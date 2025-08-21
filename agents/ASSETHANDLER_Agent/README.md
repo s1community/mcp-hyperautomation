@@ -2,12 +2,11 @@
 
 ## Agent Purpose
 
-The ASSETHANDLER Agent provides comprehensive asset and endpoint management capabilities. It enables discovery, filtering, and configuration management of endpoints connected to the management console, including detailed asset information retrieval and agent configuration analysis.
+The ASSETHANDLER Agent enables discovery of endpoints connected to the management console, including detailed asset information retrieval and agent configuration retrieval.
 
 ## Capabilities/Functionalities Exposed
 
 - **Endpoint Discovery**: List and filter endpoints based on various criteria
-- **Asset Management**: Convert between endpoint UUIDs and Asset IDs
 - **Configuration Retrieval**: Access detailed agent/endpoint configuration settings
 - **Advanced Filtering**: Support for complex filtering conditions with boolean AND logic
 - **IP Address Analysis**: Search by internal and external IP addresses
@@ -44,7 +43,7 @@ The ASSETHANDLER Agent provides comprehensive asset and endpoint management capa
 
 ## Endpoint Configuration
 
-The ASSETHANDLER Agent requires a webhook endpoint to be configured in the `AGENT_ENDPOINTS` dictionary:
+The ASSETHANDLER Agent requires a webhook endpoint to be configured in the `AGENT_ENDPOINTS` dictionary in `server.py`:
 
 ```python
 "ASSETHANDLER_Agent": "https://your-domain.com/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>"
@@ -53,21 +52,16 @@ The ASSETHANDLER Agent requires a webhook endpoint to be configured in the `AGEN
 ## Usage Examples
 
 **List All Endpoints:**
-```python
-await assethandler_list_endpoints([{}])
+```
+list endpoints
 ```
 
 **Filter by IP Address:**
 ```python
-await assethandler_list_endpoints([{"networkInterfaceInet__contains": "192.168.1.100"}])
-```
-
-**Convert UUID to Asset ID:**
-```python
-await assethandler_list_assets([{"agentUuid": "927088eb-b890-4e7e-ba26-ebdc8f77f5a7"}])
+Find asset with ip 192.168.1.100
 ```
 
 **Get Configuration for Specific Endpoints:**
-```python
-await assethandler_get_agents_config([{"computerName__contains": "DESKTOP-ABC123,SERVER-XYZ"}])
+```
+pull agent config for Frontier-PHX	
 ```
