@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hyperautomation-mcp"
+version = "0.1.0"
+description = "HyperAutomation MCP Server"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp",
+    "fastmcp",
+    "requests",
+    "uvicorn",
+    "pandas",
+    "openpyxl",
+    "google-cloud-bigquery",
+    "google-auth",
+    "python-dotenv"
+]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest_httpserver", "pytest_asyncio"]
+
+[tool.setuptools.packages]
+find = {}
+
+[project.scripts]
+hyperautomation_mcp = "server:main"

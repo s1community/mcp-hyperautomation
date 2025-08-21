@@ -1,0 +1,94 @@
+# MCP Hyperautomation Server
+
+## Project Description
+
+The MCP (Model Context Protocol) Hyperautomation Server is a bridge between LLM clients and remote security services. It implements the MCP protocol to enable LLM clients to use security orchestration tools for threat intelligence, asset management, case management, and data lake queries.
+
+## Architecture Blueprint
+
+![Architecture Blueprint](./docs/architecture.png) *(Image to be added)*
+
+## Primary Components
+
+### MCP Server
+- **Location**: `server/server.py`
+- **Purpose**: Core MCP protocol implementation that handles client requests and routes them to appropriate agents
+- **Key Features**:
+  - FastMCP server implementation
+  - Database polling and result retrieval
+  - Webhook request handling
+  - Comprehensive logging system
+
+### Agents
+
+The system integrates with multiple specialized agents through webhook endpoints:
+
+- **[VT Agent](./agents/VT_Agent/README.md)** - Virus Total threat intelligence lookups and sample downloads
+- **[SDL Agent](./agents/SDL_Agent/README.md)** - Singularity Data Lake query execution and analysis
+- **[Asset Handler Agent](./agents/ASSETHANDLER_Agent/README.md)** - Endpoint and asset management operations
+- **[Case Manager Agent](./agents/CASEMANAGER_Agent/README.md)** - Alert management and case handling
+- **[Remote Operations Manager Agent](./agents/RO_MANAGER_Agent/README.md)** - Remote script execution and task management
+
+## Environment Variables Configuration
+
+### Required Variables
+
+**Database Configuration:**
+```bash
+# Google BigQuery Configuration (required when using BigQuery)
+GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
+BIGQUERY_DATASET_ID="your-dataset-id"  
+BIGQUERY_TABLE_ID="your-table-id"
+
+# Credentials file path (MUST be updated)
+CREDENTIALS_FILE="/path/to/your/credentials/file.json"
+```
+
+**Agent Endpoints:**
+- Update all webhook URLs in `AGENT_ENDPOINTS` dictionary in `server.py`
+- Replace `<WEBHOOK_URI>` placeholders with actual webhook URIs from your SentinelOne environment
+
+### Optional Variables
+
+```bash
+# Logging Configuration
+MCP_SERVER_LOG_FILE="mcp_server.log"  # Default: mcp_server.log
+
+# Database Polling Configuration  
+DB_MAX_RETRIES=200                    # Default: 200
+DB_RETRY_DELAY=1                      # Default: 1 second
+DB_SERVICE_TYPE="bigquery"            # Options: bigquery, gsheet. Default: bigquery
+
+# BigQuery Configuration (optional)
+BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
+```
+
+## Setup Instructions
+
+1. **Clone the repository**
+2. **Install dependencies**: `uv install` (or `uv sync` if using uv.lock)
+3. **Configure environment variables** (see above)
+4. **Generate service account credentials file** for BigQuery access
+5. **Update agent webhook URLs** in `server.py`
+6. **Start the server**: `uv run python server/server.py`
+
+## Usage
+
+The server supports both stdio and SSE transport methods:
+
+```bash
+# SSE transport (default)
+uv run python server/server.py --transport sse --host 127.0.0.1 --port 8000
+
+# STDIO transport  
+uv run python server/server.py --transport stdio
+```
+
+## Dependencies
+
+- Python 3.8+
+- uv (for dependency management)
+- FastMCP
+- Google Cloud BigQuery Python client
+- uvicorn (for SSE transport)
+- Additional dependencies listed in `server/pyproject.toml`

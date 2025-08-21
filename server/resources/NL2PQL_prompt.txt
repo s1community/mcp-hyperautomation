@@ -1,0 +1,2757 @@
+Here are examples of how PowerQuery (PQL) queries are created for security-related data analysis
+====BEGIN NATURAL_LANGUAGE TO PQL QUERY GUIDANCE=====
+[PQL Fields Reference]
+- Field: #cmdline
+- Description: All Processes CmdLine Arguments
+
+- Field: #dns
+- Description: All DNS requests and responses
+
+- Field: #filepath
+- Description: All Paths
+
+- Field: #hash
+- Description: any MD5, SHA1, or SHA256 field
+
+- Field: #ip
+- Description: All IPs
+
+- Field: #md5
+- Description: All Md5
+
+- Field: #name
+- Description: All Processes Names
+
+- Field: #sha1
+- Description: All Sha1
+
+- Field: #sha256
+- Description: All Sha256
+
+- Field: #storylineid
+- Description: All Storyline Ids
+
+- Field: #uid
+- Description: All UIDs
+
+- Field: #username
+- Description: All Processes Users
+
+- Field: account.id
+- Description: SentinelOne Account ID
+
+- Field: account.name
+- Description: SentinelOne Account Name
+
+- Field: agent.uuid
+- Description: Unique Identifier of the SentinelOne agent
+
+- Field: agent.version
+- Description: Version of SentinelOne Agent
+
+- Field: cloud.accountId
+- Description: Cloud Account ID
+
+- Field: cloud.image
+- Description: Cloud Image / AMI ID
+
+- Field: cloud.instanceId
+- Description: Cloud Instance ID
+
+- Field: cloud.region
+- Description: Cloud Region
+
+- Field: cloud.roleName
+- Description: Cloud Role Name
+
+- Field: cloud.securityGroup
+- Description: Cloud Security Groups
+
+- Field: cloud.serviceProvider
+- Description: Cloud Service Provider
+
+- Field: cloud.subnetIds
+- Description: Cloud Subnet IDs
+
+- Field: cloud.tags
+- Description: Cloud Tags
+
+- Field: cloud.vpcId
+- Description: Cloud VPC ID
+
+- Field: cmdScript.applicationName
+- Description: Name of application that ran command script
+
+- Field: cmdScript.content
+- Description: The content of the executed command script. Limited up to first 65KB.
+
+- Field: cmdScript.isComplete
+- Description: Marks if the command script content is complete or truncated due to size limit. The maximal size limit is 65KB.
+
+- Field: cmdScript.originalSize
+- Description: The size (in bytes) of the complete command script
+
+- Field: cmdScript.sha256
+- Description: The SHA256 hash of the complete command script. This value can be used in Exclusions.
+
+- Field: driver.certificate.thumbprint
+- Description: Driver Certificate Thumbprint
+
+- Field: driver.certificate.thumbprintAlgorithm
+- Description: Driver Certificate Thumbprint Algorithm
+
+- Field: driver.dropperProcess
+- Description: Driver Dropper Process
+
+- Field: driver.fileVersion
+- Description: Driver File Version
+
+- Field: driver.id
+- Description: Driver Load Details
+
+- Field: driver.installerProcess
+- Description: Driver Installer Process
+
+- Field: driver.isLoadedBeforeMonitor
+- Description: Is Loaded Before Monitor
+
+- Field: driver.loadVerdict
+- Description: Driver Load Verdict Valid Values UNSIGNED BLACKLISTED BENIGN UNAUTHORIZED_PUBLISHER UNAUTHORIZED SUSPICIOUS NO_TIMESTAMP_COUNTER_SIGNATURE
+
+- Field: driver.peSha1
+- Description: Driver PE SHA1
+
+- Field: driver.peSha256
+- Description: Driver PE SHA256
+
+- Field: driver.registryKeyPath
+- Description: Driver Registry Key Path
+
+- Field: driver.serviceName
+- Description: Driver Service Name
+
+- Field: driver.sig.1.publisher
+- Description: Driver Signature 1 Publisher
+
+- Field: driver.sig.1.spcSpOpusInfo
+- Description: Driver Signature 1 spcSpOpusInfo
+
+- Field: driver.sig.1.timestamp
+- Description: Driver Signature 1 Timestamp
+
+- Field: driver.sig.1.valid
+- Description: Driver Signature 1 Valid
+
+- Field: driver.sig.2.publisher
+- Description: Driver Signature 2 Publisher
+
+- Field: driver.sig.2.spcSpOpusInfo
+- Description: Driver Signature 2 spcSpOpusInfo
+
+- Field: driver.sig.2.timestamp
+- Description: Driver Signature 2 Timestamp
+
+- Field: driver.sig.2.valid
+- Description: Driver Signature 2 Valid
+
+- Field: driver.sig.3.publisher
+- Description: Driver Signature 3 Publisher
+
+- Field: driver.sig.3.spcSpOpusInfo
+- Description: Driver Signature 3 spcSpOpusInfo
+
+- Field: driver.sig.3.timestamp
+- Description: Driver Signature 3 Timestamp
+
+- Field: driver.sig.3.valid
+- Description: Driver Signature 3 Valid
+
+- Field: driver.sig.4.publisher
+- Description: Driver Signature 4 Publisher
+
+- Field: driver.sig.4.spcSpOpusInfo
+- Description: Driver Signature 4 spcSpOpusInfo
+
+- Field: driver.sig.4.timestamp
+- Description: Driver Signature 4 Timestamp
+
+- Field: driver.sig.4.valid
+- Description: Driver Signature 4 Valid
+
+- Field: driver.sig.5.publisher
+- Description: Driver Signature 5 Publisher
+
+- Field: driver.sig.5.spcSpOpusInfo
+- Description: Driver Signature 5 spcSpOpusInfo
+
+- Field: driver.sig.5.timestamp
+- Description: Driver Signature 5 Timestamp
+
+- Field: driver.sig.5.valid
+- Description: Driver Signature 5 Valid
+
+- Field: driver.sig.count
+- Description: Driver Signature Count
+
+- Field: driver.startType
+- Description: Driver Load Start Type
+
+- Field: dst.ip.address
+- Description: IP address of destination for the network request
+
+- Field: dst.port.number
+- Description: Port number of destination of the network request
+
+- Field: endpoint.name
+- Description: Hostname of endpoint
+
+- Field: endpoint.os
+- Description: Endpoint operating system family name. Supported values: "windows", "osx", "linux"
+
+- Field: endpoint.type
+- Description: Machine type: server, laptop, desktop, Kubernetes Node. List of supported values: "desktop","kubernetes node","laptop","server","unknown"
+
+- Field: event.category
+- Description: Event category groups event types related to a common object such as a process, file, driver, task, indicator, IP. For example, filtering on event.category = 'process' yields all events relating to process activity. This is the list of supported values: "command_script","cross_process","directory_service_action","dns","driver","file","firmware","Forensic Collection","indicators","ip","logins","module","named_pipe","process","profile_activity","registry","RemoteOps Scripts","scheduled_task","threat_intelligence_indicators","url","user_subtitution","windows_event_logs","xpc"
+
+- Field: event.certainty
+- Description: The certainty of the score assigned to this event/host
+
+- Field: event.dns.request
+- Description: Domain name of the resource requested by the host
+
+- Field: event.dns.response
+- Description: The data in the DNS response describing the resource. I.e. the IP address, DNS, type, and so on
+event.dns.status,DNS response status
+event.externalThreatValue,The threat score of the event as sent by the external source
+event.id,Unique SentinelOne identifier for the event
+event.login.accountDomain,Domain or computer name for which login attempt was performed"
+
+- Field: event.login.accountName
+- Description: The name of the account that reported information about the logon event. On Windows, this value is collected from logon event SubjectUserName field.
+
+- Field: event.login.accountSid
+- Description: Security identifier (SID) of the account that attempted to login. The SID is a data structure of variable length that identifies the user account. Every account on a network is issued a unique SID when the account is first created.
+
+- Field: event.login.baseType
+- Description: Login base type
+
+- Field: event.login.failureReason
+- Description: Login failure reason
+
+- Field: event.login.isAdministratorEquivalent
+- Description: Indicates login events for accounts with administrator privileges. Based on the ElevatedToken field in Windows logon events. If "True", then the session this event represents is elevated and has administrator privileges.
+
+- Field: event.login.loginIsSuccessful
+- Description: Was the login attempt successful
+
+- Field: event.login.sessionId
+- Description: Session ID of the successful login
+
+- Field: event.login.tgt.domainName
+- Description: Domain or computer name for which login was performed
+
+- Field: event.login.tgt.user.name
+- Description: Username for which login was performed
+
+- Field: event.login.tgt.userSid
+- Description: SID of the user which logged in
+
+- Field: event.login.type
+- Description: Type of login which was performed. The value is based on Microsoft security logon types. Note that the logon event type NewCredentials is called NETWORK_CREDENTIALS.
+
+- Field: event.login.userName
+- Description: The username used in login event. On Windows, this value is collected from logon event TargetUserName field.
+
+- Field: event.logout.tgt.domainName
+- Description: Domain or computer name for which logout was performed
+
+- Field: event.logout.tgt.user.name
+- Description: Username for which logout was performed
+
+- Field: event.logout.tgt.userSid
+- Description: SID of the user which logged out
+
+- Field: event.logout.type
+- Description: Type of the login attempt
+
+- Field: event.network.connectionStatus
+- Description: Network event status
+
+- Field: event.network.direction
+- Description: Direction of the network connection event. Incoming network connection direction originate from another device to the SentinelOne protected endpoint, while outgoing network connection direction originate from the SentinelOne protected endpoint to another device.
+
+- Field: event.network.protocolName
+- Description: Protocol name per IANA well known ports distribution
+
+- Field: event.processtermination.exitCode
+- Description: Exit code of process termination
+
+- Field: event.processtermination.signal
+- Description: Signal of process termination
+
+- Field: event.repetitionCount
+- Description: Count of Concurrent Identical Events
+
+- Field: event.time
+- Description: The time the event was created. Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+
+- Field: event.type
+- Description: Type of operating system, application, network or user activity observed by the agent on the endpoint. Event types can include for example: Process events such as process creation or process termination Memory events such as memory read or write Driver events such as driver creation Registry events such as registry key renaming File events such as file creation, modification or deletion Network events such as IP connect, DNS resolved or URL Post Profile events such as Profile addition or removal. Event types are categorized to different groups by event.category. Supported values: "Behavioral Indicators","Command Script","CONNECT","DELETE","GET","HEAD","OPTIONS","POST","PUT","DNS Resolved","DNS Unresolved","Driver Load","Duplicate Process Handle","Duplicate Threat Handle","EventLogs Forensics Collection","File Creation","File Deteletion","File Modification","File Rename","File Scan","IP Connect","IP Listen","Login","Logout","Mft forneisc Collection","Module Load","Named Pipe Connection","Named Pipe Creation","Open Remote Process Handle","Pre Execution Detection","Process Creation","Process Exit","Process Modification","Profile Addition","Profile Removal","Registry Key Create","Registry Key Delete","Registry Key Export","Registry Key Import","Registry Key Rename","Registry Key Security Changed","Registry Value Create","Registry Value Delete","Registry Value Modified","Remote Process Termination","Remote Threat Creation","Srum Forensics Collection","Task Delete","Task Register","Task Start","Task Trigger","Task Update","Threat Intelligence Indicators","Usn Forensics Collection","Windows Event Log Creation"
+
+- Field: event.url.action
+- Description: URL action of process
+
+- Field: event.url.source
+- Description: URL source
+
+- Field: indicator.category
+- Description: Category name of the behavioral indicator. Supported values: "Abnormalities","Boot Configuration Update","Evasion","Exploitation","General","Hiding/Stealthiness","InfoStealer","Injection","Malware","Packer","Persistence","Post Exploitation","Privilege Escalation","Ransomware","Reconnaissance"
+
+- Field: indicator.description
+- Description: Description of the behavioral indicator
+
+- Field: indicator.identifier
+- Description: Identifier of the behavioral indicator
+
+- Field: indicator.metadata
+- Description: Contains metadata information relevant to the behavioral indicator. For example, for the ServiceCreated indicator, this field contains the name of the service For Process related indicators, this field contains additional information about the process such as process name and process ID For the WmiQueryAntiVm indicator, this field contains the query
+
+- Field: indicator.name
+- Description: Friendly name of the behavioral indicator
+
+- Field: k8sCluster.containerId
+- Description: Container ID. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.containerId
+- Description: Container ID. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.containerImage
+- Description: Container image. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.containerImage
+- Description: Container image. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.containerImage.id
+- Description: Container Image ID
+
+- Field: k8sCluster.containerImage.sha256
+- Description: Container Image Sha256
+
+- Field: k8sCluster.containerLabels
+- Description: Container labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.containerLabels
+- Description: Container labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.containerName
+- Description: Container name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.containerName
+- Description: Container name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.controllerLabels
+- Description: Kubernetes controller labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.controllerLabels
+- Description: Kubernetes controller labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.controllerName
+- Description: Kubernetes controller name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.controllerName
+- Description: Kubernetes controller name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.controllerType
+- Description: Kubernetes controller type. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.controllerType
+- Description: Kubernetes controller type. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.name
+- Description: Kubernetes cluster name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.name
+- Description: Kubernetes cluster name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.namespace
+- Description: Kubernetes namespace. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.namespace
+- Description: Kubernetes namespace. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.namespaceLabels
+- Description: Kubernetes namespace labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.namespaceLabels
+- Description: Kubernetes namespace labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.nodeName
+- Description: Kubernetes node name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.nodeName
+- Description: Kubernetes node name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.podLabels
+- Description: Kubernetes pod labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.podLabels
+- Description: Kubernetes pod labels. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.podName
+- Description: Kubernetes pod name. Will be presented only for events triggered on K8s Agents.
+
+- Field: k8sCluster.podName
+- Description: Kubernetes pod name. Will be presented only for events triggered on K8s Agents.
+
+- Field: metric.name
+- Description: Metrics
+
+- Field: metric.value
+- Description: Metrics
+
+- Field: module.certificate.expirationdate
+- Description: Module Certificate Expiration Date
+
+- Field: module.certificate.thumbprint
+- Description: Module Certificate Thumbprint
+
+- Field: module.md5
+- Description: Module MD5 Signature
+
+- Field: module.path
+- Description: Module Path
+
+- Field: module.sha1
+- Description: Module SHA1 Signature
+
+- Field: module.signed.status
+- Description: Module Signed Status
+
+- Field: module.signer.name
+- Description: Module Signed Status
+
+- Field: osSrc.process.activeContent.hash
+- Description: Active Content SHA1 of source process (as attributed by the OS)
+
+- Field: osSrc.process.activeContent.id
+- Description: Active Content file unique ID of source process (as attributed by the OS)
+
+- Field: osSrc.process.activeContent.path
+- Description: Active Content file path of source process (as attributed by the OS)
+
+- Field: osSrc.process.activeContent.signedStatus
+- Description: Active Content file signed status of source process (as attributed by the OS). Supported values: "signed", "unsigned"
+
+- Field: osSrc.process.activeContentType
+- Description: Active Content type of source process (as attributed by the OS): Supported values: "CLI","FILE","INTERACTIVE_SESSION"
+
+- Field: osSrc.process.childProcCount
+- Description: Child process count
+
+- Field: osSrc.process.cmdline
+- Description: Command arguments sent with source process (as attributed by the OS)
+
+- Field: osSrc.process.crossProcessCount
+- Description: Target Process event Count
+
+- Field: osSrc.process.crossProcessDupRemoteProcessHandleCount
+- Description: Duplicate Process Handle' event count
+
+- Field: osSrc.process.crossProcessDupThreadHandleCount
+- Description: Duplicate Thread Handle' Count
+
+- Field: osSrc.process.crossProcessOpenProcessCount
+- Description: Open Process' Count
+
+- Field: osSrc.process.crossProcessOutOfStorylineCount
+- Description: Out of Storyline' event count
+
+- Field: osSrc.process.crossProcessThreadCreateCount
+- Description: Remote Thread' Count
+
+- Field: osSrc.process.displayName
+- Description: Display name of source process (as attributed by the OS)
+
+- Field: osSrc.process.dnsCount
+- Description: Count of DNS requests
+
+- Field: osSrc.process.image.binaryIsExecutable
+- Description: Is binary backing source process (as attributed by the OS) an executable
+
+- Field: osSrc.process.image.extension
+- Description: Extension of the OS source process
+
+- Field: osSrc.process.image.location
+- Description: Location of the OS source process
+
+- Field: osSrc.process.image.md5
+- Description: MD5 of source process (as attributed by the OS)
+
+- Field: osSrc.process.image.path
+- Description: Full path of executable backing this process (as attributed by the OS)
+
+- Field: osSrc.process.image.sha1
+- Description: SHA1 of source process (as attributed by the OS)
+
+- Field: osSrc.process.image.sha256
+- Description: SHA256 of source process (as attributed by the OS)
+
+- Field: osSrc.process.image.signature.isValid
+- Description: Indicates the OS image signature is valid
+
+- Field: osSrc.process.image.size
+- Description: Size of the OS source process
+
+- Field: osSrc.process.image.type
+- Description: Type of OS source process
+
+- Field: osSrc.process.image.uid
+- Description: Image UID of the OS source process
+
+- Field: osSrc.process.indicatorBootConfigurationUpdateCount
+- Description: Count of indicators - Boot Configuration Update
+
+- Field: osSrc.process.indicatorEvasionCount
+- Description: Count of indicators - Evasion
+
+- Field: osSrc.process.indicatorExploitationCount
+- Description: Count of indicators - Exploitation
+
+- Field: osSrc.process.indicatorGeneral.count
+- Description: Count of indicators - General
+
+- Field: osSrc.process.indicatorInfostealerCount
+- Description: Count of indicators - Infostealer
+
+- Field: osSrc.process.indicatorInjectionCount
+- Description: Count of indicators - Injection
+
+- Field: osSrc.process.indicatorPersistenceCount
+- Description: Count of indicators - Persistence
+
+- Field: osSrc.process.indicatorPostExploitationCount
+- Description: Count of indicators - Post Exploitation
+
+- Field: osSrc.process.indicatorRansomwareCount
+- Description: Count of indicators - Ransomware
+
+- Field: osSrc.process.indicatorReconnaissanceCount
+- Description: Count of indicators - Reconnaissance
+
+- Field: osSrc.process.integrityLevel
+- Description: Integrity level of source process (as attributed by the OS). Supported values: "HIGH","INTEGRITY_LEVEL_UNKNOWN","LOW","MEDIUM","SYSTEM","UNTRUSTED"
+
+- Field: osSrc.process.isNative64Bit
+- Description: Is source process (as attributed by the OS) compiled natively for 64-Bit or runs as WoW.
+
+- Field: osSrc.process.isRedirectCmdProcessor
+- Description: Is interpreter for source process (as attributed by the OS) with stdout redirection
+
+- Field: osSrc.process.isStorylineRoot
+- Description: Indicates if the source process (as attributed by the OS) is the root of Storyline
+
+- Field: osSrc.process.moduleCount
+- Description: Count of Modules Loaded
+
+- Field: osSrc.process.name
+- Description: The file name of the source process (as attributed by the OS)
+
+- Field: osSrc.process.netConnCount
+- Description: Network connection count
+
+- Field: osSrc.process.netConnInCount
+- Description: Incoming network connection count
+
+- Field: osSrc.process.netConnOutCount
+- Description: Outgoing network connection count
+
+- Field: osSrc.process.parent.activeContent.hash
+- Description: Active Content SHA1 for the OS source process parent (as attributed by the OS)
+
+- Field: osSrc.process.parent.activeContent.id
+- Description: Active Content file unique ID for the OS source process parent (as attributed by the OS)
+
+- Field: osSrc.process.parent.activeContent.path
+- Description: Active Content file path for the OS source process parent (as attributed by the OS)
+
+- Field: osSrc.process.parent.activeContent.signedStatus
+- Description: Active Content file signed status for the OS source process parent (as attributed by the OS).  Supported values: "signed", "unsigned"
+
+- Field: osSrc.process.parent.activeContentType
+- Description: Active Content type of the OS source process parent (as attributed by the OS). Supported values: "CLI","FILE","INTERACTIVE_SESSION"
+
+- Field: osSrc.process.parent.cmdline
+- Description: Command arguments sent with the process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.displayName
+- Description: Display name of process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.image.binaryIsExecutable
+- Description: OS Source process parent image is executable
+
+- Field: osSrc.process.parent.image.extension
+- Description: Extension of the OS source process parent
+
+- Field: osSrc.process.parent.image.location
+- Description: Location of the OS source process parent
+
+- Field: osSrc.process.parent.image.md5
+- Description: MD5 of process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.image.path
+- Description: Full path of executable backing this process (as attributed by the OS)
+
+- Field: osSrc.process.parent.image.sha1
+- Description: SHA1 of process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.image.sha256
+- Description: SHA256 of process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.image.signature.isValid
+- Description: Indicates the OS parent image signature is valid
+
+- Field: osSrc.process.parent.image.size
+- Description: Size of the OS source process parent
+
+- Field: osSrc.process.parent.image.type
+- Description: Type of OS process that created a process
+
+- Field: osSrc.process.parent.image.uid
+- Description: Image UID of the OS source process parent
+
+- Field: osSrc.process.parent.integrityLevel
+- Description: Integrity level of process that created the OS source process (as attributed by the OS). Supported values: "HIGH","INTEGRITY_LEVEL_UNKNOWN","LOW","MEDIUM","SYSTEM","UNTRUSTED"
+
+- Field: osSrc.process.parent.isNative64Bit
+- Description: Was the OS source process parent (as attributed by the OS) compiled natively for 64-Bit or runs as WoW
+
+- Field: osSrc.process.parent.isRedirectCmdProcessor
+- Description: Does OS source process parent (as attributed by the OS) interpreter have stdout redirection
+
+- Field: osSrc.process.parent.isStorylineRoot
+- Description: Is OS source process parent (as attributed by the OS) root of Storyline
+
+- Field: osSrc.process.parent.name
+- Description: Name of the process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.pid
+- Description: PID of process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.publisher
+- Description: Publisher that digitally signed the binary invoked as part of the process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.reasonSignatureInvalid
+- Description: Reason process that created the OS source process signature is not valid (as attributed by the OS)
+
+- Field: osSrc.process.parent.sessionId
+- Description: ID of terminal (cmd shell other) session of the process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.signedStatus
+- Description: Signature status of process that created the OS source process (as attributed by the OS).  Supported values: "signed", "unsigned"
+
+- Field: osSrc.process.parent.startTime
+- Description: Start time of parent of the OS source process. Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+
+- Field: osSrc.process.parent.storyline.id
+- Description: Storyline ID of the process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.subsystem
+- Description: OS source process parent sub system
+
+- Field: osSrc.process.parent.uid
+- Description: Unique ID of process that created the OS source process (as attributed by the OS)
+
+- Field: osSrc.process.parent.user
+- Description: Username under which the process that created the OS source process ran (as attributed by the OS)
+
+- Field: osSrc.process.parent.userSid
+- Description: OS source process parent user SID
+
+- Field: osSrc.process.pid
+- Description: PID for source process (as attributed by the OS)
+
+- Field: osSrc.process.publisher
+- Description: Publisher that signed binary invoked as part of the process (as attributed by the OS)
+
+- Field: osSrc.process.reasonSignatureInvalid
+- Description: Reason process (as attributed by the OS) signature invalid
+
+- Field: osSrc.process.registryChangeCount
+- Description: Count of registry key changes
+
+- Field: osSrc.process.sessionId
+- Description: ID of the terminal (cmd shell other) session of source process (as attributed by the OS)
+
+- Field: osSrc.process.signedStatus
+- Description: Signature status of source process (as attributed by the OS)
+
+- Field: osSrc.process.startTime
+- Description: Start time of source process (as attributed by the OS). Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+
+- Field: osSrc.process.storyline.id
+- Description: Storyline ID of the source process (as attributed by the OS)
+
+- Field: osSrc.process.subsystem
+- Description: Subsystem of source process (as attributed by the OS)
+
+- Field: osSrc.process.tgtFileCreationCount
+- Description: Count of file creation events
+
+- Field: osSrc.process.tgtFileDeletionCount
+- Description: Count of file deletion events
+
+- Field: osSrc.process.tgtFileModificationCount
+- Description: Count of file modification events
+
+- Field: osSrc.process.uid
+- Description: Unique ID of source process (as attributed by the the OS)
+
+- Field: osSrc.process.user
+- Description: Username under which source process (attributed by the OS) ran
+
+- Field: osSrc.process.userSid
+- Description: OS source process user SID
+
+- Field: osSrc.process.verifiedStatus
+- Description: Verification status of process signature (as attributed by the OS)
+
+- Field: registry.export.path
+- Description: Registry Export Path
+
+- Field: registry.import.path
+- Description: Registry Import Path
+
+- Field: registry.keyPath
+- Description: Full path location of the Registry Key entry
+
+- Field: registry.keyUid
+- Description: Unique ID of registry key (as assigned by SentinelOne)
+
+- Field: registry.oldValue
+- Description: Registry previous value (in case of modification)
+
+- Field: registry.oldValueFullSize
+- Description: Registry previous full size (in case of modification)
+
+- Field: registry.oldValueIsComplete
+- Description: Was the previous registry value full size or was it truncated (in case of modification)
+
+- Field: registry.oldValueType
+- Description: Registry previous value type (in case of modification)
+
+- Field: registry.owner.user
+- Description: Owner of the registry
+
+- Field: registry.owner.userSid
+- Description: SID of the owner of the registry
+
+- Field: registry.security.info
+- Description: Registry Security Information
+
+- Field: registry.value
+- Description: Registry Value
+
+- Field: registry.valueFullSize
+- Description: Full size of registry value (in case it was truncated)
+
+- Field: registry.valueIsComplete
+- Description: Is the registry value full size or is it truncated
+
+- Field: registry.valueType
+- Description: Type of registry value
+
+- Field: site.id
+- Description: SentinelOne Site ID
+
+- Field: site.name
+- Description: SentinelOne Site name
+
+- Field: src.endpoint.ip.address
+- Description: IP address of the machine performing the login attempt
+
+- Field: src.ip.address
+- Description: IP address of the originator performing the network event
+
+- Field: src.port.number
+- Description: Port number of traffic source
+
+- Field: src.process.activeContent.hash
+- Description: Active Content SHA1 for source process
+
+- Field: src.process.activeContent.id
+- Description: Active Content file unique ID for source process
+
+- Field: src.process.activeContent.path
+- Description: Active Content file path for source process
+
+- Field: src.process.activeContent.signedStatus
+- Description: Active Content file signed status for source process.  Supported values: "signed", "unsigned"
+
+- Field: src.process.activeContentType
+- Description: Active Content type of source process. Supported values: "CLI","FILE","INTERACTIVE_SESSION"
+
+- Field: src.process.childProcCount
+- Description: Count of the child processes as attributed by the OS.
+
+- Field: src.process.cmdline
+- Description: Command line arguments sent to the source process. For example: In the command line "runc init" the source process runc is activated. src.process.cmdline will be "runc init" In the command line "C:\Windows\system32\svchost.exe -k wsappx -p -s AppXSvc" the source process svchost.exe is activated. src.process.cmdline will be "C:\Windows\system32\svchost.exe -k wsappx -p -s AppXSvc"
+
+- Field: src.process.completeness.hints
+- Description: Indicates the reason for data incompleteness
+
+- Field: src.process.crossProcessCount
+- Description: Target Process event Count
+
+- Field: src.process.crossProcessDupRemoteProcessHandleCount
+- Description: 'Duplicate Process Handle' event count
+
+- Field: src.process.crossProcessDupThreadHandleCount
+- Description: 'Duplicate Thread Handle' Count
+
+- Field: src.process.crossProcessOpenProcessCount
+- Description: 'Open Process' Count
+
+- Field: src.process.crossProcessOutOfStorylineCount
+- Description: 'Out of Storyline' event count
+
+- Field: src.process.crossProcessThreadCreateCount
+- Description: 'Remote Thread' Count
+
+- Field: src.process.displayName
+- Description: Display name of source process
+
+- Field: src.process.dnsCount
+- Description: Count of DNS requests
+
+- Field: src.process.eUserName
+- Description: Effective Username under which the process ran
+
+- Field: src.process.eUserUid
+- Description: EUID of the account that executed the source process
+
+- Field: src.process.exeModificationCount
+- Description: Count of EXE Modification
+
+- Field: src.process.image.binaryIsExecutable
+- Description: Is binary backing source process an executable
+
+- Field: src.process.image.description
+- Description: Source process image description
+
+- Field: src.process.image.extension
+- Description: Extension of source process
+
+- Field: src.process.image.internalName
+- Description: Source process image internal name
+
+- Field: src.process.image.location
+- Description: Location of the source process
+
+- Field: src.process.image.md5
+- Description: MD5 signature
+
+- Field: src.process.image.originalFileName
+- Description: Source process image original name
+
+- Field: src.process.image.path
+- Description: Full path of source process
+
+- Field: src.process.image.productName
+- Description: Source process image product name
+
+- Field: src.process.image.productVersion
+- Description: Source process image product version
+
+- Field: src.process.image.sha1
+- Description: SHA1 signature
+
+- Field: src.process.image.sha256
+- Description: SHA256 signature
+
+- Field: src.process.image.size
+- Description: Size of source process
+
+- Field: src.process.image.type
+- Description: Source process image type
+
+- Field: src.process.image.uid
+- Description: Image UID of the source process
+
+- Field: src.process.indicatorBootConfigurationUpdateCount
+- Description: Count of indicators - Boot Configuration Update
+
+- Field: src.process.indicatorEvasionCount
+- Description: Count of indicators - Evasion
+
+- Field: src.process.indicatorExploitationCount
+- Description: Count of indicators - Exploitation
+
+- Field: src.process.indicatorGeneralCount
+- Description: Count of indicators - General
+
+- Field: src.process.indicatorInfostealerCount
+- Description: Count of indicators - Infostealer
+
+- Field: src.process.indicatorInjectionCount
+- Description: Count of indicators - Injection
+
+- Field: src.process.indicatorPersistenceCount
+- Description: Count of indicators - Persistence
+
+- Field: src.process.indicatorPostExploitationCount
+- Description: Count of indicators - Post Exploitation
+
+- Field: src.process.indicatorRansomwareCount
+- Description: Count of indicators - Ransomware
+
+- Field: src.process.indicatorReconnaissanceCount
+- Description: Count of indicators - Reconnaissance
+
+- Field: src.process.integrityLevel
+- Description: The process integrity level. Supported values: "HIGH","INTEGRITY_LEVEL_UNKNOWN","LOW","MEDIUM","SYSTEM","UNTRUSTED"
+
+- Field: src.process.isNative64Bit
+- Description: Indicates if the process is 32-bit or 64-bit
+
+- Field: src.process.isRedirectCmdProcessor
+- Description: Indicates if interpreter is with stdout redirection
+
+- Field: src.process.isStorylineRoot
+- Description: Indicates if process is the root of Storyline
+
+- Field: src.process.lUserName
+- Description: Login Username under which the process ran
+
+- Field: src.process.lUserUid
+- Description: LUID of the account that executed the source process
+
+- Field: src.process.modelChildProcessCount
+- Description: Count of Model Children
+
+- Field: src.process.moduleCount
+- Description: Count of Modules Loaded
+
+- Field: src.process.name
+- Description: The file name of the process originating the event
+
+- Field: src.process.netConnCount
+- Description: Count of incoming and outgoing network connections
+
+- Field: src.process.netConnInCount
+- Description: Count of incoming network connections
+
+- Field: src.process.netConnOutCount
+- Description: Count of outgoing network connections
+
+- Field: src.process.parent.activeContent.hash
+- Description: Active Content SHA1 for source process parent
+
+- Field: src.process.parent.activeContent.id
+- Description: Active Content file unique ID for source process parent
+
+- Field: src.process.parent.activeContent.path
+- Description: Active Content file path for source process parent
+
+- Field: src.process.parent.activeContent.signedStatus
+- Description: Active Content file signed status for source process parent. Supported values: "signed", "unsigned"
+
+- Field: src.process.parent.activeContentType
+- Description: Active Content type of source process parent. Supported values: "CLI","FILE","INTERACTIVE_SESSION"
+
+- Field: src.process.parent.cmdline
+- Description: Command arguments sent with the process that created this process
+
+- Field: src.process.parent.displayName
+- Description: Display name of process that created this process
+
+- Field: src.process.parent.eUserName
+- Description: Effective Username under which the parent process ran
+
+- Field: src.process.parent.eUserUid
+- Description: EUID of the account that executed the source process parent
+
+- Field: src.process.parent.image.binaryIsExecutable
+- Description: Source process parent image is executable
+
+- Field: src.process.parent.image.extension
+- Description: Extension of the source process parent
+
+- Field: src.process.parent.image.location
+- Description: Location of the source process parent
+
+- Field: src.process.parent.image.md5
+- Description: MD5 of process that created this process
+
+- Field: src.process.parent.image.path
+- Description: Image path of process that created this process
+
+- Field: src.process.parent.image.sha1
+- Description: SHA1 of process that created this process
+
+- Field: src.process.parent.image.sha256
+- Description: SHA256 of process that created this process
+
+- Field: src.process.parent.image.signature.isValid
+- Description: Indicates the parent image signature is valid
+
+- Field: src.process.parent.image.size
+- Description: Size of the source process parent
+
+- Field: src.process.parent.image.type
+- Description: Type of process that created a new process
+
+- Field: src.process.parent.image.uid
+- Description: Image UID of the source process parent
+
+- Field: src.process.parent.integrityLevel
+- Description: Integrity level of process that created this process. Supported values: "HIGH","INTEGRITY_LEVEL_UNKNOWN","LOW","MEDIUM","SYSTEM","UNTRUSTED"
+
+- Field: src.process.parent.isNative64Bit
+- Description: Was source process parent compiled natively for 64-Bit or runs as WoW
+
+- Field: src.process.parent.isRedirectCmdProcessor
+- Description: Does source process parent interpreter have stdout redirection
+
+- Field: src.process.parent.isStorylineRoot
+- Description: Indicates if source process parent is the root of Storyline
+
+- Field: src.process.parent.lUserName
+- Description: Login Username under which the parent process ran
+
+- Field: src.process.parent.lUserUid
+- Description: LUID of the account that executed the source process parent
+
+- Field: src.process.parent.name
+- Description: Name of process that created this process
+
+- Field: src.process.parent.pid
+- Description: PID of process that created this process
+
+- Field: src.process.parent.publisher
+- Description: Publisher that signed binary invoked as part of the process that created this process
+
+- Field: src.process.parent.reasonSignatureInvalid
+- Description: Reason process signature is not valid
+
+- Field: src.process.parent.rUserName
+- Description: Real Username under which the parent process ran
+
+- Field: src.process.parent.rUserUid
+- Description: RUID of the account that executed the source process parent
+
+- Field: src.process.parent.sessionId
+- Description: ID of terminal (cmd shell other) session of source process
+
+- Field: src.process.parent.signedStatus
+- Description: Signature status of process that created this process.  Supported values: "signed", "unsigned"
+
+- Field: src.process.parent.startTime
+- Description: Start time of parent of the source process. Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+
+- Field: src.process.parent.storyline.id
+- Description: Storyline ID of process that created this process
+
+- Field: src.process.parent.uid
+- Description: Unique ID of process that created this process
+
+- Field: src.process.parent.user
+- Description: Username under which the process that created this process ran
+
+- Field: src.process.parent.userSid
+- Description: source process parent user SID
+
+- Field: src.process.pid
+- Description: PID of source process
+
+- Field: src.process.publisher
+- Description: Signature sign identity
+
+- Field: src.process.reasonSignatureInvalid
+- Description: Signature not verified reason
+
+- Field: src.process.registryChangeCount
+- Description: Count of registry key changes
+
+- Field: src.process.rpid
+- Description: Real/Relinked PID (after relinking)
+
+- Field: src.process.rUserName
+- Description: Real Username under which the process ran
+
+- Field: src.process.rUserUid
+- Description: RUID of the account that executed the source process
+
+- Field: src.process.sessionId
+- Description: The sessions the process runs at
+
+- Field: src.process.signedStatus
+- Description: Verifies the process validity and integrity. Unsigned processes may pose a security risk. Supported values: "signed", "unsigned"
+
+- Field: src.process.startTime
+- Description: Start time of source process. Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+
+- Field: src.process.storyline.id
+- Description: Storyline ID source process
+
+- Field: src.process.subsystem
+- Description: The subsystem of the process Win32/WSL
+
+- Field: src.process.tgtFileCreationCount
+- Description: Count of file creation events
+
+- Field: src.process.tgtFileDeletionCount
+- Description: Count of file deletion events
+
+- Field: src.process.tgtFileModificationCount
+- Description: Count of file modification events
+
+- Field: src.process.tid
+- Description: Thread id
+
+- Field: src.process.uid
+- Description: Unique Id of the parent process
+
+- Field: src.process.user
+- Description: Username under which source process ran
+
+- Field: src.process.userSid
+- Description: SID of the account that executed the source process
+
+- Field: src.process.verifiedStatus
+- Description: Verification status of process signature
+
+- Field: task.cluster
+- Description: Cluster name. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.cluster
+- Description: Cluster name. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.ecsVersion
+- Description: Task Ecs Version. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.ecsVersion
+- Description: Task Ecs Version. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.name
+- Description: Name of a scheduled task, as generated by the Host
+
+- Field: task.path
+- Description: Full path location of a scheduled task
+
+- Field: task.serviceArn
+- Description: Task service ARN. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.serviceArn
+- Description: Task service ARN. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.serviceName
+- Description: Task service name. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.serviceName
+- Description: Task service name. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.tags
+- Description: Task tags. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.tags
+- Description: Task tags. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskArn
+- Description: Task ARN. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskArn
+- Description: Task ARN. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskAvailabilityZone
+- Description: Task Availability Zone:. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskAvailabilityZone
+- Description: Task Availability Zone:. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskDefinitionArn
+- Description: Task definition ARN. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskDefinitionArn
+- Description: Task definition ARN. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskDefinitionFamily
+- Description: Task definition family. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskDefinitionFamily
+- Description: Task definition family. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskDefinitionRevision
+- Description: Task definition revision. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.taskDefinitionRevision
+- Description: Task definition revision. Will be presented only for events triggered on K8s Agents.
+
+- Field: task.triggerType
+- Description: Trigger type of a scheduled task
+
+- Field: tgt.file.convictedBy
+- Description: Reputation, Static AI
+
+- Field: tgt.file.creationTime
+- Description: Date and Time of File Creation. Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+
+- Field: tgt.file.description
+- Description: Description of file
+
+- Field: tgt.file.extension
+- Description: File Extension
+
+- Field: tgt.file.id
+- Description: Unique ID of file
+
+- Field: tgt.file.internalName
+- Description: Internal name of file
+
+- Field: tgt.file.isDirectory
+- Description: Is the target file a directory
+
+- Field: tgt.file.isExecutable
+- Description: Is file executable
+
+- Field: tgt.file.isKernelModule
+- Description: Is the target file a Kernel Module
+
+- Field: tgt.file.isSigned
+- Description: Is file signed
+
+- Field: tgt.file.location
+- Description: Location of file
+
+- Field: tgt.file.md5
+- Description: MD5 Signature of File
+
+- Field: tgt.file.modificationTime
+- Description: Date and time file was modified. Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+
+- Field: tgt.file.name
+- Description: File name
+
+- Field: tgt.file.oldMd5
+- Description: Old file MD5 before Modify
+
+- Field: tgt.file.oldPath
+- Description: Old path before 'Rename'
+
+- Field: tgt.file.oldSha1
+- Description: Old file SHA1 before Modify
+
+- Field: tgt.file.oldSha256
+- Description: Old file SHA256 before Modify
+
+- Field: tgt.file.originalFileName
+- Description: Target file original name
+
+- Field: tgt.file.owner.name
+- Description: Name of file owner
+
+- Field: tgt.file.owner.userSid
+- Description: SID of file owner
+
+- Field: tgt.file.path
+- Description: The full path of the target file including the file name
+
+- Field: tgt.file.productName
+- Description: Target file product name
+
+- Field: tgt.file.productVersion
+- Description: Target file product version
+
+- Field: tgt.file.publisher
+- Description: Target file signature sign identity
+
+- Field: tgt.file.sha1
+- Description: SHA1 Signature of File
+
+- Field: tgt.file.sha256
+- Description: SHA256 Signature of File
+
+- Field: tgt.file.signature.isValid
+- Description: Indicates the target file signature is valid
+
+- Field: tgt.file.signatureInvalidReason
+- Description: Reason file signature is not valid
+
+- Field: tgt.file.size
+- Description: File Size in bytes
+
+- Field: tgt.file.type
+- Description: Type of file
+
+- Field: tgt.process.accessRights
+- Description: Type of access granted to process by cross process
+
+- Field: tgt.process.activeContent.hash
+- Description: Active Content SHA1 for target process
+
+- Field: tgt.process.activeContent.id
+- Description: Active Content file unique ID for target process
+
+- Field: tgt.process.activeContent.path
+- Description: Active Content file path of source process was the target of the event
+
+- Field: tgt.process.activeContent.signedStatus
+- Description: Active Content file signed status for target process.  Supported values: "signed", "unsigned"
+
+- Field: tgt.process.activeContentType
+- Description: Active Content type of target process. Supported values: "CLI","FILE","INTERACTIVE_SESSION"
+
+- Field: tgt.process.cmdline
+- Description: Full command line sent with the target process
+
+- Field: tgt.process.completeness.hints
+- Description: Indicates the reason for data incompleteness
+
+- Field: tgt.process.displayName
+- Description: Display name of target process
+
+- Field: tgt.process.eUserName
+- Description: Effective Username under which the target process ran
+
+- Field: tgt.process.eUserUid
+- Description: EUID of the account that executed the target process
+
+- Field: tgt.process.image.binaryIsExecutable
+- Description: Is binary backing the target process an executable
+
+- Field: tgt.process.image.extension
+- Description: Extension of the target process
+
+- Field: tgt.process.image.md5
+- Description: MD5 of target process
+
+- Field: tgt.process.image.path
+- Description: Image path of target process
+
+- Field: tgt.process.image.sha1
+- Description: SHA1 of target process
+
+- Field: tgt.process.image.sha256
+- Description: SHA256 of target process
+
+- Field: tgt.process.image.size
+- Description: Size of the target process
+
+- Field: tgt.process.image.uid
+- Description: UID of the target process
+
+- Field: tgt.process.integrityLevel
+- Description: Integrity level of target process. Supported values: "HIGH","INTEGRITY_LEVEL_UNKNOWN","LOW","MEDIUM","SYSTEM","UNTRUSTED"
+
+- Field: tgt.process.isNative64Bit
+- Description: Is target process compiled natively for 64-Bit or runs as WoW
+
+- Field: tgt.process.isRedirectCmdProcessor
+- Description: Is interpreter for target process with stdout redirection
+
+- Field: tgt.process.isStorylineRoot
+- Description: Indicates if the target process is the root of Storyline
+
+- Field: tgt.process.lUserName
+- Description: Login Username under which the target process ran
+
+- Field: tgt.process.lUserUid
+- Description: LUID of the account that executed the target process
+
+- Field: tgt.process.name
+- Description: The file name of the target process. When process A creates process B, the target process name in the process creation event will be of process B.
+
+- Field: tgt.process.parent.image.location
+- Description: Location of target process image
+
+- Field: tgt.process.parent.image.type
+- Description: Type of target process
+
+- Field: tgt.process.pid
+- Description: PID for target process
+
+- Field: tgt.process.publisher
+- Description: Publisher that digitally signed the binary being invoked as part of the target process
+
+- Field: tgt.process.reasonSignatureInvalid
+- Description: Indicates the reason the target process signature is not valid
+
+- Field: tgt.process.relation
+- Description: Relationship between source process and target process
+
+- Field: tgt.process.rUserName
+- Description: Real Username under which the target process ran
+
+- Field: tgt.process.rUserUid
+- Description: RUID of the account that executed the target process
+
+- Field: tgt.process.sessionId
+- Description: ID of the terminal (cmd, shell, other) session of target process
+
+- Field: tgt.process.signedStatus
+- Description: Signature status of target process.  Supported values: "signed", "unsigned"
+
+- Field: tgt.process.startTime
+- Description: Start time of target process. Format: epoch time (milliseconds since 1.1.1970), Timezone: UTC
+tgt.process.storyline.id,Storyline ID of target event
+tgt.process.subsystem,Subsystem of target process
+tgt.process.uid,Unique ID of target process
+tgt.process.user,Username under which target process ran
+tgt.process.userSid,SID of the account that executed the target process
+tgt.process.verifiedStatus,Verification status of signature of the target process
+url.address,The full URL address accessed in the URL event
+
+- Field: osSrc.process.image.origin.locationType
+- Description: If file was copied, describes the source file's location. If file was downloaded, describes which program created it. Supported values: "Unknown","Local","External Device", "Network Drive", "Browser"
+
+- Field: osSrc.process.image.origin.creationMethod
+- Description: Type of action that spawned the file. Supported values: "Unknown","Local Creation","Copy", "Download"
+
+- Field: osSrc.process.parent.image.origin.creationMethod
+- Description: Type of action that spawned the file. Supported values: "Unknown","Local Creation","Copy", "Download"
+
+- Field: src.process.image.origin.creationMethod
+- Description: Type of action that spawned the file. Supported values: "Unknown","Local Creation","Copy", "Download"
+
+- Field: src.process.parent.image.origin.creationMethod
+- Description: Type of action that spawned the file. Supported values: "Unknown","Local Creation","Copy", "Download"
+
+- Field: tgt.process.image.origin.creationMethod
+- Description: Type of action that spawned the file. Supported values: "Unknown","Local Creation","Copy", "Download"
+
+- Field: osSrc.process.parent.image.origin.locationType
+- Description: If file was copied, describes the source file's location. If file was downloaded, describes which program created it. Supported values: "Unknown","Local","External Device", "Network Drive", "Browser"
+
+- Field: src.process.image.origin.locationType
+- Description: If file was copied, describes the source file's location. If file was downloaded, describes which program created it. Supported values: "Unknown","Local","External Device", "Network Drive", "Browser"
+
+- Field: src.process.parent.image.origin.locationType
+- Description: If file was copied, describes the source file's location. If file was downloaded, describes which program created it. Supported values: "Unknown","Local","External Device", "Network Drive", "Browser"
+
+- Field: tgt.process.image.origin.locationType
+- Description: If file was copied, describes the source file's location. If file was downloaded, describes which program created it. Supported values: "Unknown","Local","External Device", "Network Drive", "Browser"
+
+
+[PQL Syntax Commands Reference]
+- Category: Expression
+- Command: //
+- Description: Comments.
+- Syntax: // comment
+- Example: // two slashes indicate a comment, extending until the end of the line
+
+- Category: Expression
+- Command: columns
+- Description: Selects, renames, reorders and/or computes new fields.
+- Syntax: | columns field=expression, field2=expression2, …
+- Example: | columns timestamp, isError = (status >= 500 && status <= 599), bytes
+
+- Category: Expression
+- Command: filter
+- Description: Discards non-matching records.
+- Syntax: | filter filterExpression
+- Example: | filter status == 502
+
+- Category: Expression
+- Command: group
+- Description: Groups records to compute aggregate statistics
+- Syntax: | group function(expression), function2(expression2), … by expression3, expression4, …
+- Example: | group total = count(), errors = count(status >= 500 && status <= 599) by uriPath
+
+- Category: Expression
+- Command: join
+- Description: If you use a JOIN statement, the query MUST start with this command.
+This command executes two or more subqueries and merges their corresponding results.
+E.g: | [inner, sql inner, left, sql left, outer, sql outer] join [a =] (query), [b =] (query) ... [on x, y, a.z = b.w]
+You can set an optional name for each query, for example a=(query). Names must be distinct: they cannot conflict with a field name in a 
+If both subqueries have a field with the same name, use the subquery prefix (i.e  a.field_name)
+After a join, use the output column names directly, unless there is a naming conflict.
+Do not use subquery prefixes for fields unless required by a naming conflict.
+Always use the subquery prefixes when using the "ON" condition
+- Syntax: | join name = (query), name2 = (query2), … on name.field = name2.field2, …
+- Example: | join a = (status = 200 | columns tag), b = (numBytes > 1_000_000 | columns tag) on tag
+
+- Category: Expression
+- Command: let
+- Description: Defines one or more new fields.
+- Syntax: | let field=expression, field2=expression2, …
+- Example: | let isError = (status >= 500 && status <= 599)
+
+- Category: Expression
+- Command: limit
+- Description: Caps records displayed or subsequently processed.
+- Syntax: | limit [nnn]
+- Example: | limit 10
+
+- Category: Expression
+- Command: lookup
+- Description: Retrieves values from a lookup table.
+- Syntax: | lookup field=columnName, … from "tableName" by columnName=expression, …
+- Example: | lookup name from "users" by id=requestUserId
+
+- Category: Expression
+- Command: savelookup
+- Description: Save the results of a query to a lookup table
+- Syntax: | savelookup 'tablename'
+- Example: | let myvalue=1 , mysecondvalue=2
+| limit 2
+| savelookup 'testsavedlookup'
+
+- Category: Expression
+- Command: dataset
+- Description: read in a lookup table as logs to use
+- Syntax: |dataset 'config://tablename'
+- Example: | dataset 'config://datatables/IPswithHighFTNTBytes'
+
+- Category: Expression
+- Command: parse
+- Description: Extracts new fields from raw log message, or from a field, if specified.
+- Syntax: | parse [format] from fieldName
+- Example: | parse "processed $size$KB in $time$ seconds" from summary
+| parse "image conversion processed $size{regex=\d+}$"
+
+- Category: Expression
+- Command: sort
+- Description: Defines record display order. Order defines precedence, ascending is default, - defines descending.
+- Syntax: | sort [+||-]field, [+||-]field2, …
+- Example: | sort -error_rate
+
+- Category: Expression
+- Command: transpose
+- Description: Removes a column from the table and creates a new column for each of its values.
+- Syntax: | transpose field
+- Example: | transpose serverHost
+
+- Category: Expression
+- Command: union
+- Description: Executes two or more subqueries, and merges all of their results.
+- Syntax: | union (query), (query)
+- Example: | union (status = 404 | columns tag), (severity > 3 | columns tag)
+
+- Category: Expression
+- Command: anycase
+- Description: modify the preceding expression to work on any case of the following string
+- Syntax: | expression:anycase('string')
+- Example: | filter event.category in:anycase('registry')
+| filter event.network.protocolName contains:anycase 'ftp'
+
+- Category: Expression
+- Command: compare
+- Description: query across time to identify patterns, trends, and anomalies. send the same query twice, shifted forwards and backwards in time and puts the results in separate columns
+- Syntax: | compare [name = ] timeshift('[+,-]<timespan>')
+| compare [name = ] timeshift([+,-]queryspan())
+syntax examples:
+| compare last_week=timeshift('1week') 
+| compare next_hour=timeshift('+1h') 
+| compare previous_period=timeshift(queryspan())
+| compare next_period=timeshift(+queryspan())
+| compare timeshift('-1d')
+- Example: full example:
+indicator.name = "EventViewerTampering"
+| group Count=count() by agent.uuid
+| sort -Count
+| compare last_week=timeshift('1w')
+
+- Category: Grouping
+- Command: count
+- Description: Number of records.
+- Syntax: number of records in group: count()
+number of records for true: count(expression)
+- Example: | group error_rate = count(status >= 500 status <= 599) / count()
+
+- Category: Grouping
+- Command: sum
+- Description: Sum of all inputs.
+- Syntax: sum(expression)
+- Example: | group sumBytes = sum(bytes)
+
+- Category: Grouping
+- Command: avg
+- Description: Average of all inputs.
+- Syntax: avg(expression)
+- Example: | group avgBytes = avg(bytes)
+
+- Category: Grouping
+- Command: min
+- Description: The smallest input.
+- Syntax: min(expression)
+- Example: | group minBytes = min(bytes)
+
+- Category: Grouping
+- Command: min_by
+- Description: The value of x from the row with the smallest value of y in a group.
+- Syntax: min_by(x,y)
+- Example: | group least_purchased_item = min_by(item_name, purchase_count)
+
+- Category: Grouping
+- Command: max
+- Description: The largest input.
+- Syntax: max(expression)
+- Example: | group maxBytes = max(bytes)
+
+- Category: Grouping
+- Command: max_by
+- Description: The value of x from the row with the largest value of y in a group.
+- Syntax: max_by(x,y)
+- Example: | group most_purchased_item = max_by(item_name, purchase_count)
+
+- Category: Grouping
+- Command: median
+- Description: The median input.
+- Syntax: median(expression)
+- Example: | group medianBytes = median(bytes)
+
+- Category: Grouping
+- Command: pct
+- Description: Percentile from 0-100 of inputs.
+- Syntax: pct(NN, expression)
+- Example: | group medianBytes = pct(50, bytes)
+
+- Category: Grouping
+- Command: p10,p50,p90,p95,p99,999
+- Description: Percentile of inputs.
+- Syntax: pNNN(expression)
+- Example: | group medianBytes = p50(bytes)
+
+- Category: Grouping
+- Command: stddev
+- Description: The standard deviation of inputs.
+- Syntax: stddev(expression)
+- Example: | group sd = stddev(bytes)
+
+- Category: Grouping
+- Command: estimate_distinct
+- Description: Estimates number of distinct values (uses HyperLogLog algorithm configured for 1.3% median error).
+- Syntax: estimate_distinct(expression)
+- Example: | group uniqueVisitors = estimate_distinct(ip)
+
+- Category: Grouping
+- Command: first
+- Description: The first input.
+- Syntax: first(expression)
+- Example: | group firstVisitor = first(ip)
+
+- Category: Grouping
+- Command: last
+- Description: The last input.
+- Syntax: last(expression)
+- Example: | group lastVisitor = last(ip)
+
+- Category: Grouping
+- Command: oldest
+- Description: Input with oldest timestamp.
+- Syntax: oldest(expression)
+- Example: | group firstVisitor = oldest(ip)
+
+- Category: Grouping
+- Command: newest
+- Description: Input with newest timestamp.
+- Syntax: newest(expression)
+- Example: | group lastVisitor = newest(ip)
+
+- Category: Grouping
+- Command: any
+- Description: Arbitrarily chosen input.
+- Syntax: any(expression)
+- Example: | group randomVisitor = any(ip)
+
+- Category: Grouping
+- Command: any_true
+- Description: true if the expression evaluates to true for any row in a group.
+- Syntax: any_true(expression)
+- Example: | any_true(status >= 400) by serverHost
+
+- Category: Grouping
+- Command: all_true
+- Description: true if the expression evalues to true for all rows in a group.
+- Syntax: all_true(expression)
+- Example: | all_true(status >= 400) by serverHost
+
+- Category: Aggregation
+- Command: running_sum
+- Description: Sum the input expression for all rows up to and including current.
+- Syntax: running_sum(expression)
+- Example: | let thruput = running_sum(bytes)
+
+- Category: Aggregation
+- Command: running_count
+- Description: 1 for the first row, 2 for the second row, etc.
+- Syntax: running_count()
+- Example: | let sessionCount = running_count()
+
+- Category: Aggregation
+- Command: overall_sum
+- Description: Sum the input expression across all rows.
+- Syntax: overall_sum(expression)
+- Example: | let overallThruput = overall_sum(bytes)
+
+- Category: Aggregation
+- Command: overall_count
+- Description: Total number of rows.
+- Syntax: overall_count()
+- Example: | let eventCount = overall_count()
+
+- Category: Aggregation
+- Command: overall_min
+- Description: Smallest value of the input expression in any row.
+- Syntax: overall_min(expression)
+- Example: | let smallestSale = overall_min(price)
+
+- Category: Aggregation
+- Command: overall_max
+- Description: Largest value of input expression in any row.
+- Syntax: overall_max(expression)
+- Example: 
+
+- Category: Aggregation
+- Command: overall_avg
+- Description: Average value of input expression across all rows.
+- Syntax: overall_avg(expression)
+- Example: | let avgSale = overall_avg(price)
+
+- Category: Aggregation
+- Command: percent_of_total
+- Description: The input expression, as a percentage of the sum of that expression across all rows.
+- Syntax: percent_of_total(expression)
+- Example: | let salesPercentage = percent_of_total(price)
+
+- Category: Aggregation
+- Command: running_percent
+- Description: A running total of percent_of_total(). For instance, if the first three rows add up to 25% of the total in all rows, then in the third row this will be 25.
+- Syntax: running_percent(expression)
+- Example: | let salesPercentage = running_percent(price)
+
+- Category: JSON
+- Command: expand
+array_expand
+- Description: Expand a JSON Array into multiple events, duplicating other fields
+- Syntax: | let my_mvcolumn=arrayColumn.expand()
+| let my_mvcolumn=array_expand(arrayColumn)
+- Example: | limit 1 | columns message | let b=array(1,2,3).expand(), c="whatever"
+| limit 1 | columns message | let b=array_expand(array(1,2,3)), c="whatever"
+
+- Category: JSON
+- Command: json_object_value
+- Description: Extract a value from nested JSON.
+- Syntax: json_object_value(json_object, "fieldname")
+- Example: | let firstName = json_object_value(json_obj, "first_name")
+
+- Category: Logic
+- Command: +, -, *, /, %, -x
+- Description: Arithmetic operators.
+- Syntax: | let <command> = <expression>
+- Example: | let sum = a + b
+
+- Category: Logic
+- Command: <, <=, >, >=, ==, !=
+- Description: Comparison operators.
+- Syntax: | filter <expression>
+- Example: | filter a > b
+
+- Category: Logic
+- Command: &&, ||, !, AND, OR, NOT
+- Description: Boolean operators.
+- Syntax: this || that
+- Example: 
+
+- Category: Logic
+- Command: ?:
+- Description: Ternary operator.
+- Syntax: test ? value-if-true : value-if-false
+- Example: 
+
+- Category: Logic
+- Command: contains
+- Description: Match logic within.
+- Syntax: <expression> contains "search-term"
+- Example: 
+
+- Category: Logic
+- Command: matchcase
+- Description: Case-sensitive match logic.
+- Syntax: <expression> contains:matchcase "Case-Sensitive-Search-Term"
+- Example: 
+
+- Category: Logic
+- Command: matches
+- Description: Match logic exact.
+- Syntax: <expression> matches "regex"
+- Example: 
+
+- Category: Strings
+- Command: len
+- Description: Number of characters.
+- Syntax: len(x)
+- Example: | let example = len("DataSet")
+
+- Category: Strings
+- Command: lower
+- Description: All letters changed to lowercase.
+- Syntax: lower(x)
+- Example: | let example = lower("DataSet")
+
+- Category: Strings
+- Command: upper
+- Description: All letters changed to uppercase.
+- Syntax: upper(x)
+- Example: | let example = upper("DataSet")
+
+- Category: Strings
+- Command: ltrim
+- Description: Remove leading characters.
+- Syntax: trim whitespace: ltrim(x)
+trim characters in y: ltrim(x,y)
+- Example: | let example = ltrim("DataSet", "Data")
+
+- Category: Strings
+- Command: rtrim
+- Description: Remove trailing characters.
+- Syntax: trim whitespace: rtrim(x)
+trim y characters in y: rtrim(x,y)
+- Example: | let example = rtrim("DataSet", "Set")
+
+- Category: Strings
+- Command: trim
+- Description: Remove leading and trailing characters.
+- Syntax: trim whitespace: trim(x)
+trim characters in y: trim(x,y)
+- Example: | let example = trim("_DataSet_", "_")
+
+- Category: Strings
+- Command: substr
+- Description: A copy with characters removed.
+- Syntax: remove first y characters: substr(x,y)
+remove y characters, starting at z: substr(x,y,z)
+- Example: | let example = substr("DataSet", 4)
+| let example = substr("DataSet", 4, 3)
+
+- Category: Strings
+- Command: replace
+- Description: x, with all matches for y replaced by z.
+- Syntax: replace(x,y,z)
+- Example: | let example = replace("I <3 Scalyr", "Scalyr", "DataSet")
+
+- Category: Strings
+- Command: isempty
+- Description: True if null or an empty string.
+- Syntax: isempty(x)
+- Example: | let example = isempty("")
+
+- Category: Strings
+- Command: isblank
+- Description: True if null, an empty string, or contains only whitespace.
+- Syntax: isblank(x)
+- Example: | let example = isblank(" ")
+
+- Category: Strings
+- Command: string
+- Description: Cast as string.
+- Syntax: string(x)
+- Example: | let example = string(12345)
+
+- Category: Strings
+- Command: pad_version
+- Description: Forces each part of a dotted version string to have 5 digits.
+- Syntax: pad_version(x)
+- Example: | pad_version("3.19.5")
+
+- Category: Strings
+- Command: format
+- Description: Generate a formatted string, inserting values as specified with additional options.
+- Syntax: integer: %[width]d
+numeric: %[width][.precision]f
+string: %[width][.precision]s
+
+Optional formatting flags:
+pad on right: %-
+show positive numbers with plus: %+
+show positive numbers with space: %⎵
+pad with zeros: %0
+thousands separator: %,
+show negatives in parentheses: %(
+- Example: | let description = format("Processed %,d orders for %s in %+,10.8f seconds.", 1000, "customer", .002)
+
+- Category: Numbers
+- Command: number
+- Description: convert a string to a number
+- Syntax: number(x)
+- Example: | let numtest=number(test)
+
+- Category: Numbers
+- Command: abs
+- Description: Absolute value of x.
+- Syntax: abs(x)
+- Example: | let example = abs(-1)
+
+- Category: Numbers
+- Command: ceiling
+- Description: x, rounded up to an integer.
+- Syntax: ceiling(x)
+- Example: | let example = ceiling(.9)
+
+- Category: Numbers
+- Command: floor
+- Description: x, rounded down to an integer.
+- Syntax: floor(x)
+- Example: | let example = floor(.9)
+
+- Category: Numbers
+- Command: min
+- Description: The smaller of x and y.
+- Syntax: min(x,y)
+- Example: | let example = min(1,2)
+
+- Category: Numbers
+- Command: max
+- Description: The larger of x and y.
+- Syntax: max(x,y)
+- Example: | let example = max(1,2)
+
+- Category: Numbers
+- Command: sqrt
+- Description: The square root of x.
+- Syntax: sqrt(x)
+- Example: | let example = sqrt(9)
+
+- Category: Numbers
+- Command: exp
+- Description: Standard exponential function, e^x.
+- Syntax: exp(x)
+- Example: | let example = exp(2)
+
+- Category: Numbers
+- Command: ln
+- Description: Natural (base-e) logarithm of x.
+- Syntax: ln(x)
+- Example: | let example = ln(10)
+
+- Category: Numbers
+- Command: log
+- Description: Logarithm of x.
+- Syntax: base-10: log(x)
+base y: log(x,y)
+- Example: | let example = log(10)
+| let example = log(100, 10)
+
+- Category: Numbers
+- Command: pow
+- Description: X to the power of y, or x^y.
+- Syntax: pow(x,y)
+- Example: | let example = pow(2, 3)
+
+- Category: Numbers
+- Command: sca:bytesToCharge
+- Description: Charged ingest bytes for event
+- Syntax: sca:bytesToCharge
+- Example: event.type in ('IP Connect','DNS Resolved','DNS Unresolved')
+| group totalGB = sum(sca:bytesToCharge)/1024/1024/1024
+
+- Category: Networking
+- Command: net_ip
+- Description: True if x is a valid IP address.
+- Syntax: net_ip(x)
+- Example: | let example = net_ip("1.1.1.1")
+
+- Category: Networking
+- Command: net_ipv4
+- Description: True if valid IPv4 address.
+- Syntax: net_ipv4(x)
+- Example: | let example = net_ipv4("1.1.1.1")
+
+- Category: Networking
+- Command: net_ipv6
+- Description: True if valid IPv6 address.
+- Syntax: net_ipv6(x)
+- Example: | let example = net_ipv6("2001:0db8:85a3:0000:0000:8a2e:0370:7334")
+
+- Category: Networking
+- Command: net_ipsubnet
+- Description: True if x is within y subnet expression.
+- Syntax: net_ipsubnet(x,y)
+- Example: | let example = net_ipsubnet("1.1.1.1", "1.0.0.0/8")
+
+- Category: Networking
+- Command: net_private
+- Description: True if x is a valid IPV4 or IPV6 private address.
+- Syntax: net_private(x)
+- Example: | let example = net_private("192.168.1.1")
+
+- Category: Networking
+- Command: net_rfc1918
+- Description: True if x is a valid IPV4 private address.
+- Syntax: net_rfc1918(x)
+- Example: | let example = net_rfc1918("192.168.1.1")
+
+- Category: Networking
+- Command: net_rfc4193
+- Description: True if x is a valid IPV6 private address.
+- Syntax: net_rfc4193(x)
+- Example: | let example = net_rfc4193("fd00::")
+
+- Category: Networking
+- Command: net_url_scheme
+- Description: return scheme(http|https|ftp|etc) from a supplied url
+- Syntax: net_url_scheme(url)
+- Example: | let url ="https://www.sentinelone.com/a/path?a=b&c=b"
+| let net_url_scheme = net_url_scheme(url)
+
+- Category: Networking
+- Command: net_url_domain
+- Description: Return domain
+- Syntax: net_url_domain(url)
+- Example: | let net_url_domain = net_url_domain(url)
+
+- Category: Networking
+- Command: net_url_subdomain
+- Description: Return subdomain
+- Syntax: net_url_subdomain(url)
+- Example: | let net_url_subdomain = net_url_subdomain(url)
+
+- Category: Networking
+- Command: net_url_tld
+- Description: Return top level domain
+- Syntax: net_url_tld(url)
+- Example: | let net_url_tld = net_url_tld(url)
+
+- Category: Networking
+- Command: net_url_path
+- Description: Return Path
+- Syntax: net_url_path(url)
+- Example: | let net_url_path = net_url_path(url)
+
+- Category: Networking
+- Command: net_url_query
+- Description: Return Query
+- Syntax: net_url_query(url)
+- Example: | let net_url_query = net_url_query(url)
+
+- Category: Networking
+- Command: net_url_fragment
+- Description: Return URL fragment/anchor
+- Syntax: net_url_fragment(url)
+- Example: | let net_url_fragment = net_url_fragment(url)
+
+- Category: Time
+- Command: timebucket
+- Description: Truncates a time value to the beginning of a bucket. Valid units: days, hours, minutes, seconds, or a number 1-500. Prettify the returned time value using the `simpledateformat` function.
+- Syntax: record timestamp, auto: timebucket() 
+record timestamp, defined unit: timebucket(unit) 
+specified time and unit: timebucket(timestamp, unit)
+non-prettified output : Hour = timebucket( timestamp, "1 hour" )
+prettified output : Hour = simpledateformat( timebucket( timestamp, "1 hour" ), "MMM d yyyy hh:mm:ss.SSS a" )
+- Example: | let Hour = simpledateformat( timebucket( timestamp, "1 hour" ), "MMM d yyyy hh:mm:ss.SSS a" )
+
+- Category: Time
+- Command: querystart
+- Description: Beginning of the query time span.
+- Syntax: epoch nanoseconds: querystart()
+defined unit: querystart(unit)
+- Example: | let errors.timestamp = querystart()
+
+- Category: Time
+- Command: queryend
+- Description: End of the query time span.
+- Syntax: epoch nanoseconds: queryend()
+defined unit: queryend(unit)
+- Example: | let investigation.timestamp = queryend()
+
+- Category: Time
+- Command: queryspan
+- Description: The length of the time span for the current query.
+- Syntax: nanoseconds: queryspan()
+defined unit: queryspan(unit)
+- Example: message contains "error"
+| group eventsPerMinute = count() / queryspan("minutes") by serverHost
+
+- Category: Time
+- Command: strftime
+- Description: Output ISO8601 timestamp.
+
+For formats, reference Java docs.
+- Syntax: UTC: strftime(fieldname)
+UTC with defined pattern: strftime(fieldname, pattern)
+defined timezone and pattern: strftime(fieldname, pattern, timezone)
+- Example: | let t=strftime(timestamp)
+| let t=strftime(timestamp, "%Y-%m-%d %H:%m %Z")
+| let t=strftime(timestamp, "%Y-%m-%d %H:%m %Z", "GMT+8")
+
+- Category: Time
+- Command: now
+- Description: current ns epoch time
+- Syntax: epoch nanoseconds: now()
+- Example: | columns record
+| let formattedTime1=strftime(now()) 
+| let formattedTime2=simpledateformat(now())
+
+- Category: Time
+- Command: simpledateformat
+- Description: strftime equivalent for Java SimpleDateFormat patterns.
+- Syntax: UTC: simpledateformat(fieldname)
+UTC with defined pattern: simpledateformat(fieldname, pattern)
+defined timezone and pattern: simpledateformat(fieldname, pattern, timezone)
+- Example: | let t=simpledateformat(timestamp)
+| let t=simpledateformat(timestamp, "Y-m-d H:m Z")
+| let t=simpledateformat(timestamp, "Y-m-d H:m Z","GMT+5")
+
+
+- Category: Time
+- Command: strptime
+- Description: parse a String datetime to a nanosecond value
+- Syntax: strptime(fieldname, pattern)
+- Example: | let nanos = strptime( req_date, "%Y-%m-%d %H:%m %Z")
+
+- Category: Time
+- Command: simpledateparse
+- Description: Java SimpleDateFormat to nanosecond value.
+- Syntax: simpledateparse(fieldname, pattern)
+- Example: 
+
+- Category: Geolocation
+- Command: geo_ip_location
+- Description: Returns latitude and longitude of an IP address.
+- Syntax: geo_ip_location(ip)
+- Example: | let lat_long = geo_ip_location("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_ip_city
+- Description: Returns the city of an IP address.
+- Syntax: default: geo_ip_city(ip)
+translated language: geo_ip_city(ip, lang)
+- Example: | let city = geo_ip_city("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_ip_state
+- Description: Returns the state of an IP address.
+- Syntax: default: geo_ip_state(ip)
+translated language: geo_ip_state(ip, lang)
+- Example: | let state = geo_ip_state("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_ip_state_iso
+- Description: Returns ISO standard state code.
+- Syntax: geo_ip_state_iso(ip)
+- Example: | let state = geo_ip_state_iso("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_ip_country
+- Description: Returns the country of an IP address.
+- Syntax: default: geo_ip_country(ip)
+translated language: geo_ip_country(ip, lang)
+- Example: | let country = geo_ip_country("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_ip_country_iso
+- Description: Returns ISO standard state code.
+- Syntax: geo_ip_country_iso(ip)
+- Example: | let country = geo_ip_country_iso("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_ip_continent
+- Description: Returns the continent of an IP address.
+- Syntax: default: geo_ip_continent(ip)
+translated language: geo_ip_continent(ip, lang)
+- Example: | let continent = geo_ip_continent("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_ip_continent_code
+- Description: Returns the continent code.
+- Syntax: geo_ip_continent_code(ip)
+- Example: | let continent_code = geo_ip_continent_code("8.8.8.8")
+
+- Category: Geolocation
+- Command: geo_point
+- Description: True if a proper lat, lon string.
+- Syntax: geo_point(lat, long)
+- Example: | let isValid = geo_point("43.651070, -79.347015")
+
+- Category: Geolocation
+- Command: geo_point_within_polygon
+- Description: True if the provided point is within a provided WKT polygon.
+- Syntax: geo_point_within_polygon(lat,long, polygon)
+- Example: | let isValid = geo_point(43.651070, -79.347015, "POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))") => true|false
+
+- Category: Geolocation
+- Command: geo_distance
+- Description: As the crow flies distance between 2 points.
+Units: kilometer (default), meter, centimeter, mile, foot, inch, degree, nauticalmile, yard
+- Syntax: geo_distance(lat,long, lat,long, unit)
+- Example: | let distance = geo_distance("43.651070, -79.347015", "37.773972, -122.431297", "mile") => number
+
+- Category: Arrays
+- Command: array_agg
+- Description: Produce a list of values in an array for a given field
+- Syntax: array_agg(columnName)
+- Example: | group array_agg(telemetrics.type)
+
+- Category: Arrays
+- Command: array_agg_distinct
+- Description: Produce a list of distinct values in an array for a given field
+- Syntax: array_agg_distinct(columnName)
+- Example: | group array_agg_distinct(telemetrics.type)
+
+- Category: Arrays
+- Command: array_mean
+- Description: Caclulate the mean value of numeric values in an array field
+- Syntax: | group array_mean(array_agg(columnName))
+- Example: | group array_mean(array_agg(telemetrics.average_cpu_usage))
+
+- Category: Arrays
+- Command: array_sum
+- Description: Caclulate the sum of numeric values in an array field
+- Syntax: | group array_sum(array_agg(columnName))
+- Example: | group array_sum(array_agg(telemetrics.average_cpu_usage))
+
+- Category: Arrays
+- Command: array_min
+- Description: Caclulate the minimum value of numeric values in an array field
+- Syntax: | group array_min(array_agg(columnName))
+- Example: | group array_min(array_agg(telemetrics.average_cpu_usage))
+
+- Category: Arrays
+- Command: array_max
+- Description: Caclulate the maximum value of numeric values in an array field
+- Syntax: | group array_max(array_agg(columnName))
+- Example: | group array_max(array_agg(telemetrics.average_cpu_usage))
+
+- Category: Arrays
+- Command: array_median
+- Description: Caclulate the median value of numeric values in an array field
+- Syntax: | group array_median(array_agg(columnName))
+- Example: | group array_median(array_agg(telemetrics.average_cpu_usage))
+
+- Category: Arrays
+- Command: array_map
+- Description: creates a new array from calling a function for every array element
+- Syntax: | let output=array_map(array, func(x) -> expression)
+- Example: | let output=array_map(array(1,2,3), func(x) -> x + 1) => [2, 3, 4]
+
+- Category: Arrays
+- Command: array_from_json
+- Description: Parses a JSON string into an array
+- Syntax: | let array_var=array_from_json(expression)
+- Example: | let array_var=array_from_json("[1, 2, 3]") => [1, 2, 3]
+
+- Category: Arrays
+- Command: array_to_json
+- Description: Converts an array to a JSON string
+- Syntax: | let json_output=array_to_json(array)
+- Example: | let json_output=array_to_json(array(1, 2, 3)) => "[1, 2, 3]"
+
+- Category: Arrays
+- Command: array_distinct
+- Description: remove duplicate values from an array
+- Syntax: | let json_output=array_distinct(array)
+- Example: | let distinct_array=array_distinct(array(1,1,3)) => [1, 2]
+
+- Category: Arrays
+- Command: array_sort
+- Description: Sorts an array
+- Syntax: | let sorted_array=array_sort(array)
+- Example: | let sorted_array=array_sort(array(3,2,1)) => [1,2,3]
+
+- Category: Arrays
+- Command: array
+- Description: Return an array containing the listed values. Accepts up to 20 values.
+- Syntax: | let new_array=array(1, 2,..)
+- Example: | let new_array=array(1, 2, 'three', null) → [1, 2, 'three', null]
+
+- Category: Arrays
+- Command: extract_matches
+- Description: Extract all matches for the pattern, rather than just the first match. If max_count is specified, then we stop after the first
+max_count matches.
+- Syntax: | let array_var=extract_matches(columnName, pattern)
+- Example: | let array_var=extract_matches('three blind mice', '[a-z]+') → ['three', 'blind', 'mice']
+
+- Category: Arrays
+- Command: extract_matches_matchcase
+- Description: Case sensitive implementation of extract_maches
+- Syntax: | let array_var=extract_matches_matchcase(columnName, pattern)
+- Example: let array_var=extract_matches_matchcase('THREEE BLind mice', '[A-Z]+') → ['THREE', 'BL']
+
+- Category: Arrays
+- Command: array_split
+- Description: Find all matches for pattern (a regular expression) in string , and uses these as delimiters to split the string into an array
+- Syntax: | let array_var=array_split(columnName, pattern)
+- Example: | let array_var=array_split('three blind mice', ' ') → ['three', 'blind', 'mice']
+
+- Category: Arrays
+- Command: array_split_matchcase
+- Description: Case sensitive implementation of array_split
+- Syntax: | let array_var=array_split_matchcase(columnName, pattern)
+- Example: | let array_var=array_split('aAa', 'A') → ['a', 'a']
+
+- Category: Arrays
+- Command: array_slice
+- Description: Return a new array containing the values from the input array, starting at the from index and stopping just before the to index if exists and at the end of the array otherwise.
+- Syntax: | let new_array=array_list(from_inclusive, to_inclusive)
+- Example: | let new_array=array_slice(array(100, 200, 300, 400, 500), 2) → [300, 400, 500]
+
+- Category: Arrays
+- Command: array_intersect
+- Description: Return a copy of array_1 , minus any entries that don’t also appear in array_2 .
+- Syntax: | let new_array=array_intersect(array_1, array_2)
+- Example: | let new_array=array_intersect(array(1, 2, 3, 2, 1), array(1, 3, 5)) → [1, 3, 1]
+
+- Category: Arrays
+- Command: array_reduce
+- Description: Return the result of applying func to initial_value and each
+entry in the array.
+- Syntax: | let new_array=array_reduce(array, initial_value, func)
+- Example: | let new_array=array_reduce(array(1, 2, 3, 4, 5), 0, func(x,y) -> x+y) → 15
+
+- Category: Arrays
+- Command: array_filter
+- Description: Return a new array, consisting of those entries in the input array for which the function returns true .
+- Syntax: | let new_array=array_filter(array, func)
+- Example: | let new_array=array_filter(array(1, 2, 3, 4, 5), func(x)->x%2==0) →[2,4]
+
+- Category: Arrays
+- Command: array_zip
+- Description: Return a new array, consisting of func applied to the corresponding entries of the two arrays.
+- Syntax: | let new_array=array_zip(array_1, array_2, func)
+- Example: | let new_array=array_zip(array(100, 200, 300), array(30, 20, 10), func(x, y) -> x+y) → [130, 220, 310]
+
+- Category: Arrays
+- Command: array_concat
+- Description: Return the concatenation of two arrays.
+- Syntax: | let new_array=array_concat(array_1, array_2)
+- Example: | let new_array=array_concat(array(1, 2), array(3,4)) → [1,2,3,4]
+
+- Category: Arrays
+- Command: array_set
+- Description: Return a copy of the input array, with the specified position set to the specified value
+- Syntax: | let new_array=array_set(array, index, value)
+- Example: | let new_array=array_set(array(100, 200, 300), 0,
+111) → [111, 200, 300]
+
+- Category: Arrays
+- Command: array_get
+- Description: Return the value at the specified (zero-based) index in the array.
+- Syntax: | let new_field=array_get(array, index)
+- Example: | let new_field=array_get(array(100, 200, 300), 1) → 200
+
+- Category: Arrays
+- Command: len
+- Description: Return the length of the array
+- Syntax: len(array)
+- Example: len(array(1, 2, 'three', null)) → 4
+
+- Category: Arrays
+- Command: array_contains
+- Description: Return true if any element of array is equal to value (case
+sensitive).
+- Syntax: array_contains(array, value)
+- Example: array_contains(array("foo", "bar"),"foo") → true
+
+- Category: Arrays
+- Command: array_match_any
+- Description: Applies the function to each array entry, and returns true if the function returns true for any of the entries
+- Syntax: array_match_any(array, func)
+- Example: array_match_any(array(10, 20, 30),func(x) -> x > 20) → true
+
+- Category: Arrays
+- Command: array_match_all
+- Description: Applies the function to each array entry, and returns true if the function returns true for all of the entries
+- Syntax: array_match_all(array, func)
+- Example: array_match_any(array(10, 20, 30),func(x) -> x > 20) → false
+
+- Category: Arrays
+- Command: array_to_string
+- Description: Converts the array entries to strings, and concatenates them, placing delimiter between each pair of entries.
+- Syntax: array_to_string(array, delimiter)
+- Example: | let new_field=array_to_string(array(1, 2, 3)) → "1,2,3"
+
+
+[PQL Syntax Filters Reference]
+Filter: Free text search
+Description: free text search the message field (raw message) for the value provided
+Syntax: 'value'
+Example: 'my-string'
+
+Filter: =
+Description: Searches for exact matches
+Syntax: field=value
+or for a string
+field='value'
+Example: count=10
+or
+name='victor'
+
+Filter: !=
+Description: searches for everything other than exact matches
+Syntax: field!=value
+or for a string
+field!='value'
+Example: count!=10
+or
+name!='victor'
+
+Filter: contains
+Description: verifies if the
+Syntax: | group function(expression), function2(expression2), … by expression3, expression4, …
+Example: | group total = count(), errors = count(status >= 500 && status <= 599) by uriPath
+
+Filter: in
+Description: checks if the value is in the list
+Syntax: field in (value1, value2....)
+Example: test in ('alpha','beta')
+or
+test in (1,2,3........)
+
+Filter: matches
+Description: search a field for a regex match
+Syntax: field matches 'value'
+Example: filetype matches '\\.png'
+
+Filter: !()
+Description: Not, inverts logic
+Syntax: !(query)
+Example: !(name contains 'vic')
+!(count=10)
+
+Filter: * command
+Description: uses a wildcard for the field name and matches on any field matching the expression
+Syntax: * command value
+Example: * = '10'
+* contains 'victor'
+
+Filter: >,<,>=,<=
+Description: checks if value is equal/less/greater than
+Syntax: field > value
+field <= value
+Example: test > 10
+test <= 10
+
+Filter: matches
+Description: search a field for a regex match
+Syntax: field matches 'value'
+Example: filetype matches '\\.png'
+
+Filter: !()
+Description: Not, inverts logic
+Syntax: !(query)
+Example: !(name contains 'vic')
+!(count=10)
+
+Filter: * command
+Description: uses a wildcard for the field name and matches on any field matching the expression
+Syntax: * command value
+Example: * = '10'
+* contains 'victor'
+
+Filter: command *
+Description: uses a wildcard for the value
+Syntax: command *
+Example: test = *
+
+
+[PQL Query Examples]
+Description/Purpose: Get all user creation or modification events
+Query: event.type = "Behavioral Indicators" AND indicator.name in("DomainUserCreate", "ModifyPasswdFile", "ModifyShadow", "UserAdd", "UserCreate")
+
+Description/Purpose: Query for events indicative of MITRE T1140
+Query: event.type = "Behavioral Indicators" AND indicator.description contains:anycase("T1140") 
+
+Description/Purpose: Show attempts to delete volume shadow copies
+Query: event.type = "Behavioral Indicators" AND indicator.name = "ShadowCopyDeletion"
+
+Description/Purpose: Find any IOCs for AvosLocker malware in my environment
+Query: event.type = "Threat Intelligence Indicators" AND tiIndicator.malwareNames contains "AvosLocker"
+
+Description/Purpose: Show any evidence of Royal ransomware present on my machines
+Query: event.type = "Threat Intelligence Indicators" AND tiIndicator.malwareNames contains "Royal"
+
+Description/Purpose: Show all registry modifications initiated by a PowerShell script
+Query: event.category == "registry" AND endpoint.os == "windows" AND src.process.displayName == "Windows PowerShell" 
+
+Description/Purpose: A query can contain any number of terms. To select events matching all of the terms (an "AND" query), you can simply enter the terms next to one another
+Query: event.type = 'Process Creation' src.process.name = 'svchost.exe'
+
+Description/Purpose: You can also use explicit AND, OR, and NOT keywords to combine terms
+Query: indicator.category = 'InfoStealer' or indicator.category = 'Evasion'
+
+Description/Purpose: The operators &&, ||, and ! can be used as synonyms for AND, OR, and NOT:
+Query: src.process.signedStatus='unsigned' && !(src.process.name='svchost.exe')
+
+Description/Purpose: The contains operator retrieves events containing the search term, and has the following syntax
+Query: fieldname contains ('search-term-1', 'search-term-2', 'search-term-3')
+
+Description/Purpose: All text search is case-insensitive by default. For case sensitivity, append ":matchcase" to the operator
+Query: fieldname contains:matchcase ('Search-term-1', Search-term-2', Search-term-3')       
+
+Description/Purpose: you can use the matches operator to search a field for a regex match. matches has the following syntax
+Query: src.process.cmdline matches ".*.exe"
+
+Description/Purpose: Double-escaping regex elements is required almost everywhere. 
+Query: registry.keyPath matches '\\.*\\VSS'
+
+Description/Purpose: the regex must be escaped. The regex cannot exceed 1000 byte
+Query: dst.ip.address matches "\\d+\\.\\d+\\.\\d+\\.\\d+"
+
+Description/Purpose: Multiple regex are supported
+Query: fieldname matches ('regex-1', 'regex-2', 'regex-3')
+
+Description/Purpose: For case-sensitivity, append ":matchcase" to the operator
+Query: fieldname matches:matchcase ('regex-1', 'Regex-2', 'regex-3')
+
+Description/Purpose: In some cases, you may have to use four backslashes (\\\\) to properly escape Regular expressions. The first backslash is the character needed (\), the second backslash is an escape for the first, and the last two backslashes are needed to denote this as a special character. This will return a literal backslash as double backslashes (\\) are used to escape regex-specific characters like \\[ \\] \\{ \\} \\+ \\. \\s \\w. searching for target file path in the Windows temp directory using regex tgt.file.path matches
+Query: tgt.file.path matches '^C:\\\\Windows\\\\Temp\\\\[a-z]{8}\.tmp$'
+
+Description/Purpose: You can select events that do or do not have a particular value, using the == and != operators. = can be used as a synonym for ==
+Query: src.process.crossProcessCount > 0 indicator.name !='RawVolumeAccess'
+
+Description/Purpose: You can also use the <, <=, >, and >= operators to compare values. For example, this query matches all requests with a status in the range 400-499
+Query: tgt.file.size > 0 tgt.file.size < 65536
+
+Description/Purpose: You can compare a field with the wildcard character * to match events with any value in that field
+Query: indicator.description = *
+
+Description/Purpose: You can also use the wildcard character * with contains or matches to search all fields for a value
+Query: * contains 'search term'
+
+Description/Purpose: You can also use the wildcard character * with contains or matches to search all fields for a value
+Query: * matches 'regex'
+
+Description/Purpose: Use the in operator to search for numeric, boolean (true / false), and text values in a field:
+Query: fieldname in ("aaa", 111, false)
+
+Description/Purpose: Similar to * contains, shortcut queries search multiple fields for a value. The fields searched are predefined, and each shortcut name is preceded by a hash character #. Example
+Query: #storylineid = 'bba6fccd-a1e8-9561-b397-33bae4194c75'
+
+Description/Purpose: The following shortcuts/fields are supported for the # hash character 
+Query: #cmdline (all processes CmdLine Arguments)
+#dns (All DNS requests and responses)
+#filepath (All fields referencing a Path)
+#hash (any MD5, SHA1, or SHA256 field)
+#ip (all IPs)
+#md5 (all fields containing a sha md5s)
+#name (all process names)
+#sha1 (All fields containing a sha1)
+#sha256 (All sha256)
+#storyline (All storylines IDs)
+#uid (all UIDs)
+#username (All Processes users)
+
+Description/Purpose: 3CX Supply Chain attack
+Query: "// Known C2
+url.address contains 'raw.githubusercontent.com' and url.address contains 'iconstorages/images/main/icon'
+
+event.type = ""DNS Resolved"" and (lower(src.process.name) = ""3cxdesktopapp.exe"" or src.process.image.path contains ""/3CX"") and event.dns.request contains (""akamaicontainer.com"", ""akamaitechcloudservices.com"", ""azuredeploystore.com"", ""azureonlinecloud.com"", ""azureonlinestorage.com"", ""azureonlinecloud.com"", ""convieneonline.com"", ""dunamistrd.com"", ""github.com"", ""glcloudservice.com"", ""journalide.org"", ""msedgepackageinfo.com"", ""msstorageazure.com"", ""msstorageboxes.com"", ""officeaddons.com"", ""officestoragebox.com"", ""officeaddons.com"", ""pbxcloudeservices.com"", ""pbxphonenetwork.com"", ""pbxsources.com"", ""philip.je"", ""qwepoi123098.com"", ""raw.githubusercontent.com"", ""sbmsa.wiki"", ""soyoungjun.com"", ""sourceslabs.com"", ""visualstudiofactory.com"", ""zacharryblogs.com"")
+
+// Module loads
+event.type = ""Module Load"" and module.sha1 in (""3b88cda62cdd918b62ef5aa8c5a73a46f176d18b"", ""cad1120d91b812acafef7175f949dd1b09c6c21a"", ""bf939c9c261d27ee7bb92325cc588624fca75429"")
+
+event.type = ""Module Load"" and module.path contains (""3CXDesktopApp"") and module.path contains (""ffmpeg.dll"", ""d3dcompiler_47.dll"") and endpoint.os = ""windows""
+
+event.type = ""Module Load"" and module.sha1 in(""bf939c9c261d27ee7bb92325cc588624fca75429"",""188754814b37927badc988b45b7c7f7d6b4c8dd3"",""37ad80310e2b346638fd959bfa653ddf3baffdff"",""f12f83ffb870b561debce94a20bad59e78aa475c"",""32954f133e1713b18f45576dc3244bff47cc19cd"",""86a79491d327caeee4e272b01de61bfa1fbd5e81"",""2943eb3c43494a0a0f878fded562891426e7fc04"",""b83e023623109f0f97aeb72d7f0ed42f1eaf7fa0"",""413cb97fdb82f636f1d33b594fd422da90665472"",""52cdb6593e9b8009a0d6420b480cb63c1c0fa097"",""60218ccd17cca0b4f07f2ee1cd7ea128fec75a9b"",""dd1692b45505de46077e74fe73ccc16aba658144"",""9eb0a0c74e64cd209c150bbce7a0556be9b6b561"",""0d10de7c9515974cf4ccfc8b60a89e6229531abc"",""ffbf245f9d2d42959cf283ebd1536d5e753e3f02"",""b93ee1637f78a4eba7db8542b5f97bfd62924c84"",""769383fc65d1386dd141c960c9970114547da0c2"",""9e9a5f8d86356796162cee881c843cde9eaedfb3"",""3dc840d32ce86cebf657b17cef62814646ba8e98"",""fe2fc92a1cfbaad21ae05a78577bced237e13880"",""20d554a80d759c50d6537dd7097fed84dd258b3e"")
+
+// Bad hashes
+event.category in (""dns"", ""ip"", ""process"", ""file"") and (src.process.image.sha1 in (""fe2fc92a1cfbaad21ae05a78577bced237e13880"",""3DC840D32CE86CEBF657B17CEF62814646BA8E98"",""9e9a5f8d86356796162cee881c843cde9eaedfb3"",""20d554a80d759c50d6537dd7097fed84dd258b3e"") or tgt.process.image.sha1 in (""fe2fc92a1cfbaad21ae05a78577bced237e13880"",""3DC840D32CE86CEBF657B17CEF62814646BA8E98"",""9e9a5f8d86356796162cee881c843cde9eaedfb3"",""20d554a80d759c50d6537dd7097fed84dd258b3e"") or tgt.file.sha1 in (""fe2fc92a1cfbaad21ae05a78577bced237e13880"",""3DC840D32CE86CEBF657B17CEF62814646BA8E98"",""9e9a5f8d86356796162cee881c843cde9eaedfb3"",""20d554a80d759c50d6537dd7097fed84dd258b3e""))
+
+event.category in (""dns"", ""ip"", ""process"", ""file"") and (src.process.image.sha256 in (""59e1edf4d82fae4978e97512b0331b7eb21dd4b838b850ba46794d9c7a2c098"",""c485674ee63ec8d4e8fde9800788175a8b02d3f9416d0e763360fff7f8eb4e02"",""7986bbaee8940da11ce089383521ab420c443ab7b15ed42aed91fd31ce833896"",""11be1803e2e307b647a8a7e02d128335c448ff741bf06bf52b332e0bbf423b03"",""4e08e4ffc699e0a1de4a5225a0b4920933fbb9cf123cde33e1674fde6d61444f"") or tgt.process.image.sha256 in (""59e1edf4d82fae4978e97512b0331b7eb21dd4b838b850ba46794d9c7a2c098"",""c485674ee63ec8d4e8fde9800788175a8b02d3f9416d0e763360fff7f8eb4e02"",""7986bbaee8940da11ce089383521ab420c443ab7b15ed42aed91fd31ce833896"",""11be1803e2e307b647a8a7e02d128335c448ff741bf06bf52b332e0bbf423b03"",""4e08e4ffc699e0a1de4a5225a0b4920933fbb9cf123cde33e1674fde6d61444f"") or tgt.file.sha256 in (""59e1edf4d82fae4978e97512b0331b7eb21dd4b838b850ba46794d9c7a2c098"",""c485674ee63ec8d4e8fde9800788175a8b02d3f9416d0e763360fff7f8eb4e02"",""7986bbaee8940da11ce089383521ab420c443ab7b15ed42aed91fd31ce833896"",""11be1803e2e307b647a8a7e02d128335c448ff741bf06bf52b332e0bbf423b03"",""4e08e4ffc699e0a1de4a5225a0b4920933fbb9cf123cde33e1674fde6d61444f""))
+
+// MacOS
+endpoint.os = ""osx""  and event.type in (""File Modification"", ""File Creation"") and tgt.file.path contains ""Application Support/3CX Desktop App"" and tgt.file.path contains (""UpdateAgent"", "".session-lock"", "".main_storage"")"
+
+Description/Purpose: Outlook EoP (CVE-2023-23397)
+Query: "// This query is crafted to hunt for potential exploitation of CVE-2023-23397. When a reminder fires in Outlook, a temporary PNG file ""Olktmp.png"" is written and deleted in the user's %TEMP% dir.
+// We can use this as an indication of a reminder firing. We then can search for endpoints that are reaching out to external IPs over SMB who have had a reminder fire.
+// ** DISCLAIMER: There will likely be FPs from this query, but it should help get the hunting process started. This has been tested and verified on Outlook 2019 and O365.  We will continue refining the query as we continue researching.  **
+
+// We use a join to combine two different event types by unique endpoint
+| join 
+// Outlook writes and then deletes a temporary file ""Olkptmp.png"" to %TEMP% directory when the reminder goes off.  We use this to see when an appointment is triggered 
+Outlook_Modified_File = (src.process.name contains ""outlook.exe"" and tgt.file.path contains ""AppData\\Local\\Temp\\Olktmp"" and tgt.file.extension = ""png""  | columns src.process.name, src.process.storyline.id, endpoint.name, tgt.file.path, event.time), 
+// We then want to confirm that we have outbound 445 traffic destined for PUBLIC IP space.  This traffic is attributed to the kernel (ntoskrnl.exe). In testing, we found that the SMB traffic commences anywhere from a few seconds to around one minute before the PNG file is written / deleted
+// ** for filtering out benign IPs, feel free to add any IPs to the array of IPs, such as --> !(dst.ip.address in (""0.0.0.0"", ""127.0.0.1"")) **
+// ** if you would like for this query to also fire on internal SMB traffic, remove the ""and !(net_reserved(dst.ip.address))"" from below **
+SMB_Traffic = (dst.port.number = ""445"" and src.process.image.path contains ""C:\\Windows\\System32\\ntoskrnl.exe"" and event.network.direction contains ""OUTGOING"" and !(dst.ip.address in ("""")) and !(net_reserved(dst.ip.address)) | columns dst.port.number, src.ip.address , src.process.image.path, src.process.storyline.id, endpoint.name, tgt.file.path, dst.ip.address , event.time ) on endpoint.name |
+// We want to limit FPs by adding a delta for a condition related to the time that outlook wrote the PNG file, to the time that the SMB traffic occurs
+let delta = Outlook_Modified_File.event.time - SMB_Traffic.event.time  | 
+// This is in ms, so we are looking for endpoints that call out to a public IP over SMB having just written the PNG file within  1 minute.  Feel free to modify this to increase or decrease the delta / window.
+filter (delta < 60000) AND (delta >= 0) "
+
+Description/Purpose: DNS C2 Hunting Rule (Upsteam - A / CNAME variance)
+Query: event.category = "dns" 
+| filter !(event.dns.request = ".")
+| filter !(event.dns.request matches "\\.(office\\.com|msappproxy\\.net|windows\\.net|logicnow\\.us|googlesyndication\\.com|dropboxusercontent\\.com|googlevideo\\.com|\\.internal)$")  // whitelisting known MS, Google, etc domains
+| filter !(event.dns.request matches "(local|arpa|\\.)$") 
+| parse ".*\\.$main_domain$$$" from event.dns.request
+| parse '^$first_subdomain$\\.' from event.dns.request
+| filter len(first_subdomain) > 25
+| group hits=estimate_distinct(first_subdomain), subdomain_list=array_agg_distinct(first_subdomain) by main_domain, timestamp = timebucket(timestamp, "1m"),endpoint.name 
+| filter hits > 25
+| columns endpoint.name,main_domain, hits, subdomain_list, timestamp
+| limit 100000
+| sort -main_domain, -timestamp
+
+Description/Purpose: Distribution of TI amongst endpoints (ALL OS)
+Query: event.category = 'threat_intelligence_indicators'
+| group hits=count(tiIndicator.name)
+  by tiIndicator.name, tiIndicator.type, tiIndicator.value,
+     tiIndicator.addedBy, tiIndicator.description, endpoint.name
+| filter tiIndicator.name matches ("".*"") 
+| sort -hits
+| columns  hits,endpoint.name,tiIndicator.name,tiIndicator.type,tiIndicator.value
+
+Description/Purpose: "Find endpoints with highest number of TI matches
+ (ALL OS)"
+Query: event.category = 'threat_intelligence_indicators'
+| group hits=count(tiIndicator.name) by endpoint.name
+| sort -hits
+| columns  hits, endpoint.name
+
+Description/Purpose: Origin of Network scanning activity
+Query: event.network.direction = "OUTGOING"
+| filter dst.ip.address != src.ip.address
+| filter dst.port.number in ("3389","80","8080","22","21","445","1433","3306")
+| let rfc1918 =  net_rfc1918(dst.ip.address)
+| filter rfc1918 = true
+| columns endpoint.name,dst.port.number,dst.ip.address
+| group tgt_port_count=estimate_distinct(dst.port.number), tgt_ports=array_agg_distinct(dst.port.number),uniq_dst=estimate_distinct(dst.ip.address) by endpoint.name
+| sort -tgt_port_count
+| filter tgt_port_count > 4
+
+Description/Purpose: Frequency analysis on Parent->child->grandchild chains
+Query: event.category = "process" AND endpoint.os = "windows"
+| group frequency = count()
+by src.process.parent.name, src.process.name, tgt.process.name
+| columns src.process.parent.name, src.process.name, tgt.process.name, frequency
+| sort -frequency
+
+Description/Purpose: DirectSyscalls as possible EDR bypass attempts
+Query: endpoint.os = "windows" and  (src.process.signedStatus = "unsigned" or src.process.verifiedStatus = "unverified" )  and indicator.name in ("DirectSyscall", "DirectSyscallAfterNtdllRead", "DirectSyscallFromUnprotectedPatchedLibrary", "DirectSyscallFromLibrary", "DirectSyscallFromMainBinary", "DirectSyscallFromPatchedLibrary", "DirectSyscallFromRemoteAlloc", "DirectSyscallFromRemoteProcess",  "ParallelNtDllLoad")
+| group frequency=count(),storylines=array_agg_distinct(src.process.storyline.id),hashes=array_agg_distinct(src.process.image.sha1)
+by indicator.name,endpoint.name,src.process.cmdline
+
+Description/Purpose: Top Login outside business hours
+Query: event.login.type = "INTERACTIVE" && event.login.isAdministratorEquivalent = "true" && event.login.loginIsSuccessful = true
+| let hours = floor(((event.time/1000) % 86400) / 3600)
+| let minutes = floor(((event.time/1000) % 3600) / 60)
+| filter (hours > 18 && hours <= 24) || (hours >= 1 && hours < 8)
+| columns epoch_time=event.time, hours, minutes, endpoint=endpoint.name, login_user=event.login.userName , process=src.process.name, src.process.cmdline, event.login.isAdministratorEquivalent
+| limit 100
+
+Description/Purpose: Query for Outbound communications, grouped by hostname and process that initiated communication
+Query: src.process.name matches "powershell"
+dst.ip.address = * 
+| let rfc1918 = not ($dst.ip.address matches "((127\\..*)|(192\\.168\..*)|(10\\..*)|(172\\.1[6-9]\\..*)|(172\\.2[0-9]\\..*)|(172\\.3[0-1]\\..*)).*")
+| filter rfc1918 = true
+| group hits = count(src.process.name), IPs = array_agg_distinct(dst.ip.address) by endpoint.name, src.process.name, src.process.storyline.id
+| sort -hits
+
+Description/Purpose: Count of failed login attempts by userName
+Query: event.category = 'logins' | group NumberOfFailedAttempts=count(event.login.loginIsSuccessful=false) by event.login.userName, endpoint.name | sort -NumberOfFailedAttempts
+
+Description/Purpose: LOLBins spawned in fewer than 5 Agents
+Query: | filter (event.type == "Process Creation" AND tgt.process.name in:anycase("appvlp.exe", "atbroker.exe", "bash.exe", "bginfo.exe", "bitsadmin.exe", "cdb.exe", "certutil.exe", "cmd.exe", "cmdkey.exe", 
+"cmstp.exe", "control.exe", "csc.exe", "cscript.exe", "csi.exe", "dfsvc.exe", "diskshadow.exe", "dnscmd.exe", "dnx.exe", "dxcap.exe", "esentutl.exe", "eventvwr.exe", "expand.exe", "extexport.exe", 
+"extrac32.exe", "findstr.exe", "forfiles.exe", "ftp.exe", "gpscript.exe", "hh.exe", "ie4uinit.exe", "ieexec.exe", "infdefaultinstall.exe", "installutil.exe", "makecab.exe", "mavinject.exe", "mftrace.exe", 
+"microsoft.workflow.compiler.exe", "mmc.exe", "msbuild.exe", "msconfig.exe", "msdeploy.exe", "msdt.exe", "mshta.exe", "msxsl.exe", "odbcconf.exe", "pcalua.exe", "pcwrun.exe", "powershell.exe", 
+"presentationhost.exe", "print.exe", "pwsh.exe", "rcsi.exe", "reg.exe", "regasm.exe", "regedit.exe", "register-cimprovider.exe", "regsvcs.exe", "regsvr32.exe", "replace.exe", "rpcping.exe", "rundll32.exe", 
+"runonce.exe", "runscripthelper.exe", "sc.exe", "schtasks.exe", "scriptrunner.exe", "sqldumper.exe", "sqlps.exe", "sqltoolsps.exe", "syncappvpublishingserver.exe", "te.exe", "tracker.exe", "verclsid.exe", 
+"vsjitdebugger.exe", "vssadmin.exe", "wab.exe", "wmic.exe", "wscript.exe", "xwizard.exe"))
+| group EventCount = count(), DistinctAgentCount = estimate_distinct(agent.uuid), DistinctAgentUUIDs = array_agg_distinct(agent.uuid) by TargetProcessImagePath = lower(tgt.process.image.path)
+| filter(DistinctAgentCount < 5)
+| sort + EventCount| limit 1000
+
+Description/Purpose: Non-server endpoints running a VPN
+Query: | filter(endpoint.type != "server" AND (src.process.cmdline contains:anycase("vpn") OR src.process.displayName contains:anycase("vpn") OR src.process.cmdline contains:anycase("CyberGhost", "surfshark", "pia_client", "ipvanish", "TunnelBear", "hsscp") 
+OR (event.type == "Registry Value Create" AND registry.keyPath matches("Control\\\\Network\\\\[^\\\\]+\\\\Descriptions"))))
+| parse "Descriptions\\\\$NetworkInterfaceName$" from registry.keyPath
+| filter(!(NetworkInterfaceName == *) OR NetworkInterfaceName contains:anycase("Check Point", "Cisco", "CyberGhost", "TAP", "Fortinet", "GlobalProtect", "IPVanish", "Juniper", "Microsoft VPN", "Nlwt", "NordLynx", "Plus Secure", "SecureLine", "SoftEther", 
+"Tailscale", "Windscribe", "ExpressVPN", "Surfshark", "Mullvad", "ProtonVPN"))
+| group EventCount = count() by agent.uuid, event.type, src.process.uid, src.process.displayName, registry.keyPath
+| sort -EventCount
+| limit 1000
+
+Description/Purpose: Identify anomalous login activity patterns (spikes) potentially originating from VPN subnet or from unmanaged endpoints (endpoints that don't have S1 Agent installed). 
+Background: Attackers may access an environment via VPN with their on VM (no S1 EDR agent installed on it). They might start performing network reconnaissance and attempt to check valide credentials across many systems. This will result in a lot of login activities for the same usernames across many systems in a short timeframe.
+Breakdown of steps:
+
+STEP 1.identify all IP addresses from which a large volume of Logins is originating within a 30 minute interval (time buckets)
+	- IP addresses that have accessed less than 20 systems (managed endpoints) are removed to stay true to the original hunting hypothesis of large scale scanning
+STEP 2. For each of the 30 minute interval at step 1, the query attempts to identify the rfc1918 address(es) for every managed endpoint that has generated any kind of outbound network connections during that timeframe.
+STEP3. Results from step 1 and 2 are joined resulting in a table with the following fields:
+- event.login.userName: username referenced in the remote logins
+- endpoint.name: hostname that realistically maps to the source IP from which  the logins originate
+- src.endpoint.ip.address: IP of the machine responsible for the high volume of logins
+- timebucket_start: beginning of the 30 minute interval
+- earliest_login: timestamp of the earliest login in the 30 minute interval
+- latest_login: timestamp of the latest login in the 30 minute interval
+- delta_s: delta  delta in second, between latest_login and earliest_login
+- delta: delta in HH MM SS between  latest_login and earliest_login
+- login_per_minute: number of logins per minute within the 30 minute interval:
+- accessed_endpoint_cnt: number of distinct endpoints accessed by src.endpoint.ip.address
+- accessed_endpoints : list of hostnames accessed by src.endpoint.ip.address
+- rfc1918_cnt: size of rfc1918_list
+- rfc1918_list: list of private IPs associated with endpoint.name within the 30 minute interval
+Query: | left join login_spikes=(event.type = 'Login' and event.login.type in ('NETWORK_CLEAR_TEXT' ,'NETWORK_CREDENTIALS', 'NETWORK' ) and !(src.endpoint.ip.address in ('::1', '127.0.0.1'))  and src.endpoint.ip.address != null and !(event.login.userName contains "$")
+| columns account.name, site.name, event.time,src.endpoint.ip.address, endpoint.name, event.login.type, event.login.userName 
+| group earliest_login_tmp=oldest(event.time),latest_login_tmp=newest(event.time), accessed_endpoint_cnt=estimate_distinct(endpoint.name), accessed_endpoints=array_agg_distinct(endpoint.name) by src.endpoint.ip.address, timestamp = timebucket(event.time, "30m"), account.name, site.name, event.login.userName 
+| let delta_s=(latest_login_tmp - earliest_login_tmp)/1000
+| let delta=strftime(delta_s*1000*1000000,"%H:%M:%S")
+| let earliest_login=strftime(earliest_login_tmp*1000000,"%Y-%m-%d %H:%M:%S"),latest_login=strftime(latest_login_tmp*1000000,"%Y-%m-%d %H:%M:%S")
+| let login_per_minute = accessed_endpoint_cnt/(delta_s/60)
+| columns account.name,site.name,event.login.userName,src.endpoint.ip.address, timebucket_start=strftime(timestamp*1000000,"%Y-%m-%d %H:%M:%S"),earliest_login,latest_login, delta_s,delta,login_per_minute,accessed_endpoint_cnt,accessed_endpoints 
+| filter accessed_endpoint_cnt >= 20),
+endpoint_info= (event.type='IP Connect'  and !(src.ip.address in ('127.0.0.1', '0.0.0.0','255.255.255.255')) and event.network.direction = 'OUTGOING'
+| group rfc1918_list=array_agg_distinct(src.ip.address), rfc1918_cnt=estimate_distinct(src.ip.address) by endpoint.name,timestamp = timebucket(event.time, "30m")
+| columns endpoint.name,timebucket_start=strftime(timestamp*1000000,"%Y-%m-%d %H:%M:%S"),rfc1918_zero=array_get(rfc1918_list,0), rfc1918_cnt,rfc1918_list) on login_spikes.src.endpoint.ip.address=rfc1918_zero, login_spikes.timebucket_start=endpoint_info.timebucket_start
+| columns account.name,site.name,event.login.userName,endpoint.name,src.endpoint.ip.address, timebucket_start,earliest_login,latest_login, delta_s,delta,login_per_minute,accessed_endpoint_cnt,accessed_endpoints,rfc1918_cnt,rfc1918_list
+| sort timebucket_start
+
+Description/Purpose: Show me the distribution of VPN clients used in the environment and shows the results in aggregate form (Forensic approach)
+This approach focuses around processes (including vpn clients)  that interact with network interfaces on windows systems
+Query: | filter registry.keyPath  matches  "\}\\\\Descriptions"  
+| parse "Descriptions\\\\$interfaceName$" from registry.keyPath
+| filter len(interfaceName)>0
+| group frequency=estimate_distinct(endpoint.name) by interfaceName
+| sort -frequency
+| filter interfaceName matches "(Check Point|Cisco|CyberGhost|TAP Adapter|ExpressVPN|Fortinet|VPN|GlobalProtect|IPVanish|Juniper|Microsoft Virtual Private Network Adapter|Nlwt Tun|NordLynx|NordVPN|Pulse Secure Virtual Adapter|PureVPN|SecureLine|SoftEther|Tailscale|NordVPN|ProtonVPN|TAP-Windows|VyprVPN|Windscribe)"
+
+Description/Purpose: Users who have logged in from more than 2 different countries in the last week
+Query: | filter(event.type == "Login" AND event.login.loginIsSuccessful == true)
+| group LoginCount = count() by event.login.userName, LoginCountry = geo_ip_country(src.endpoint.ip.address)
+| group LoginCount = sum(LoginCount), LoginCountryCount = estimate_distinct(LoginCountry), DistinctLoginCountries = array_agg_distinct(LoginCountry) by event.login.userName
+| filter(LoginCountryCount > 2)
+| sort -LoginCountryCount
+| limit 1000
+
+Description/Purpose: PowerShell connections to IPs outside of the United States
+Query: | filter(event.type == "IP Connect" AND event.network.direction == "OUTGOING" AND src.process.displayName == "Windows PowerShell" AND !net_private(dst.ip.address) AND !net_ipsubnet(dst.ip.address, "0.0.0.0/8") AND !net_ipsubnet(dst.ip.address, "127.0.0.0/8") AND !net_ipsubnet(dst.ip.address, "169.254.0.0/16") AND geo_ip_country(dst.ip.address) != "United States")
+| columns event.time, event.id, event.type, site.id, site.name, agent.uuid, src.process.storyline.id, src.process.user, src.process.uid, src.process.cmdline, src.process.image.path, dst.ip.address, dst.port.number, event.network.direction, event.network.protocolName, event.network.connectionStatus, DestinationCountry = geo_ip_country(dst.ip.address)
+| sort -event.time
+| limit 1000
+
+Description/Purpose: All registry modifications initiated by a PowerShell script, grouped by command line argument
+Query: | filter(event.category == "registry" AND endpoint.os == "windows" AND src.process.displayName == "Windows PowerShell")
+| group EventCount = count() by src.process.cmdline
+| sort -EventCount
+| limit 1000
+
+Description/Purpose: Jjoin query to attach the command-line to a query for outbound PowerShell communications
+Query: | join 
+(src.process.name matches "powershell" dst.ip.address = *
+| let rfc1918 = not ($dst.ip.address matches "((127\\..*)|(192\\.168\..*)|(10\\..*)|(172\\.1[6-9]\\..*)|(172\\.2[0-9]\\..*)|(172\\.3[0-1]\\..*)).*")
+| filter rfc1918 = true
+| group hits = count(src.process.name), IPs = hacklist(dst.ip.address) by endpoint.name, src.process.name, src.process.storyline.id), 
+(src.process.name matches "powershell" src.process.cmdline = *
+| columns src.process.cmdline, src.process.storyline.id)
+on src.process.storyline.id
+
+Description/Purpose: This join query computes the most executed process for each endpoint, and the count. Note the use of the max_by function to calculate the most executed process
+Query: | join
+most_executed_process_by_endpoint = (event.type = "Process Creation" src.process.name=*
+| group c=count() by endpoint.name, src.process.name
+| group most_executed = max_by(src.process.name, c) by endpoint.name),
+all_procs_by_endpoint = (event.type = "Process Creation" src.process.name=* 
+| group cnt=count() by endpoint.name, most_executed=src.process.name) 
+on endpoint.name, most_executed
+
+
+[PQL Behavioral Indicators Reference]
+(No data available or sheet/columns missing)
+
+
+====END NATURAL_LANGUAGE TO PQL QUERY GUIDANCE=====
+Now, based on the user's input, translate the natural language request into an appropriate PQL query. Remember that in PQL the columns in the output need to be explicitly mentioned. Always include them.
