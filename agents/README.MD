@@ -47,7 +47,7 @@ To ensure seamless integration between the MCP server and HA workflows, we use a
 - `action`: Specifies which capability/function within the Agent should be executed (e.g., list_alerts, add_note_to_alert, etc.)
 - `input`: List of values (strings, integers, or dictionaries) containing the parameters required by the specified action
 
-### Output Message (to DB Agent)
+#### Output Message (to DB Agent)
 
 - `time_start`: Timestamp captured when the agent began processing the request
 - `time_stop`: Timestamp calculated when the agent completes processing (using DATETIME_NOW())
