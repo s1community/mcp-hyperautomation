@@ -4,7 +4,7 @@
 
 The CASEMANAGER Agent provides alert and case management capabilities. It enables security analysts to list, filter, and manage security alerts across different detection products, and add investigative notes to alerts for case documentation and collaboration.
 
-## Capabilities/Functionalities Exposed
+## Functionalities
 
 - **Alert Discovery**: List and filter security alerts with flexible time ranges
 - **Advanced Filtering**: Filter by asset names, alert IDs, detection products, and time ranges
