@@ -2,7 +2,13 @@
 
 ## Project Description
 
-The MCP Hyperautomation Server is a bridge between LLM clients and remote security services. It implements the MCP protocol to enable LLM clients to use security orchestration tools for threat intelligence, asset management, case management, and data lake queries.
+The MCP Hyperautomation Server provides a bridge between LLM clients and a middle-layer of HA workflows, enabling dynamic security orchestration through natural language interaction.
+This MCP server is the core component of an architecture called **Interactive Security Orchestrator** that reimagines how standard SOAR solutions can operate.
+
+Unlike traditional SOAR platforms, where workflows are pre-built and static, this architecture enables analysts to "create workflows" in real-time as the LLM interprets high-level security goals and dynamically selects the optimal tools and actions from available Agents in the HyperAutomation layer.
+
+This unlocks a new paradigm where dynamic workflow orchestration can complement traditional static SOAR approaches, creating a hybrid system that combines the reliability and predictability of pre-built workflows with the flexibility and intelligence of adaptive, context-aware automation.
+
 
 ## Architecture Blueprint
 
