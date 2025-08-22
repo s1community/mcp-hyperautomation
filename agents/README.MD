@@ -41,7 +41,7 @@ To ensure seamless integration between the MCP server and HA workflows, we use a
 }
 ```
 
-This standardised format enables both MCP-to-HA communication and inter-Agent message passing within workflows, with all Agent outputs being routed through the DB Agent for external storage due to the platform's unidirectional data flow constraints.
+This standardised format enables both MCP-to-HA communication and inter-Agent message passing within workflows, with all Agent outputs being routed through the DB Agent for temporary external storage due to the platform's unidirectional data flow constraints.
 
 ### Field Descriptions
 #### Input Message
