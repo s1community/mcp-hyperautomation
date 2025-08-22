@@ -2,9 +2,9 @@
 
 ## Agent Purpose
 
-The RO_MANAGER (Remote Operations Manager) Agent provides task management capabilities. It enables security analysts to discover available scripts in the library, execute remote operations tasks, and monitor task execution status across managed endpoints.
+The RO_MANAGER (Remote Operations Manager) Agent should provides task management capabilities in RemoteOps. Analysts should be able to discover available scripts in the library, execute remote operations tasks, and monitor task execution status across managed endpoints.
 
-## Functionalities
+## Implemented Functionalities
 
 - **Script Library Management**: List and discover available RemoteOps scripts
 - **Task Execution Monitoring**: List and filter remote operations tasks/jobs
