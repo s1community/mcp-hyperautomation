@@ -11,7 +11,9 @@ Modular architectures happen to be the golden standard when building SOAR orches
 
 ## Message Format Protocol
 To ensure seamless integration between the MCP server and HA workflows, we use a standardised JSON protocol which defines the structure for both input and output messages:
+
 ####Input Format
+
 ```json
 {
   "req_id": "generated_uuid",
@@ -21,6 +23,7 @@ To ensure seamless integration between the MCP server and HA workflows, we use a
 ```
 
 ####Output Format (Message to DB Agent)
+
 ```json
 {
   "req_id": "generated_uuid",
