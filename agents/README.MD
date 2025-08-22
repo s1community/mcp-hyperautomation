@@ -43,18 +43,17 @@ To ensure seamless integration between the MCP server and HA workflows, we use a
 ### Field Descriptions
 #### Input Message
 
-- req_id: Unique identifier generated using str(uuid.uuid4()) enabling correlation between requests and responses
-- action: Specifies which capability/function within the Agent should be executed (e.g., list_alerts, add_note_to_alert, etc.)
-- input: List of values (strings, integers, or dictionaries) containing the parameters required by the specified action
+- `req_id`: Unique identifier generated using str(uuid.uuid4()) enabling correlation between requests and responses
+- `action`: Specifies which capability/function within the Agent should be executed (e.g., list_alerts, add_note_to_alert, etc.)
+- `input`: List of values (strings, integers, or dictionaries) containing the parameters required by the specified action
 
 ### Output Message (to DB Agent)
 
-- time_start: Timestamp captured when the agent began processing the request
-- time_stop: Timestamp calculated when the agent completes processing (using DATETIME_NOW())
-- req_id: Original request identifier for traceability
-- action: Echo of the original action that was executed
-- data: Dictionary containing the agent's output results (flexible structure with no constraints)
-
+- `time_start`: Timestamp captured when the agent began processing the request
+- `time_stop`: Timestamp calculated when the agent completes processing (using DATETIME_NOW())
+- `req_id`: Original request identifier for traceability
+- `action`: Echo of the original action that was executed
+- `data`: Dictionary containing the agent's output results (flexible structure with no constraints)
 This standardized format enables both MCP-to-HA communication and inter-Agent message passing within workflows, with all Agent outputs being routed through the DB Agent for external storage due to the platform's unidirectional data flow constraints.
 
 
