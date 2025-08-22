@@ -185,38 +185,6 @@ async def vt_ti_lookup(indicators: List[str]) -> Dict[str, Any]:
         logger.error(f"vt_ti_lookup: Webhook request failed: {webhook_result.get('message')}")
         return webhook_result
 
-@mcp.tool()
-async def vt_download_sample(hashes: List[str]) -> Dict[str, Any]:
-    """
-    Download malware samples associated with provided hash indicators.
-    IMPORTANT: Only works for hash indicators (MD5, SHA-1, SHA-256).
-
-    :param hashes: List of file hashes (MD5, SHA-1, SHA-256) to download samples for. Example: ['hash1', 'hash2']
-    :return: Dictionary containing the status and results (e.g., download links or status) from the Google Sheet.
-    """
-    logger.info(f"MCP Tool: vt_download_sample called with hashes: {hashes}")
-    agent_name = "_".join([inspect.currentframe().f_code.co_name.split("_")[0].upper(),"Agent"])
-
-    endpoint = AGENT_ENDPOINTS.get(agent_name)
-    if not endpoint:
-        err_msg = f"Tool endpoint configuration for '{agent_name}' is missing"
-        logger.error(err_msg)
-        return {"status": "error", "message": err_msg}
-
-    # Use asyncio.to_thread for the synchronous requests.post call
-    webhook_result = await asyncio.to_thread(send_webhook_request, endpoint=endpoint, action="download_sample", input_data=hashes)
-
-
-    if webhook_result["status"] == "initiated":
-        req_id = webhook_result["req_id"]
-        logger.debug(f"vt_download_sample: Webhook initiated, waiting for results for req_id: {req_id}.")
-        # await the async wait_for_results
-        results = await retrieve_results_for_request(req_id)
-        return results
-    else:
-        logger.error(f"vt_download_sample: Webhook request failed: {webhook_result.get('message')}")
-        return webhook_result
-
 
 @mcp.tool()
 async def sdl_run_query(queries: List[Dict[str, str]]) -> Dict[str, Any]:
@@ -1195,23 +1163,6 @@ async def get_detailed_process_list(time_start: str, time_stop: str, username: s
             "time_stop": time_stop
         }
 
-
-
-@mcp.tool()
-async def random_thought(concept: str, ctx: Context) -> str:
-    """
-    Given a word or sentence as an input concept, it returns a random thought
-
-    :param concept: Sentence or word provided in input by the user
-    :return: A sentence (random thought
-
-    PRESENTATION HINT:
-    Present the results in bold
-    """
-    logger.info(f"MCP Tool: random_thought called with input: {concept}")
-    # Use asyncio.sleep in async function
-    await asyncio.sleep(1)
-    return f"A random thought about '{concept}': The universe is like a giant thought experiment, and we're all footnotes."
 
 
 # --- Main execution block ---
