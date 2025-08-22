@@ -9,6 +9,52 @@ This means that **instead of building monololithic workflows**, which are good p
 Modular architectures happen to be the golden standard when building SOAR orchestrations and Agents embody that paradigm in HA.
 
 
+## Message Format Protocol
+To ensure seamless integration between the MCP server and HA workflows, we use a standardised JSON protocol which defines the structure for both input and output messages:
+####Input Format
+```json
+{
+  "req_id": "generated_uuid",
+  "action": "function_name", 
+  "input": ["value1", "value2", {...}]
+}
+```
+
+####Output Format (Message to DB Agent)
+```json
+{
+  "req_id": "generated_uuid",
+  "action": "create_row",
+  "input": [{
+    "time_start": "timestamp_when_agent_started",
+    "time_stop": "timestamp_when_agent_finished", 
+    "req_id": "original_request_id",
+    "action": "original_action_name",
+    "data": {
+      "key1": "value1",
+      "key2": "value2"
+    }
+  }]
+}
+```
+
+###Field Descriptions
+###Input Message
+
+- req_id: Unique identifier generated using str(uuid.uuid4()) enabling correlation between requests and responses
+- action: Specifies which capability/function within the Agent should be executed (e.g., list_alerts, add_note_to_alert, etc.)
+- input: List of values (strings, integers, or dictionaries) containing the parameters required by the specified action
+
+### Output Message (to DB Agent)
+
+- time_start: Timestamp captured when the agent began processing the request
+- time_stop: Timestamp calculated when the agent completes processing (using DATETIME_NOW())
+- req_id: Original request identifier for traceability
+- action: Echo of the original action that was executed
+- data: Dictionary containing the agent's output results (flexible structure with no constraints)
+
+This standardized format enables both MCP-to-HA communication and inter-Agent message passing within workflows, with all Agent outputs being routed through the DB Agent for external storage due to the platform's unidirectional data flow constraints.
+
 
 ---
 ## Release Notes
