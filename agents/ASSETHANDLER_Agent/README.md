@@ -4,7 +4,7 @@
 
 The ASSETHANDLER Agent enables discovery of endpoints connected to the management console, including detailed asset information retrieval and agent configuration retrieval.
 
-## Capabilities/Functionalities Exposed
+## Functionalities
 
 - **Endpoint Discovery**: List and filter endpoints based on various criteria
 - **Configuration Retrieval**: Access detailed agent/endpoint configuration settings
