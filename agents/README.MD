@@ -67,7 +67,7 @@ This standardised format enables both MCP-to-HA communication and inter-Agent me
 
 - First release of the MCP server for HyperAutomation
   - Four Active and One Passive Agents release:
-    - [**Case Manager**](.ASSETHANDLER_Agent/README.md)
+    - [**Case Manager**](ASSETHANDLER_Agent/README.md)
     - **SDL**
     - **Asset Manager**
     - **VT**
