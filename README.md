@@ -72,14 +72,10 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 
 ## Usage
 
-The server supports both stdio and SSE transport methods:
+Connect the MCP server to your LLM client of preference. **Note**: Testing was performed with chatgpt-4.1
 
-```bash
-# SSE transport (default)
-uv run python server/server.py --transport sse --host 127.0.0.1 --port 8000
-
-# STDIO transport  
-uv run python server/server.py --transport stdio
+```
+/PATH_TO_BINARY/uv --directory /mcp-hyperautomation/server/ run server.py --transport stdio
 ```
 
 ## Dependencies
