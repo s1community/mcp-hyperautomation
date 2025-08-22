@@ -40,6 +40,9 @@ To ensure seamless integration between the MCP server and HA workflows, we use a
   }]
 }
 ```
+
+This standardised format enables both MCP-to-HA communication and inter-Agent message passing within workflows, with all Agent outputs being routed through the DB Agent for external storage due to the platform's unidirectional data flow constraints.
+
 ### Field Descriptions
 #### Input Message
 
@@ -54,8 +57,6 @@ To ensure seamless integration between the MCP server and HA workflows, we use a
 - `req_id`: Original request identifier for traceability
 - `action`: Echo of the original action that was executed
 - `data`: Dictionary containing the agent's output results (flexible structure with no constraints)
-
-This standardized format enables both MCP-to-HA communication and inter-Agent message passing within workflows, with all Agent outputs being routed through the DB Agent for external storage due to the platform's unidirectional data flow constraints.
 
 
 ---
