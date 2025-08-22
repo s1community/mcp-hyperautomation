@@ -25,6 +25,3 @@
 ### Bugs
 - N/A
 ---
-
-
-    - DB (Passive)
