@@ -73,6 +73,7 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 ## Usage
 
 Connect the MCP server to your LLM client of preference. 
+
 **Note**: Testing was performed with `chatgpt-4.1`
 
 ```
