@@ -1,4 +1,4 @@
-# MCP Hyperautomation Server (Alpha)
+# MCP HyperAutomation Server (Alpha)
 
 ## Project Description
 
