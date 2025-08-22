@@ -94,4 +94,4 @@ Connect the MCP server to your LLM client of preference.
 - FastMCP
 - Google Cloud BigQuery Python client
 - uvicorn (for SSE transport)
-- Additional dependencies listed in `server/pyproject.toml`
+- Additional dependencies listed in [server/pyproject.toml](./server/pyproject.toml)
