@@ -1,4 +1,4 @@
-# DB Agent
+# DB Manager
 
 ## Agent Purpose
 
