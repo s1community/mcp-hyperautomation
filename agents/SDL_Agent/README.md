@@ -73,6 +73,7 @@ The SDL Agent requires a webhook endpoint to be configured in the `AGENT_ENDPOIN
 ## Usage Examples
 
 **Run PQL Query:**
+```
 run this query filter( event.category == 'registry' AND registry.keyPath matches '\\\\Netlogon\\\\') | columns event.time, event.id, event.type, endpoint.name, agent.uuid, src.process.storyline.id, src.process.user, src.process.uid, src.process.cmdline, src.process.image.path, registry.keyUid, registry.keyPath, registry.value, registry.valueType for april 11 to 12 2025 and from April 1-3
 ```
 
@@ -81,8 +82,7 @@ run this query filter( event.category == 'registry' AND registry.keyPath matches
 Show me incoming RDP connections from public IPs not in the US
 ```
 
-
 **Remote Logon Analysis:**
-```python
+```
 list remote logons for "DESKTOP-ABC123 on 2025-04-11
 ```
