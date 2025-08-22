@@ -2,7 +2,7 @@
 
 ## Agent Purpose
 
-The SDL (Singularity Data Lake) Agent should provide advanced query capabilities against the Singularity Data Lake using PowerQuery Language (PQL), enabling threat hunting and investigations across managed endpoints.
+This Agent should provide advanced query capabilities against the SDL (Singularity Data Lake) using PowerQuery Language (PQL), enabling threat hunting and investigations across managed endpoints.
 
 ## Implemented Functionalities
 
