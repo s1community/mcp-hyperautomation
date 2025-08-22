@@ -7,7 +7,6 @@ It implements the MCP protocol to allow LLM Clients to use tools/functions like 
 
 Current implemented tools:
 - ti_lookup: Threat intelligence lookup for IPs, FQDNs, and hashes
-- download_sample: Download malware samples associated with hash indicators
 - sdl_run_query: Run one or multiple PQL queries against the Singularity Data Lake and collect the results
 - list_endpoints: List endpoints connected to the management console. Optionally filter by conditions
 """
