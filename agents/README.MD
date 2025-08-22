@@ -2,11 +2,11 @@
 
 ## What is an Agent?
 
-Agents are the backbone of the **Interactive Security Orchestrator** architecture, each representing a collective of features all related to the same domain (Detections, Intel Enrichment, Agent Management, Case Management, DataLake, etc..).
+Agents are the backbone of the Interactive Security Orchestrator architecture, each representing a collective of features related to the same domain (Detections, Intel Enrichment, Agent Management, Case Management, DataLake, etc.).
 
-This means that **instead of building monololithic workflows**, which are good prototyping, but but don't scale and are generally hard to main over longer periods of time, **we rely on a modular architecture** where each each group of domain-specific capabilities is exposed by a single entity that we call Agent.
+This means that **instead of building monolithic workflows**, which are good  for prototyping, but don't scale and are generally hard to main over longer periods of time, **we rely on a modular architecture** where each group of domain-specific capabilities is exposed by a single entity that we call Agent.
 
-Modular architectures happen to be the golden standard when building SOAR orchestrations and Agents embody that paradigm in HA.
+Modular architectures happen to be the golden standard when building SOAR orchestrations, and Agents embody that paradigm in HA.
 
 
 ## Message Format Protocol
