@@ -2,7 +2,7 @@
 
 ## Project Description
 
-The MCP (Model Context Protocol) Hyperautomation Server is a bridge between LLM clients and remote security services. It implements the MCP protocol to enable LLM clients to use security orchestration tools for threat intelligence, asset management, case management, and data lake queries.
+The MCP Hyperautomation Server is a bridge between LLM clients and remote security services. It implements the MCP protocol to enable LLM clients to use security orchestration tools for threat intelligence, asset management, case management, and data lake queries.
 
 ## Architecture Blueprint
 
@@ -12,16 +12,14 @@ The MCP (Model Context Protocol) Hyperautomation Server is a bridge between LLM 
 
 ### MCP Server
 - **Location**: `server/server.py`
-- **Purpose**: Core MCP protocol implementation that handles client requests and routes them to appropriate agents
+- **Purpose**: Core MCP protocol implementation that handles client requests and routes them to appropriate agents implemented as HyperAutomation workflows
 - **Key Features**:
   - FastMCP server implementation
   - Database polling and result retrieval
-  - Webhook request handling
-  - Comprehensive logging system
 
 ### Agents
 
-The system integrates with multiple specialized agents through webhook endpoints:
+The system integrates with multiple specialised agents through webhook endpoints:
 
 - **[VT Agent](./agents/VT_Agent/README.md)** - Virus Total threat intelligence lookups and sample downloads
 - **[SDL Agent](./agents/SDL_Agent/README.md)** - Singularity Data Lake query execution and analysis
