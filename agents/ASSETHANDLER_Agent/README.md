@@ -2,9 +2,9 @@
 
 ## Agent Purpose
 
-The ASSETHANDLER Agent enables discovery of endpoints connected to the management console, including detailed asset information retrieval and agent configuration retrieval.
+The ASSETHANDLER Agent should enable the discovery of endpoints connected to the management console, including detailed asset information retrieval and agent configuration retrieval.
 
-## Functionalities
+## Implemented Functionalities
 
 - **Endpoint Discovery**: List and filter endpoints based on various criteria
 - **Configuration Retrieval**: Access detailed agent/endpoint configuration settings
