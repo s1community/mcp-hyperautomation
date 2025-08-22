@@ -301,14 +301,7 @@ async def assethandler_list_endpoints(conditions: List[Dict[str, Any]]) -> Dict[
     - activeThreats: (integer) Include Agents with this amount of active threats
     - infected: (boolean) Include Agents that are infected. Example: true
     - computerName__contains: Free-text filter by computer name (supports multiple values). Example: "john-office,WIN-XX"
-    - computerName__like: Match computer name partially (substring). Example: "Lab1".
-    - ids: (string []) A list of Agent IDs
-    - uuid: (string) Agent's universally unique identifier
-    - uuids: (string []) A list of included UUIDs
-    - uuid__contains: (string []) Free-text filter by Agent UUID (supports multiple values). Example: "e92-01928...,b055...".
-    - osTypes: (string) (Example: "windows")
-    - adQuery__contains: Free-text filter by Active Directory string (supports multiple values). Example: "DC=sentinelone,CN=Enterprise Admins,..".
-    - query: (string) A free-text search term, will match applicable attributes (sub-string match).
+
     """
     logger.info(f"MCP Tool: asset_list_endpoints called with conditions: {conditions}")
     agent_name = "_".join([inspect.currentframe().f_code.co_name.split("_")[0].upper(),"Agent"])
@@ -347,7 +340,7 @@ async def assethandler_list_assets(conditions: List[Dict[str, Any]]) -> Dict[str
     :param conditions: A LIST that is either:
                             1. A list with a single empty dictionary `[{}]` (to list/find all endpoints).
                             2. A list of dictionaries for filtering.
-    :return: Dictionary containing endpoint information or an error. This method MUST BE CALLED to pivot from endpoint UUID (e.g 927088eb-b890-4e7e-ba26-ebdc8f77f5a7) to Asset ID ("5qyrgexenze4znwm6iihjd5weq")
+    :return: Dictionary containing endpoint information or an error. This method MUST BE CALLED to pivot from endpoint UUID (from "927088eb-b890-4e7e-ba26-ebdc8f77f5a7" to "5qyrgexenze4znwm6iihjd5weq")
     When creating the filters, ONLY use the conditions listed below.
     NEVER guess the condition and ONLY use the conditions listed below.
     Using a condition not included in the list below will cause an error.
@@ -522,10 +515,8 @@ async def pql_retrieve_knowledge(context:List) -> str:
     :param context: An empty dictionary: {}
     :return: A large prompt string.
     """
-    excel_file_path = "resources/rag_pql_queries.xlsx"
-    reader = PQL_XLS_Reader(excel_file_path)
-    pql_prompt = reader.generate_prompt(write_to_disk=True)
-
+    with open("resources/NL2PQL_prompt.txt", "r", encoding="utf-8") as f:
+        pql_prompt = f.read()
 
     return pql_prompt
 
@@ -707,7 +698,7 @@ async def get_remote_logon_patterns_for_username(username: str, time_start: str,
         | let earliest_login=strftime(earliest_login_tmp*1000000,'%Y-%m-%d %H:%M:%S'),latest_login=strftime(latest_login_tmp*1000000,'%Y-%m-%d %H:%M:%S')
         | columns event.login.tgt.domainName,event.login.userName,src.endpoint.ip.address, timebucket_start=strftime(timestamp*1000000,'%Y-%m-%d %H:%M:%S'),earliest_login,latest_login, delta_s,delta,successful_logon_cnt,failed_logon_cnt,accessed_endpoint_cnt,accessed_endpoints,logon_types),
         endpoint_info= ((event.type='IP Connect' and !(src.ip.address in ('127.0.0.1', '0.0.0.0','255.255.255.255')) and event.network.direction = 'OUTGOING') or (event.type = 'Login' and event.login.userName contains '$')
-        | let src_hostname =  event.type == 'Login' ? upper(array_get(extract_matches(event.login.userName, '^(.*)\\\\$'),0)): upper(endpoint.name)
+        | let src_hostname =  event.type == 'Login' ? array_get(extract_matches(event.login.userName, '^(.*)\\\\$'),0)): upper(endpoint.name)
         | let username = event.type == 'IP Connect' ? src.process.user: ''
         | let src_ip_address = event.type == 'IP Connect' ? src.ip.address : src.endpoint.ip.address
         | group rfc1918_list=array_agg_distinct(src_ip_address), rfc1918_cnt=estimate_distinct(src_ip_address), tmp_endpoint_username_list=array_agg_distinct(username),tmp_username_cnt=estimate_distinct(username) by src_hostname,timestamp = timebucket(event.time, "30m")
@@ -819,7 +810,6 @@ async def get_fuzzy_logon_session_windows(time_start: str, time_stop: str, usern
 
         # Add some metadata to indicate this came from get_ip_from_hostname
         if isinstance(results, dict) and results.get("status") == "success":
-
             results["source_tool"] = results["source_tool"] = inspect.currentframe().f_code.co_name
             results["searched_username"] = username
             results["time_range"] = f"{time_start} to {time_stop}"
