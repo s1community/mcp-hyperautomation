@@ -45,18 +45,13 @@ The CASEMANAGER Agent requires a webhook endpoint to be configured in the `AGENT
 ```
 list alerts in the last 10 days
 ```
-
-
-```
-
 **Filter by Detection Product:**
 ```
 find identity alerts
 ```
-
 **Filter by Asset Name:**
-```python
-await casemanager_list_alerts([{"assetName": "DESKTOP-ABC123"}])
+```
+list alerts for DESKTOP-ABC123
 ```
 
 **Add Notes to Alerts:**
