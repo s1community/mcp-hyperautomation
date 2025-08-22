@@ -2,13 +2,11 @@
 
 ## Agent Purpose
 
-The VT (VirusTotal) Agent provides threat intelligence capabilities by interfacing with VirusTotal services to analyze indicators of compromise (IOCs) and download malware samples for security analysis.
+The VT (VirusTotal) Agent should threat intelligence capabilities by interfacing with VirusTotal services to analyze indicators of compromise (IOCs) and download malware samples for security analysis.
 
-## Capabilities/Functionalities Exposed
+## Implemented Functionalities
 
 - **Threat Intelligence Lookup**: Analyze multiple host-based indicators (HBIs) and network-based indicators (NBIs) including IPs, FQDNs, and file hashes
-- **Multi-Format Support**: Handles MD5, SHA-1, and SHA-256 hash formats
-- **Bulk Support**: Each lookup can include a list of indicators
 
 ## Associated Tools
 
@@ -16,7 +14,6 @@ The VT (VirusTotal) Agent provides threat intelligence capabilities by interfaci
 - **Purpose**: Perform threat intelligence lookup on multiple indicators in parallel
 - **Input**: List of indicators (IPs, FQDNs, hashes)
 - **Output**: Security details including reputation, classification, risk scores, and detection information
-- **Presentation**: Results formatted in markdown table with risk highlighting
 
 
 ## Endpoint Configuration
