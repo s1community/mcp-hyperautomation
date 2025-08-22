@@ -7,8 +7,7 @@ This MCP server is the core component of an architecture called **Interactive Se
 
 Unlike traditional SOAR platforms, where workflows are pre-built and static, this architecture enables analysts to "create workflows" in real-time as the LLM interprets high-level security goals and dynamically selects the optimal tools and actions from available [Agents](./agents/README.MD) in the HyperAutomation layer.
 
-This unlocks a new paradigm where dynamic workflow orchestration can complement traditional static SOAR approaches, creating a hybrid system that combines the reliability and predictability of pre-built workflows with the flexibility and intelligence of adaptive, context-aware automation.
-
+This unlocks a new paradigm where analysts can seamlessly blend dynamic workflow orchestration with traditional static SOAR approaches, creating a hybrid system that combines the reliability and predictability of pre-built workflows with the flexibility and intelligence of conversational, user-directed automation.
 
 ## Architecture Blueprint
 
