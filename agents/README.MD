@@ -72,7 +72,7 @@ This standardised format enables both MCP-to-HA communication and inter-Agent me
     - [**Asset Handler**](ASSETHANDLER_Agent/README.md)
     - [**VT**](VT_Agent/README.md)
     - [**DB Manager**](DB_Manager/README.md)
-  - Google Big Query is the default choice for temporarily storing Agents' results
+  - Google Big Query as the default choice for temporarily storing Agents' results
  
 ### Improvements
 - N/A
