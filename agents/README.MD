@@ -2,7 +2,7 @@
 
 ## What is an Agent?
 
-Agents are the backbone of the **Interactive Security Orchestrator** architecture, each representing a collective of features related to the same domain (Detections, Intel Enrichment, Agent Management, Case Management, DataLake, etc.).
+Agents are the backbone of the **Interactive Security Orchestration** architecture, each representing a collective of features related to the same domain (Detections, Intel Enrichment, Agent Management, Case Management, DataLake, etc.).
 
 This means that **instead of building monolithic workflows**, which are good  for prototyping, but don't scale and are generally hard to main over longer periods of time, **we rely on a modular architecture** where each group of domain-specific capabilities is exposed by a single entity that we call Agent through a Webhook Endpoint.
 
