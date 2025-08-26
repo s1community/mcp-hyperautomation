@@ -12,7 +12,7 @@ This unlocks a new paradigm where analysts can seamlessly blend dynamic workflow
 
 ## Architecture Blueprint
 
-<img width="1145" height="628" alt="Image" src="https://github.com/user-attachments/assets/8aee341f-720b-4fd9-a8cc-52a92eb1ad8f" />
+<img width="1145" height="628" alt="Image" src="https://github.com/user-attachments/assets/0fb915d8-0fbd-4f19-88fe-7075e8d3fe05" />
 
 ## Primary Components
 
