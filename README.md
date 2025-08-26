@@ -12,8 +12,7 @@ This unlocks a new paradigm where analysts can seamlessly blend dynamic workflow
 
 ## Architecture Blueprint
 
-<img width="711" height="580" alt="Image" src="https://github.com/user-attachments/assets/55eb434f-90bc-44ab-b3cf-3b291c1fb186" />
-
+<img width="1145" height="628" alt="Image" src="https://github.com/user-attachments/assets/c75e082c-3f01-482a-bf36-850e0af0ccc2" />
 ## Primary Components
 
 ### MCP Server
