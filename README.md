@@ -101,3 +101,6 @@ Connect the MCP server to your LLM client of preference.
 - Google Cloud BigQuery Python client
 - uvicorn (for SSE transport)
 - Additional dependencies listed in [server/pyproject.toml](./server/pyproject.toml)
+
+-----
+*Author*: antonio.monaca@sentinelone.com
