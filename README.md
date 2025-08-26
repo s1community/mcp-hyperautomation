@@ -1,8 +1,8 @@
-# MCP HyperAutomation Server (Alpha)
+# HyperAutomation MCP Server (Alpha)
 
 ## Project Description
 
-The MCP Hyperautomation Server provides a bridge between LLM clients and a middle-layer of HA workflows, enabling dynamic security orchestration through natural language interactions.
+The Hyperautomation MCP Server provides a bridge between LLM clients and a middle-layer of HA workflows, enabling dynamic security orchestration through natural language interactions.
 
 This MCP server is the core component of an architecture called **Interactive Security Orchestration** that reimagines how standard SOAR solutions can operate.
 
