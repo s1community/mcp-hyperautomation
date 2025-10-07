@@ -81,6 +81,8 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 4. **Generate service account credentials file** for BigQuery access
 5. **Update agent webhook URLs** in `server.py`
 6. **Start the server**: `uv run python server/server.py`
+   - Make sure you see no errors
+   - Kill process afterwards and proceed to add the MCP server to the LLM client
 
 ## Usage
 
