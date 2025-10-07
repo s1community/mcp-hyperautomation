@@ -76,11 +76,12 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 ## Setup Instructions
 
 1. **Clone the repository**
-2. **Install dependencies**: `uv install` (or `uv sync` if using uv.lock)
-3. **Configure environment variables** (see above)
-4. **Generate service account credentials file** for BigQuery access
-5. **Update agent webhook URLs** in `server.py`
-6. **Start the server**: `uv run python server/server.py`
+2. [Configure the Agents](./agents/INSTALLATION.MD)
+3. **Install dependencies**: `uv install` (or `uv sync` if using uv.lock)
+4. **Configure environment variables** (see instructions above)
+5. **Generate service account credentials file** for BigQuery access
+6. **Update agent webhook URLs** in `server.py`
+7. **Start the server**: `uv run python server/server.py`
    - Make sure you see no errors
    - Kill process afterwards and proceed to add the MCP server to the LLM client
 
