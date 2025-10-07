@@ -17,7 +17,7 @@ This unlocks a new paradigm where analysts can seamlessly blend dynamic workflow
 ## Primary Components
 
 ### MCP Server
-- **Location**: `server/server.py`
+- **Location**: [server/server.py](./server/server.py)
 - **Purpose**: Core MCP protocol implementation that handles client requests and routes them to appropriate agents implemented as HyperAutomation workflows
 - **Key Features**:
   - FastMCP server implementation
