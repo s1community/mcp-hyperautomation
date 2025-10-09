@@ -30,7 +30,7 @@ This will generate unique IDs for the agents and a deployment archive called `de
 | VT                   | 1bc6413b-5bbe-4a19-8ef5-6a494546136d |
 ---------------------------------------------------------
 ```
-Make sure to save the content of this table as we will need it to configure the MCP server.
+Make sure to **save the content of this table** since we will need it later to configure the MCP server.
 
 #### Upload the Agents
 
