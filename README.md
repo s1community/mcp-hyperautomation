@@ -93,6 +93,13 @@ Connect the MCP server to your LLM client of preference.
 ```
 /PATH_TO_BINARY/uv --directory /mcp-hyperautomation/server/ run server.py --transport stdio
 ```
+Run a quick test by asking: `list endpoints` and you should get something like the following
+
+| computerName | osType | machineType | agentVersion | lastActiveDate | infected | activeThreats | internalIp | externalIp | activeProtection | siteName | groupName | osName | uuid | id |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Frontier-PHX | windows | desktop | 22.3.4.612 | 2025-08-11T18:26:16.080037Z | true | 6 | 192.168.192.20 | 206.198.150.53 | ["edr"] | XXX | Default Group | Windows 10 Enterprise Evaluation | 919e37a9-e6a2-4b82-a9e9-7aa92096ec72 | 2279159527239327282 |
+| TheBorg-PHX | windows | server | 22.3.4.612 | 2025-08-11T18:26:16.043995Z | true | 4 | 192.168.192.10 | 206.198.150.53 | ["edr"] | XXXX | Default Group | Windows Server 2019 Standard Evaluation | c96bbca7-4573-4dcf-ad84-808d2034e3da | 2279159527247715891 |
+| aws-al2023 | linux | server | 22.3.4.612 | 2025-08-11T18:26:16.043995Z | true | 1 | 172.17.0.1 | 206.198.150.53 | ["edr"] | XXX | Default Group | Linux | deb0ffbd-a996-46ab-912f-739e02b25fe2 | 2279159523011468837 |
 
 ## Dependencies
 
