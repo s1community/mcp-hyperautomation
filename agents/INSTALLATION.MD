@@ -67,6 +67,7 @@ Once the ZIP file has been created. Log into the S1 management console and go to
 
 <img width="1056" height="704" alt="Image" src="https://github.com/user-attachments/assets/7ebfe782-2151-4525-812a-9bb47539bd06" />
 <img width="321" height="493" alt="Image" src="https://github.com/user-attachments/assets/2446067b-9bd2-4375-b43b-76d89cddb5db" />
+
 ### Updating the API Endpoints
 
 #### Configure API endpoint
