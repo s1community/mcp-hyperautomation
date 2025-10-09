@@ -79,10 +79,11 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 4. **Configure environment variables** ([see instructions above](#environment-variables-configuration))
 5. **Generate service account credentials file** for BigQuery access
 6. **Update agent webhook URLs** in `server.py`
-7. **Start the server**: `uv run python server/server.py`
+7. **Test the server**: `uv run python server/server.py`
    - Make sure you see no errors
-   - Kill process afterwards and proceed to add the MCP server to the LLM client
+   - Kill process
 
+     
 ## Usage
 
 Connect the MCP server to your LLM client of preference. 
