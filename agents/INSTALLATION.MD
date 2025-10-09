@@ -76,20 +76,20 @@ Update all webhook URLs in `AGENT_ENDPOINTS` dictionary in [server.py](../server
 ##### Before
 ```python
 AGENT_ENDPOINTS = {
-    "VT_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "SDL_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "ASSETHANDLER_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "CASEMANAGER_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "RO_MANAGER_Agent" :  "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>"
+    "VT_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "SDL_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "ASSETHANDLER_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "CASEMANAGER_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "RO_MANAGER_Agent" :  "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>"
 }
 ```
 
 ##### After
 ```python
 AGENT_ENDPOINTS = {
-    "VT_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/1bc6413b-5bbe-4a19-8ef5-6a49454..",
-    "SDL_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/8e015aa5-72b7-4cd4-946e-e1...",
-    "ASSETHANDLER_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/b64252f0-8921-43d0-a9f7-372...",
+    "VT_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/1bc6413b-5bbe-4a19-8ef5-6a49454..",
+    "SDL_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/8e015aa5-72b7-4cd4-946e-e1...",
+    "ASSETHANDLER_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/b64252f0-8921-43d0-a9f7-372...",
      ...
      ...
 }
