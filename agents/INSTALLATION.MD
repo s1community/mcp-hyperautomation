@@ -66,7 +66,7 @@ Once the ZIP file has been created. Log into the S1 management console and go to
 - Open the **DB_Manager Agent** and set a new value for `projectId` field as shown in the image below. This is the same `projectID` that maps to the BigQuery project you created earlier.
 
 <img width="1056" height="704" alt="Image" src="https://github.com/user-attachments/assets/7ebfe782-2151-4525-812a-9bb47539bd06" />
-
+<img width="321" height="493" alt="Image" src="https://github.com/user-attachments/assets/62aed2dd-0e6c-4f92-befc-1ab8cedd0208" />
 ### Updating the API Endpoints
 
 #### Configure API endpoint
