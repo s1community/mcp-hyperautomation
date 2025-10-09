@@ -2,6 +2,17 @@
 
 This guide will walk you through setting up a BigQuery database for storing service responses. Even if you've never used Google Cloud before, following these steps will help you create and configure everything needed.
 
+## Table of Contents
+- [Prerequisites](#prerequisites)
+- [Step 1: Create a Google Cloud Project](#step-1-create-a-google-cloud-project)
+- [Step 2: Enable the BigQuery API](#step-2-enable-the-bigquery-api)
+- [Step 3: Create a BigQuery Dataset](#step-3-create-a-bigquery-dataset)
+- [Step 4: Create the Table Schema](#step-4-create-the-table-schema)
+- [Step 5: Create a Service Account](#step-5-create-a-service-account)
+- [Step 6: Grant BigQuery Permissions](#step-6-grant-bigquery-permissions)
+- [Step 7: Generate Service Account Credentials (JSON Key)](#step-7-generate-service-account-credentials-json-key)
+- [Step 8: Configure Environment Variables](#step-8-configure-environment-variables)
+
 ## Prerequisites
 
 - A Google account
