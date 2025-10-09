@@ -2,7 +2,7 @@
 
 ### Configuration
 
-#### Deployment Package
+####  Generating the Deployment Package
 
 From the root of the project, run the command  `python configure_agents.py`
 
@@ -26,7 +26,7 @@ This will generate unique IDs for the agents and a deployment archive called `de
 ---------------------------------------------------------
 ```
 
-#### Upload
+#### Upload the Agents
 
 Once the ZIP file has been created. Log into the S1 management console and go to the HyperAutomation menu.
 - Click Actions and Import 
