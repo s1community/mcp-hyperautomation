@@ -8,8 +8,6 @@
   - [Agents](#agents)
   - [Cloud DB](#cloud-db)
 - [Environment Variables Configuration](#environment-variables-configuration)
-  - [Required Variables](#required-variables)
-  - [Optional Variables](#optional-variables)
 - [Setup Instructions](#setup-instructions)
 - [Usage](#usage)
 - [Dependencies](#dependencies)
