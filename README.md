@@ -1,5 +1,19 @@
 # HyperAutomation MCP Server (Alpha)
 
+## Table of Contents
+- [Project Description](#project-description)
+- [Architecture Blueprint](#architecture-blueprint)
+- [Primary Components](#primary-components)
+  - [MCP Server](#mcp-server)
+  - [Agents](#agents)
+  - [Cloud DB](#cloud-db)
+- [Environment Variables Configuration](#environment-variables-configuration)
+  - [Required Variables](#required-variables)
+  - [Optional Variables](#optional-variables)
+- [Setup Instructions](#setup-instructions)
+- [Usage](#usage)
+- [Dependencies](#dependencies)
+
 ## Project Description
 
 The Hyperautomation MCP Server provides a bridge between LLM clients and a middle layer of HA workflows, enabling dynamic security orchestration through natural language interactions.
