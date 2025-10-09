@@ -76,7 +76,7 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 1. **Clone the repository**
 2. [Configure the Agents](./agents/INSTALLATION.MD)
 3. **Install dependencies**: `uv install` (or `uv sync` if using uv.lock)
-4. **Configure environment variables** (see instructions above)
+4. **Configure environment variables** ([see instructions above](#environment-variables-configuration))
 5. **Generate service account credentials file** for BigQuery access
 6. **Update agent webhook URLs** in `server.py`
 7. **Start the server**: `uv run python server/server.py`
