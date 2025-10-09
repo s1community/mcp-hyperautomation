@@ -35,15 +35,15 @@ This will generate unique IDs for the agents and a deployment archive called `de
 🧹 Cleaning up the 'deployment' directory...
 
 --- UUID Assignment Summary ---
-| Agent Name           | UUID                                 |
-|---------------------|-------------------------------------|
-| Asset Handler        | b64252f0-8921-43d0-a9f7-3727bdc70dc1 |
-| Case Manager         | 07bc76d4-aed2-47ec-bf74-cdf5a52f8b42 |
-| DB Manager           | c5e257f0-5a12-4213-..................|
-| RO Manager           | 87ab6a11-ac6e-4691-ae45-e4c......... |
-| SDL                  | 8e015aa5-72b7-4cd4-946e-............ |
-| VT                   | 1bc6413b-5bbe-4a19-8ef5-6........... |
----------------------------------------------------------
+| Agent Name           | UUID                                |
+|---------------------|--------------------------------------|
+| Asset Handler       | b64252f0-8921-43d0-a9f7-3727bdc70dc1 |
+| Case Manager        | 07bc76d4-aed2-47ec-bf74-cdf5a52f8b42 |
+| DB Manager          | c5e257f0-5a12-4213-..................|
+| RO Manager          | 87ab6a11-ac6e-4691-ae45-e4c......... |
+| SDL                 | 8e015aa5-72b7-4cd4-946e-............ |
+| VT                  | 1bc6413b-5bbe-4a19-8ef5-6........... |
+--------------------------------------------------------------
 ```
 Make sure to **save the content of this table** since we will need it later to configure the MCP server.
 
