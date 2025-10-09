@@ -9,9 +9,9 @@ There are three steps necessary to configure this architecture in HyperAutomatio
 
 Go to the **Integrations** tab under the Hyperautomation menu and [configure a connection](https://community.sentinelone.com/s/article/000010828) for each of the following
 
-1. Virus Total
+1. **Virus Total**
    - Search for VirusTotal and add a new Connection. Use your VT/GTI API token, and you will be fine.
-2. SentinelOne GraphQL
+2. **SentinelOne GraphQL**
    - Create a Service Token and add a new Connection as shown in the image below
    <img width="803" height="675" alt="Image" src="https://github.com/user-attachments/assets/5e4a75f2-d0f2-472c-8290-c866b3417645" />
 
