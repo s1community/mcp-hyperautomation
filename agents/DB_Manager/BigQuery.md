@@ -125,12 +125,9 @@ The JSON file will look like this:
 }
 ```
 
-> **Security Warning:** Never commit this JSON file to version control (Git). Add it to your `.gitignore` file.
-
 ## Step 8: Configure Environment Variables
 
-Set up the following environment variables in your application:
-
+Save the following inside a `.env` file located at the root of this project.
 ```bash
 # Your unique Google Cloud Project ID
 GOOGLE_CLOUD_PROJECT="your-project-id"
