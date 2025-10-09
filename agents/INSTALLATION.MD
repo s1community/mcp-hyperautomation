@@ -5,7 +5,10 @@ There are three steps necessary to configure this architecture in HyperAutomatio
 2. Uploading and activating the agents (workflows)
 3. Updating the [API Endpoints in the MCP server](../server/server.py#L66-L71)
 
-### Server Setup
+### Integrations
+
+
+### Setting up the Agents in HA
 
 ####  Generating the Deployment Package
 
@@ -47,7 +50,7 @@ Once the ZIP file has been created. Log into the S1 management console and go to
 <img width="510" height="102" alt="Image" src="https://github.com/user-attachments/assets/b4ec1e65-49f4-4d2e-88f8-dfc6fa7d3ec9" />
 
 
-### Client Setup
+### Updating the API Endpoints
 
 #### Configure API endpoint
 
