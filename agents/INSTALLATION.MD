@@ -6,6 +6,8 @@ There are three steps necessary to configure this architecture in HyperAutomatio
 3. Updating the [API Endpoints in the MCP server](../server/server.py#L66-L71)
 
 ### Integrations
+1. Virus Total
+   - From the **Integrations** tab under the Hyperautomation menu, search for VirusTotal and Add a Connection. Use your VT/GTI API token and you will be fine.
 
 
 ### Setting up the Agents in HA
