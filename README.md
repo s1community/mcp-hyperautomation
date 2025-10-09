@@ -88,7 +88,7 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 
 **Note**: Testing was performed with `chatgpt-4.1` (This is the model I recommend using for now)
 
-Connect the MCP server to your LLM client of preference. 
+Connect the MCP server to your preferred LLM client. 
 
 ```
 /PATH_TO_BINARY/uv --directory /mcp-hyperautomation/server/ run server.py --transport stdio
