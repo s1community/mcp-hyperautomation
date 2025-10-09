@@ -64,11 +64,11 @@ CREDENTIALS_FILE_PATH = os.getenv("CREDENTIALS_FILE", "/PATH_TO_CREDENTIALS_FILE
 
 
 AGENT_ENDPOINTS = {
-    "VT_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "SDL_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "ASSETHANDLER_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "CASEMANAGER_Agent" : "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
-    "RO_MANAGER_Agent" :  "https://usea1-purple.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>"
+    "VT_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "SDL_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "ASSETHANDLER_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "CASEMANAGER_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>",
+    "RO_MANAGER_Agent" :  "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<WEBHOOK_URI>"
 }
 
 # --- Initialize DB Manager ---
