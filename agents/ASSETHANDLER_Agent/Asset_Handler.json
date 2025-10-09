@@ -1,0 +1,1191 @@
+{
+  "name": "Asset_Handler",
+  "description": "",
+  "actions": [
+    {
+      "action": {
+        "type": "http_trigger",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "HTTP Trigger",
+          "action_type": "http_trigger",
+          "url_identifier": "<UUID>",
+          "supported_methods": {
+            "get": true,
+            "post": true
+          },
+          "response_status_code": 200,
+          "response_body": "{\"Status\": \"OK\"}",
+          "response_content_type": "application/json",
+          "response_headers": {},
+          "include_headers": true,
+          "allow_empty_request_body": true
+        },
+        "description": null,
+        "client_data": {
+          "position": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 100.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 16,
+      "connected_to": [
+        {
+          "target": 24,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "validate input",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "correct_input",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, \"((.data | has(\\\"action\\\") and (.action | type == \\\"string\\\")) and (.data | has(\\\"input\\\") and (.input | type == \\\"array\\\")) and (.data | has(\\\"req_id\\\") and (.req_id | type == \\\"string\\\")))\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 0.0,
+            "y": 200.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 24,
+      "connected_to": [
+        {
+          "target": 8,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Condition",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.correct_input}}",
+              "compared_value": "true",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 0.0,
+            "y": 377.35439999999994
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 8,
+      "connected_to": [
+        {
+          "target": 20,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define variables and jq queries",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "jq_extract_input",
+              "value": ".data.input",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_action",
+              "value": ".data.action",
+              "is_secret": false
+            },
+            {
+              "name": "json_output",
+              "value": "{\"endpoints_list\": [], \"assets_list\": [], \"agents_config_list\": []}",
+              "is_secret": false
+            },
+            {
+              "name": "endpoints_list",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "time_start",
+              "value": "{{Function.DATETIME_NOW()}}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_filters",
+              "value": ".data | if (.input != null and (.input | type) == \"array\" and (.input | length) > 0 and (.input | map(keys) | flatten | length) > 0) then (.input | map(to_entries) | flatten | map(\"\\(.key)=\\(.value)\") | join(\"&\")) else \"\" end",
+              "is_secret": false
+            },
+            {
+              "name": "assets_list",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "headers_list_endpoints",
+              "value": "\"computerName\",\"osType\",\"machineType\",\"agentVersion\",\"lastActiveDate\",\"infected\",\"activeThreats\",\"lastIpToMgmt\",\"externalIp\",\"activeProtection\",\"siteName\",\"groupName\",\"osName\",\"uuid\",\"id\"",
+              "is_secret": false
+            },
+            {
+              "name": "headers_list_assets",
+              "value": "\"name\",\"resourceType\",\"agentVersion\",\"lastActiveDt\",\"infectionStatus\",\"ipAddress\",\"lastLoggedInUser\",\"domain\",\"networkStatus\", \"activeCoverage\",\"antiTamperingStatus\",\"assetCriticality\",\"s1SiteName\",\"s1GroupName\",\"osNameVersion\",\"uuid\",\"id\"",
+              "is_secret": false
+            },
+            {
+              "name": "agents_config_list",
+              "value": "[]",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 78.75,
+            "y": 554.0315999999999
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 20,
+      "connected_to": [
+        {
+          "target": 23,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "run jq query",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "input_data",
+              "value": "{{Function.FLATTEN_ARRAY(Function.JQ(http-trigger, local_var.jq_extract_input))}}",
+              "is_secret": false
+            },
+            {
+              "name": "action",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_action), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "get_parameters",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_filters), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_endpoint_list_fields",
+              "value": "def find_field($field):\n  if has($field) then .[$field]\n  else \n    [paths(scalars) as $p | \n     if ($p | last) == $field then getpath($p) else empty end] | \n    if length > 0 then .[0] else null end\n  end;\n\n.endpoints_list | map(. as $item | \n   [{{local_var.headers_list_endpoints}}] as $fields | \n  reduce $fields[] as $field ({}; \n    . + {($field): ($item | find_field($field) | if type == \"array\" then tostring else . end)}\n  )\n)",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_asset_list_fields",
+              "value": "def find_field($field):\n  if has($field) then .[$field]\n  else \n    [paths(scalars) as $p | \n     if ($p | last) == $field then getpath($p) else empty end] | \n    if length > 0 then .[0] else null end\n  end;\n\n.assets_list | map(. as $item | \n   [{{local_var.headers_list_assets}}] as $fields | \n  reduce $fields[] as $field ({}; \n    . + {($field): ($item | find_field($field) | if type == \"array\" then tostring else . end)}\n  )\n)",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 78.75,
+            "y": 730.7087999999999
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 23,
+      "connected_to": [
+        {
+          "target": 14,
+          "custom_handle": null
+        },
+        {
+          "target": 21,
+          "custom_handle": null
+        },
+        {
+          "target": 22,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Get Agents Config",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "get_agents_config",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 643.9461241722853,
+            "y": 915.8809647641859
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 14,
+      "connected_to": [
+        {
+          "target": 13,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "list assets",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "list_assets",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -356.58860000000004,
+            "y": 907.386
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 21,
+      "connected_to": [
+        {
+          "target": 3,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "list endpoints",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "list_endpoints",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 78.75,
+            "y": 907.386
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 22,
+      "connected_to": [
+        {
+          "target": 9,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Endpoints Loop",
+          "action_type": "loop",
+          "loop_type": "while",
+          "number_of_iterations": 1,
+          "object_to_iterate": null
+        },
+        "description": "Iterate over a list of items to perform repetitive actions. This action allows you to repeat a set of actions for each item in a list.",
+        "client_data": {
+          "position": {
+            "x": -98.5,
+            "y": 1122.0632
+          },
+          "dimensions": {
+            "width": 768.0,
+            "height": 818.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 9,
+      "connected_to": [
+        {
+          "target": 12,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 19,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "cacb7721-1ba7-4ab2-82bc-dc9bb4e63677",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "ef645af9-ed60-4efd-882e-bf534442ce86",
+        "data": {
+          "name": "Get Agents",
+          "action_type": "http_request",
+          "public_action_id": "afe978b7-6a52-4e4b-9871-c0c738971b6f",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}<@/web/api/v2.1/agents@>?{{local_var.get_parameters}}",
+          "url_path": "/web/api/v2.1/agents",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json",
+            "accept": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get the Agents, and their data, that match the filter. This command gives the Agent ID, which you can use in other commands.",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 12,
+      "connected_to": [
+        {
+          "target": 2,
+          "custom_handle": null
+        },
+        {
+          "target": 17,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 9
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "cacb7721-1ba7-4ab2-82bc-dc9bb4e63677",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "ef645af9-ed60-4efd-882e-bf534442ce86",
+        "data": {
+          "name": "Get Agents 2",
+          "action_type": "http_request",
+          "public_action_id": "afe978b7-6a52-4e4b-9871-c0c738971b6f",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}<@/web/api/v2.1/agents@>?{{local_var.get_parameters}}",
+          "url_path": "/web/api/v2.1/agents",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json",
+            "accept": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get the Agents, and their data, that match the filter. This command gives the Agent ID, which you can use in other commands.",
+        "client_data": {
+          "position": {
+            "x": 733.5,
+            "y": 1084.0632
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 13,
+      "connected_to": [
+        {
+          "target": 10,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Variable",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "debug_two",
+              "value": "{\"endpoints_list\": {{Function.UNION(local_var.json_output.endpoints_list, get-agents.body.data)}}, \"assets_list\": {{local_var.json_output.assets_list}}}",
+              "is_secret": false
+            },
+            {
+              "name": "json_output_original",
+              "value": "{\"endpoints_list\": {{Function.APPEND(local_var.json_output.endpoints_list, get-agents.body.data)}}, \"assets_list\": {{local_var.json_output.assets_list}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 416.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 17,
+      "connected_to": [],
+      "parent_action": 9
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Append agent info",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"endpoints_list\": {{Function.UNION(local_var.json_output.endpoints_list, get-agents.body.data)}}, \"assets_list\": {{local_var.json_output.assets_list}}, \"agents_config_list\":{{local_var.json_output.agents_config_list}} }",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 96.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 2,
+      "connected_to": [
+        {
+          "target": 7,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 9
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Assets Loop",
+          "action_type": "loop",
+          "loop_type": "while",
+          "number_of_iterations": 1,
+          "object_to_iterate": null
+        },
+        "description": "Iterate over a list of items to perform repetitive actions. This action allows you to repeat a set of actions for each item in a list.",
+        "client_data": {
+          "position": {
+            "x": -533.8386,
+            "y": 2078.7404
+          },
+          "dimensions": {
+            "width": 768.0,
+            "height": 818.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 3,
+      "connected_to": [
+        {
+          "target": 15,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 19,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Check Cursor Endpoints",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{get-agents.body.pagination.nextCursor}}",
+              "compared_value": "null",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 96.0,
+            "y": 530.0316
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 7,
+      "connected_to": [
+        {
+          "target": 5,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": 9
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Extract Agent Config loop",
+          "action_type": "loop",
+          "loop_type": "dynamic",
+          "number_of_iterations": 1,
+          "object_to_iterate": "{{get-agents-2.body.data}}"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 477.5,
+            "y": 2078.7404
+          },
+          "dimensions": {
+            "width": 768.0,
+            "height": 464.3544
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 10,
+      "connected_to": [
+        {
+          "target": 11,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 19,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "cacb7721-1ba7-4ab2-82bc-dc9bb4e63677",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "ef645af9-ed60-4efd-882e-bf534442ce86",
+        "data": {
+          "name": "Get Agent Config",
+          "action_type": "http_request",
+          "public_action_id": "afe978b7-6a52-4e4b-9871-c0c738971b6f",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}/web/api/v2.1/private/agents/{{extract-agent-config-loop.item.id}}/support-actions/configuration",
+          "url_path": "/web/api/v2.1/agents",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json",
+            "accept": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get the Agent config (private API)",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 11,
+      "connected_to": [
+        {
+          "target": 1,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 10
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "cacb7721-1ba7-4ab2-82bc-dc9bb4e63677",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "ef645af9-ed60-4efd-882e-bf534442ce86",
+        "data": {
+          "name": "Get Assets",
+          "action_type": "http_request",
+          "public_action_id": "afe978b7-6a52-4e4b-9871-c0c738971b6f",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}/web/api/v2.1/xdr/assets/surface/endpoint?{{local_var.get_parameters}}",
+          "url_path": "/web/api/v2.1/agents",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json",
+            "accept": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get the Agents, and their data, that match the filter. This command gives the Agent ID, which you can use in other commands.",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 15,
+      "connected_to": [
+        {
+          "target": 0,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 3
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define output json",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"time_start\": {{local_var.time_start}}, \"time_stop\": {{Function.DATETIME_NOW()}} , \"req_id\": {{http-trigger.data.req_id}}, \"action\": {{local_var.action}}, \"data\":{\"endpoints_list\": {{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.json_output, local_var.jq_extract_endpoint_list_fields), 0)}}, \"assets_list\": {{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.json_output, local_var.jq_extract_asset_list_fields), 0)}}, \"agents_config_list\": {{local_var.json_output.agents_config_list}} }}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 157.5,
+            "y": 2997.4176
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 19,
+      "connected_to": [
+        {
+          "target": 18,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Append Asset info",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"endpoints_list\": {{local_var.json_output.endpoints_list}}, \"assets_list\": {{Function.UNION(local_var.json_output.assets_list, get-assets.body.data)}}, \"agents_config_list\":{{local_var.json_output.agents_config_list}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 0,
+      "connected_to": [
+        {
+          "target": 6,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 3
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Append Config Info",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"agents_config_list\": {{Function.APPEND(local_var.json_output.agents_config_list, get-agent-config.body.data)}}, \"assets_list\": {{local_var.json_output.assets_list}}, \"endpoints_list\":{{local_var.json_output.endpoints_list}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 1,
+      "connected_to": [],
+      "parent_action": 10
+    },
+    {
+      "action": {
+        "type": "break_loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Break Endpoints Loop",
+          "action_type": "break_loop"
+        },
+        "description": "Exit a loop prematurely. This action allows you to stop the loop before it has iterated over all items.",
+        "client_data": {
+          "position": {
+            "x": 174.75,
+            "y": 706.7088
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 5,
+      "connected_to": [],
+      "parent_action": 9
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Check Cursor Assets",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{get-assets.body.pagination.nextCursor}}",
+              "compared_value": "null",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 530.0316
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 6,
+      "connected_to": [
+        {
+          "target": 4,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": 3
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Write to DB",
+          "action_type": "http_request",
+          "public_action_id": null,
+          "method": "post",
+          "url": "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<DB_UUID>",
+          "url_path": null,
+          "url_prefix": null,
+          "payload": "{\n\t\"req_id\": {{http-trigger.data.req_id}},\n    \"action\": \"create_row\",\n    \"input\": [{{local_var.json_output}}]\n}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 157.5,
+            "y": 3174.0948000000003
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 18,
+      "connected_to": [],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "break_loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Break Assets Loop",
+          "action_type": "break_loop"
+        },
+        "description": "Exit a loop prematurely. This action allows you to stop the loop before it has iterated over all items.",
+        "client_data": {
+          "position": {
+            "x": 334.75,
+            "y": 706.7088
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 4,
+      "connected_to": [],
+      "parent_action": 3
+    }
+  ]
+}

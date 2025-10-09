@@ -1,0 +1,868 @@
+{
+  "name": "Case_Manager",
+  "description": "",
+  "actions": [
+    {
+      "action": {
+        "type": "http_trigger",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "HTTP Trigger",
+          "action_type": "http_trigger",
+          "url_identifier": "<UUID>",
+          "supported_methods": {
+            "get": true,
+            "post": true
+          },
+          "response_status_code": 200,
+          "response_body": "{\"Status\": \"OK\"}",
+          "response_content_type": "application/json",
+          "response_headers": {},
+          "include_headers": true,
+          "allow_empty_request_body": true
+        },
+        "description": null,
+        "client_data": {
+          "position": {
+            "x": -423.0,
+            "y": -870.0
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 100.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 3,
+      "connected_to": [
+        {
+          "target": 16,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "validate input",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "correct_input",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, \"((.data | has(\\\"action\\\") and (.action | type == \\\"string\\\")) and (.data | has(\\\"input\\\") and (.input | type == \\\"array\\\")) and (.data | has(\\\"req_id\\\") and (.req_id | type == \\\"string\\\")))\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -423.0,
+            "y": -669.3228
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 16,
+      "connected_to": [
+        {
+          "target": 0,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Condition",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.correct_input}}",
+              "compared_value": "true",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -423.0,
+            "y": -492.64560000000006
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 0,
+      "connected_to": [
+        {
+          "target": 12,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define variables and jq queries",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "jq_extract_input",
+              "value": ".data.input",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_action",
+              "value": ".data.action",
+              "is_secret": false
+            },
+            {
+              "name": "json_output",
+              "value": "{\"alerts_list\": [], \"incidents_list\": [],\"alerts_note_responses\":[]}",
+              "is_secret": false
+            },
+            {
+              "name": "alerts_list",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "time_start",
+              "value": "{{Function.DATETIME_NOW()}}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_filters",
+              "value": ".data | if (.input != null and (.input | type) == \"array\" and (.input | length) > 0 and (.input | map(keys) | flatten | length) > 0) then (.input | map(to_entries) | flatten | map(\"\\(.key)=\\(.value)\") | join(\"&\")) else \"\" end",
+              "is_secret": false
+            },
+            {
+              "name": "incidents_list",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_start_date",
+              "value": "\"(.data.input[] | select(has(\\\"start\\\")) | .start) // (now - 7776000 | strftime(\\\"%Y-%m-%d\\\"))\"",
+              "is_secret": false
+            },
+            {
+              "name": "jq_create_graphQL_filter_list",
+              "value": "{\n  \"detectionProduct\": \"stringIn:values\",\n  \"assetId\": \"match:value\",\n  \"*\": \"match:value\"\n} as $fieldMappings |\n\n.data.input | \nif length == 0 then [] \nelse \n  reduce .[] as $item ({}; \n    ($item | keys[] | select(. != \"start\" and . != \"end\")) as $key | \n    if $key then .[$key] += [$item[$key]] else . end\n  ) | \n  if length > 0 then \n    to_entries | \n    map(\n      . as $entry |\n      ($fieldMappings[$entry.key] // $fieldMappings[\"*\"]) as $mapping |\n      ($mapping | split(\":\")) as $parts |\n      {\n        fieldId: $entry.key,\n        ($parts[0]): {\n          ($parts[1]): $entry.value\n        }\n      }\n    )\n  else [] \n  end \nend",
+              "is_secret": false
+            },
+            {
+              "name": "jq_note_parse_response",
+              "value": "(try ((.body.data.alertTriggerActions.actions[0].success | length) > 0) catch false)",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_end_date",
+              "value": "\"(.data.input[] | select(has(\\\"end\\\")) | .end) // (now | strftime(\\\"%Y-%m-%d %H:%M:%S\\\"))\"",
+              "is_secret": false
+            },
+            {
+              "name": "headers_list_alerts",
+              "value": "\"detectedAt\",\"node.asset.name\",\"name\",\"severity\",\"status\",\"classification\",\"node.analytics.category\",\"node.process.file.path\",\"node.process.cmdLine\",\"node.process.file.sha1\",\"description\",\"analystVerdict\",\"vendor\",\"node.detectionSource.product\",\"storylineId\",\"id\"",
+              "is_secret": false
+            },
+            {
+              "name": "headers_add_notes",
+              "value": "\"alertID\",\"addNote_successful\"",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -344.25,
+            "y": -315.9684000000001
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 12,
+      "connected_to": [
+        {
+          "target": 15,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "run jq query",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "input_data",
+              "value": "{{Function.FLATTEN_ARRAY(Function.JQ(http-trigger, local_var.jq_extract_input))}}",
+              "is_secret": false
+            },
+            {
+              "name": "action",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_action), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "get_parameters",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_filters), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "epoch_start_date",
+              "value": "{{Function.DATETIME_TO_EPOCH(Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_start_date), 0))}}",
+              "is_secret": false
+            },
+            {
+              "name": "graphQL_filter_list",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_create_graphQL_filter_list), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "graphQL_date_filter",
+              "value": "{\n          \"fieldId\": \"detectedAt\",\n          \"dateTimeRange\": {\n            \"end\":  {{Function.MUL(Function.DATETIME_TO_EPOCH(Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_end_date), 0)), 1000)}},\n            \"start\": {{Function.MUL(Function.DATETIME_TO_EPOCH(Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_start_date), 0)), 1000)}},\n            \"startInclusive\": true,\n            \"endInclusive\": true\n          }\n}",
+              "is_secret": false
+            },
+            {
+              "name": "epoch_end_date",
+              "value": "{{Function.DATETIME_TO_EPOCH(Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_end_date), 0))}}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_list_alerts_fields",
+              "value": "def find_field($field):\n  if ($field | contains(\".\")) then\n    # Handle dot-notation paths like \"asset.name\"\n    ($field | split(\".\")) as $path |\n    try (getpath($path)) catch null\n  elif has($field) then \n    .[$field]\n  else \n    [paths(scalars) as $p | \n     if ($p | last) == $field then getpath($p) else empty end] | \n    if length > 0 then .[0] else null end\n  end;\n\n.alerts_list | map(. as $item | \n   [{{local_var.headers_list_alerts}}] as $fields | \n  reduce $fields[] as $field ({}; \n    . + {($field): ($item | find_field($field) | if type == \"array\" then tostring else . end)}\n  )\n)",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_add_notes_fields",
+              "value": "def find_field($field):\n  if has($field) then .[$field]\n  else \n    [paths(scalars) as $p | \n     if ($p | last) == $field then getpath($p) else empty end] | \n    if length > 0 then .[0] else null end\n  end;\n\n.alerts_note_responses | map(. as $item | \n   [{{local_var.headers_add_notes}}] as $fields | \n  reduce $fields[] as $field ({}; \n    . + {($field): ($item | find_field($field) | if type == \"array\" then tostring else . end)}\n  )\n)",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -504.25,
+            "y": -139.2912
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 15,
+      "connected_to": [
+        {
+          "target": 7,
+          "custom_handle": null
+        },
+        {
+          "target": 13,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "list alerts",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "list_alerts",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -792.25,
+            "y": 37.38600000000008
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 13,
+      "connected_to": [
+        {
+          "target": 1,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Create Final graphQL filter",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "final_graphQL_filter",
+              "value": "{{Function.APPEND(local_var.graphQL_filter_list, local_var.graphQL_date_filter)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -713.5,
+            "y": 214.06320000000005
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 1,
+      "connected_to": [
+        {
+          "target": 10,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "add notes to Alerts",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "add_notes",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -216.25,
+            "y": 214.06320000000005
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 7,
+      "connected_to": [
+        {
+          "target": 4,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "build POST body",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "getAllAlerts_query",
+              "value": "{\n    \"operationName\": \"GetAlerts\",\n    \"variables\": {\n      \"skipName\": false,\n      \"skipAsset\": false,\n      \"skipResult\": false,\n      \"skipStatus\": false,\n      \"skipProcess\": false,\n      \"skipAssignee\": false,\n      \"skipSeverity\": false,\n      \"skipTicketId\": false,\n      \"skipRealTime\": false,\n      \"skipAnalytics\": false,\n      \"skipNoteExists\": false,\n      \"skipExternalId\": false,\n      \"skipDetectedAt\": false,\n      \"skipLastSeenAt\": false,\n      \"skipDescription\": false,\n      \"skipStorylineId\": false,\n      \"skipFirstSeenAt\": false,\n      \"skipDetectionTime\": false,\n      \"skipAttackSurfaces\": false,\n      \"skipAnalystVerdict\": false,\n      \"skipClassification\": false,\n      \"skipDetectionSource\": false,\n      \"skipConfidenceLevel\": false,\n      \"filters\": {{local_var.final_graphQL_filter}},\n      \"first\": 1000\n    },\n    \"query\": \"fragment Asset on Asset {\\n  id\\n  name\\n  osType\\n  policy\\n  category\\n  osVersion\\n  agentUuid\\n  subcategory\\n  agentVersion\\n  pendingReboot\\n  lastLoggedInUser\\n  assetTypeClassifier\\n  connectivityToConsole\\n  __typename\\n}\\n\\nfragment Analytics on Analytics {\\n  uid\\n  name\\n  typeValue\\n  category\\n  __typename\\n}\\n\\nfragment PageInfo on PageInfo {\\n  endCursor\\n  startCursor\\n  hasNextPage\\n  hasPreviousPage\\n  __typename\\n}\\n\\nfragment DetectionAsset on DetectionAsset {\\n  ipV4\\n  ipV6\\n  policy\\n  domain\\n  osName\\n  osType\\n  osRevision\\n  agentVersion\\n  consoleIpAddress\\n  subscriptionTime\\n  lastLoggedInUser\\n  __typename\\n}\\n\\nfragment DetectionKubernetes on DetectionKubernetes {\\n  podName\\n  nodeName\\n  podLabels\\n  nodeLabels\\n  clusterName\\n  containerId\\n  namespaceName\\n  containerName\\n  controllerName\\n  controllerType\\n  namespaceLabels\\n  containerLabels\\n  controllerLabels\\n  containerImageName\\n  __typename\\n}\\n\\nfragment SimpleScopeResponse on SimpleScopeResponse {\\n  siteName\\n  groupName\\n  accountName\\n  __typename\\n}\\n\\nfragment DetectionAttackerDetails on DetectionAttackerDetails {\\n  ip\\n  host\\n  __typename\\n}\\n\\nfragment DetectionTargetUserDetails on DetectionTargetUserDetails {\\n  name\\n  domain\\n  __typename\\n}\\n\\nfragment DetectionAws on DetectionAws {\\n  tags\\n  role\\n  vpcId\\n  region\\n  imageId\\n  subnetIds\\n  accountId\\n  instanceId\\n  instanceType\\n  securityGroups\\n  __typename\\n}\\n\\nfragment DetectionGcp on DetectionGcp {\\n  tags\\n  zone\\n  vpcId\\n  imageId\\n  projectId\\n  instanceId\\n  instanceType\\n  serviceAccount\\n  __typename\\n}\\n\\nfragment DetectionAzure on DetectionAzure {\\n  tags\\n  region\\n  imageId\\n  instanceId\\n  instanceType\\n  resourceGroup\\n  subscriptionId\\n  __typename\\n}\\n\\nfragment DetectionCloud on DetectionCloud {\\n  tags\\n  image\\n  network\\n  location\\n  accountId\\n  instanceId\\n  instanceSize\\n  cloudProvider\\n  providerDetails {\\n    ...DetectionAws\\n    ...DetectionGcp\\n    ...DetectionAzure\\n    __typename\\n  }\\n  __typename\\n}\\n\\nfragment DetectionTime on DetectionTime {\\n  scope {\\n    ...SimpleScopeResponse\\n    __typename\\n  }\\n  asset {\\n    ...DetectionAsset\\n    __typename\\n  }\\n  cloud {\\n    ...DetectionCloud\\n    __typename\\n  }\\n  attacker {\\n    ...DetectionAttackerDetails\\n    __typename\\n  }\\n  targetUser {\\n    ...DetectionTargetUserDetails\\n    __typename\\n  }\\n  kubernetes {\\n    ...DetectionKubernetes\\n    __typename\\n  }\\n  __typename\\n}\\n\\nfragment DetectionSource on DetectionSource {\\n  vendor\\n  engine\\n  product\\n  __typename\\n}\\n\\nfragment File on File {\\n  md5\\n  path\\n  sha1\\n  sha256\\n  certSubject\\n  __typename\\n}\\n\\nfragment Process on Process {\\n  cmdLine\\n  parentName\\n  file {\\n    ...File\\n    __typename\\n  }\\n  __typename\\n}\\n\\nfragment Site on Site {\\n  id\\n  name\\n  __typename\\n}\\n\\nfragment Group on Group {\\n  id\\n  name\\n  __typename\\n}\\n\\nfragment Account on Account {\\n  id\\n  name\\n  __typename\\n}\\n\\nfragment Scope on Scope {\\n  site {\\n    ...Site\\n    __typename\\n  }\\n  group {\\n    ...Group\\n    __typename\\n  }\\n  account {\\n    ...Account\\n    __typename\\n  }\\n  __typename\\n}\\n\\nfragment RealTime on RealTime {\\n  scope {\\n    ...Scope\\n    __typename\\n  }\\n  __typename\\n}\\n\\nquery GetAlerts($last: Int, $sort: SortInput, $sorts: [SortInput!], $first: Int, $after: String, $scope: ScopeSelectorInput, $before: String, $filters: [FilterInput!], $skipName: Boolean! = false, $skipAsset: Boolean! = false, $skipResult: Boolean! = false, $skipStatus: Boolean! = false, $skipProcess: Boolean! = false, $skipAssignee: Boolean! = false, $skipSeverity: Boolean! = false, $skipTicketId: Boolean! = false, $skipRealTime: Boolean! = false, $skipAnalytics: Boolean! = false, $skipNoteExists: Boolean! = false, $skipExternalId: Boolean! = false, $skipDetectedAt: Boolean! = false, $skipLastSeenAt: Boolean! = false, $skipDescription: Boolean! = false, $skipStorylineId: Boolean! = false, $skipFirstSeenAt: Boolean! = false, $skipDetectionTime: Boolean! = false, $skipAttackSurfaces: Boolean! = false, $skipAnalystVerdict: Boolean! = false, $skipClassification: Boolean! = false, $skipDetectionSource: Boolean! = false, $skipConfidenceLevel: Boolean! = false) {\\n  alerts(\\n    last: $last\\n    first: $first\\n    after: $after\\n    before: $before\\n    filters: $filters\\n    scope: $scope\\n    sort: $sort\\n    sorts: $sorts\\n  ) {\\n    edges {\\n      node {\\n        id\\n        name @skip(if: $skipName)\\n        result @skip(if: $skipResult)\\n        status @skip(if: $skipStatus)\\n        severity @skip(if: $skipSeverity)\\n        ticketId @skip(if: $skipTicketId)\\n        noteExists @skip(if: $skipNoteExists)\\n        detectedAt @skip(if: $skipDetectedAt)\\n        lastSeenAt @skip(if: $skipLastSeenAt)\\n        externalId @skip(if: $skipExternalId)\\n        description @skip(if: $skipDescription)\\n        firstSeenAt @skip(if: $skipFirstSeenAt)\\n        storylineId @skip(if: $skipStorylineId)\\n        attackSurfaces @skip(if: $skipAttackSurfaces)\\n        analystVerdict @skip(if: $skipAnalystVerdict)\\n        classification @skip(if: $skipClassification)\\n        confidenceLevel @skip(if: $skipConfidenceLevel)\\n        assignee @skip(if: $skipAssignee) {\\n          email\\n          userId\\n          fullName\\n          __typename\\n        }\\n        asset @skip(if: $skipAsset) {\\n          ...Asset\\n          __typename\\n        }\\n        process @skip(if: $skipProcess) {\\n          ...Process\\n          __typename\\n        }\\n        realTime @skip(if: $skipRealTime) {\\n          ...RealTime\\n          __typename\\n        }\\n        analytics @skip(if: $skipAnalytics) {\\n          ...Analytics\\n          __typename\\n        }\\n        detectionTime @skip(if: $skipDetectionTime) {\\n          ...DetectionTime\\n          __typename\\n        }\\n        detectionSource @skip(if: $skipDetectionSource) {\\n          ...DetectionSource\\n          __typename\\n        }\\n        __typename\\n      }\\n      cursor\\n      __typename\\n    }\\n    pageInfo {\\n      ...PageInfo\\n      __typename\\n    }\\n    totalCount\\n    __typename\\n  }\\n}\"\n  }",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -713.5,
+            "y": 390.74040000000014
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 10,
+      "connected_to": [
+        {
+          "target": 2,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "c6bd7ddc-9f53-455d-8b41-10a71f5d85e6",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "3e274c5a-f574-462f-8685-5eed98e90fbb",
+        "data": {
+          "name": "Get Alerts",
+          "action_type": "http_request",
+          "public_action_id": "6f06eb91-9a16-45f3-ab9d-670c16e7355d",
+          "method": "post",
+          "url": "{{Connection.protocol}}{{Connection.url}}/web/api/v2.1/unifiedalerts/graphql?opname=GetAlerts",
+          "url_path": "/web/api/v2.0/threats",
+          "url_prefix": null,
+          "payload": "{{local_var.getAllAlerts_query}}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get All Unified Alerts",
+        "client_data": {
+          "position": {
+            "x": -713.5,
+            "y": 567.4176000000002
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 2,
+      "connected_to": [
+        {
+          "target": 8,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Notes Loop",
+          "action_type": "loop",
+          "loop_type": "dynamic",
+          "number_of_iterations": 1,
+          "object_to_iterate": "{{http-trigger.data.input}}"
+        },
+        "description": "Iterate over a list of items to perform repetitive actions. This action allows you to repeat a set of actions for each item in a list.",
+        "client_data": {
+          "position": {
+            "x": -393.5,
+            "y": 428.74040000000014
+          },
+          "dimensions": {
+            "width": 768.0,
+            "height": 641.0316
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 4,
+      "connected_to": [
+        {
+          "target": 5,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 11,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "c6bd7ddc-9f53-455d-8b41-10a71f5d85e6",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "3e274c5a-f574-462f-8685-5eed98e90fbb",
+        "data": {
+          "name": "Submit note",
+          "action_type": "http_request",
+          "public_action_id": "c4d87734-41d0-4f0a-890c-6411de0796d3",
+          "method": "post",
+          "url": "{{Connection.protocol}}{{Connection.url}}/web/api/v2.1/unifiedalerts/graphql",
+          "url_path": "/web/api/v2.0/threats",
+          "url_prefix": null,
+          "payload": "{\n  \"query\": \"mutation AddNoteToAlert { alertTriggerActions(actions: [{ id: \\\"S1/alert/addNote\\\", payload: { note: { value: \\\"{{Function.HTML_ENCODE(notes-loop.item.text)}}\\\" } } }], filter: { or: [{ and: [{ fieldId: \\\"id\\\", stringEqual: { value: \\\"{{notes-loop.item.alertId}}\\\" } }] }] }) { ... on ActionsTriggered { actions { actionId success { id } failure { id } skip { id } } } } }\"\n}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Add a note to a unified alert.",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 5,
+      "connected_to": [
+        {
+          "target": 14,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 4
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "append Results",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"alerts_list\": {{Function.ACCESS_LIST_ITEM(Function.APPEND(local_var.json_output.alerts_list, get-alerts.body.data.alerts.edges), 0)}}, \"incidents_list\": {{local_var.json_output.incidents_list}}, \"alerts_note_responses\": {{local_var.json_output.alerts_note_responses}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -713.5,
+            "y": 744.0948000000003
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 8,
+      "connected_to": [
+        {
+          "target": 11,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define json output",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"time_start\": {{local_var.time_start}}, \"time_stop\": {{Function.DATETIME_NOW()}} , \"req_id\": {{http-trigger.data.req_id}}, \"action\": {{local_var.action}}, \"data\":{\"alerts_list\": {{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.json_output, local_var.jq_extract_list_alerts_fields), 0)}}, \"incidents_list\": {{local_var.json_output.incidents_list}},\"alerts_note_responses\": {{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.json_output, local_var.jq_extract_add_notes_fields), 0)}}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -425.5,
+            "y": 1170.4492
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 11,
+      "connected_to": [
+        {
+          "target": 6,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "parse response",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "addNote_successful",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(submit-note, local_var.jq_note_parse_response), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 14,
+      "connected_to": [
+        {
+          "target": 9,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 4
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Write to DB",
+          "action_type": "http_request",
+          "public_action_id": null,
+          "method": "post",
+          "url": "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<DB_UUID>",
+          "url_path": null,
+          "url_prefix": null,
+          "payload": "{\n\t\"req_id\": {{http-trigger.data.req_id}},\n    \"action\": \"create_row\",\n    \"input\": [{{local_var.json_output}}]\n}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -425.5,
+            "y": 1347.1264
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 6,
+      "connected_to": [],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "append note results",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"alerts_note_responses\": {{Function.APPEND(local_var.json_output.alerts_note_responses, {\"alertID\": notes-loop.item.alertId, \"addNote_successful\": local_var.addNote_successful})}}, \"alerts_list\": {{local_var.json_output.alerts_list}}, \"incidents_list\": {{local_var.json_output.incidents_list}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 530.0316
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 9,
+      "connected_to": [],
+      "parent_action": 4
+    }
+  ]
+}

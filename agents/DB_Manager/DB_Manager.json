@@ -1,0 +1,252 @@
+{
+  "name": "DB_Manager (BQ)",
+  "description": "",
+  "actions": [
+    {
+      "action": {
+        "type": "http_trigger",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "HTTP Trigger",
+          "action_type": "http_trigger",
+          "url_identifier": "<UUID>",
+          "supported_methods": {
+            "get": true,
+            "post": true
+          },
+          "response_status_code": 200,
+          "response_body": "{\"Status\": \"OK\"}",
+          "response_content_type": "application/json",
+          "response_headers": {},
+          "include_headers": true,
+          "allow_empty_request_body": true
+        },
+        "description": null,
+        "client_data": {
+          "position": {
+            "x": -117.0,
+            "y": -616.0
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 100.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 1,
+      "connected_to": [
+        {
+          "target": 4,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "validate input",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "correct_input",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, \"((.data | has(\\\"action\\\") and (.action | type == \\\"string\\\")) and (.data | has(\\\"input\\\") and (.input | type == \\\"array\\\")) and (.data | has(\\\"req_id\\\") and (.req_id | type == \\\"string\\\")))\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -117.0,
+            "y": -415.32280000000003
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 4,
+      "connected_to": [
+        {
+          "target": 0,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Condition",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.correct_input}}",
+              "compared_value": "true",
+              "comparison_operator": "equals"
+            },
+            {
+              "input_value": "{{http-trigger.data.action}}",
+              "compared_value": "\"create_row\"",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -117.0,
+            "y": -238.64560000000006
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 0,
+      "connected_to": [
+        {
+          "target": 3,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "set db variables",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "projectId",
+              "value": "arcane-transit-457914-n8",
+              "is_secret": false
+            },
+            {
+              "name": "datasetId",
+              "value": "mcp_iso_results_dataset",
+              "is_secret": false
+            },
+            {
+              "name": "tableId",
+              "value": "ha_service_responses",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -38.25,
+            "y": -61.96840000000009
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 3,
+      "connected_to": [
+        {
+          "target": 2,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "6412290d-0f0f-4b42-a76a-a3794b04e31e",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "f66b2029-ddbf-4faa-94e3-999856d95f0b",
+        "data": {
+          "name": "Insert BigQuery Row",
+          "action_type": "http_request",
+          "public_action_id": "d88421ef-0ac2-4d5d-ba75-8d4261bc25a5",
+          "method": "post",
+          "url": "https://bigquery.googleapis.com/bigquery/v2/projects/{{local_var.projectId}}/datasets/{{local_var.datasetId}}/tables/{{local_var.tableId}}/insertAll",
+          "url_path": "/v4/spreadsheets/<<spreadsheet_id>>/values/1%3A10000:append",
+          "url_prefix": null,
+          "payload": "{\n  \"skipInvalidRows\": false,\n  \"ignoreUnknownValues\": false,\n  \"rows\": [\n    {\n      \"json\": { \n        \"time_start\": {{http-trigger.data.input[0].time_start}},\n        \"time_stop\": {{http-trigger.data.input[0].time_stop}},\n        \"req_id\": {{http-trigger.data.input[0].req_id}},\n        \"action\": {{http-trigger.data.input[0].action}},\n        \"output\": {{Function.STRING(http-trigger.data.input[0].data)}}\n        \n      }\n    }\n  ]\n}",
+          "parameters": [
+            {
+              "parameter_name": "Content-Type",
+              "parameter_value": "json"
+            }
+          ],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 100,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Create row in BigQuery DB",
+        "client_data": {
+          "position": {
+            "x": -198.25,
+            "y": 114.7088
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 2,
+      "connected_to": [],
+      "parent_action": null
+    }
+  ]
+}

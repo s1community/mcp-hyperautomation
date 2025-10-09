@@ -1,0 +1,941 @@
+{
+  "name": "RO_Manager",
+  "description": "",
+  "actions": [
+    {
+      "action": {
+        "type": "http_trigger",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "HTTP Trigger",
+          "action_type": "http_trigger",
+          "url_identifier": "<UUID>",
+          "supported_methods": {
+            "get": true,
+            "post": true
+          },
+          "response_status_code": 200,
+          "response_body": "{\"Status\": \"OK\"}",
+          "response_content_type": "application/json",
+          "response_headers": {},
+          "include_headers": true,
+          "allow_empty_request_body": true
+        },
+        "description": null,
+        "client_data": {
+          "position": {
+            "x": -88.0,
+            "y": -258.0
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 100.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 6,
+      "connected_to": [
+        {
+          "target": 17,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "validate input",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "correct_input",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, \"((.data | has(\\\"action\\\") and (.action | type == \\\"string\\\")) and (.data | has(\\\"input\\\") and (.input | type == \\\"array\\\")) and (.data | has(\\\"req_id\\\") and (.req_id | type == \\\"string\\\")))\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -88.0,
+            "y": -57.3228
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 17,
+      "connected_to": [
+        {
+          "target": 3,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Condition",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.correct_input}}",
+              "compared_value": "true",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -88.0,
+            "y": 119.35439999999994
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 3,
+      "connected_to": [
+        {
+          "target": 11,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define variables and jq queries",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "jq_extract_input",
+              "value": ".data.input",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_action",
+              "value": ".data.action",
+              "is_secret": false
+            },
+            {
+              "name": "json_output",
+              "value": "{\"tasks_list\": [], \"script_library\": [],\"queue_tasks_responses\":[]}",
+              "is_secret": false
+            },
+            {
+              "name": "tasks_list",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "time_start",
+              "value": "{{Function.DATETIME_NOW()}}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_filters",
+              "value": ".data | if (.input != null and (.input | type) == \"array\" and (.input | length) > 0 and (.input | map(keys) | flatten | length) > 0) then (.input | map(to_entries | map(select(.key != \"start\" and .key != \"end\"))) | flatten | map(\"\\(.key)=\\(.value)\") | join(\"&\")) else \"\" end",
+              "is_secret": false
+            },
+            {
+              "name": "script_library",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_start_date",
+              "value": "\"(.data.input[] | select(has(\\\"start\\\")) | .start) // (now - 1209600 | strftime(\\\"%Y-%m-%d %H:%M:%S\\\"))\"",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_end_date",
+              "value": "\"(.data.input[] | select(has(\\\"end\\\")) | .end) // (now | strftime(\\\"%Y-%m-%d %H:%M:%S\\\"))\"",
+              "is_secret": false
+            },
+            {
+              "name": "headers_tasks_list",
+              "value": "\"createdAt\",\"updatedAt\",\"description\",\"agentComputerName\",\"agentOsType\",\"agentIsActive\",\"statusDescription\",\"siteName\",\"groupName\",\"id\",\"initiatedBy\",\"detailedStatus\"",
+              "is_secret": false
+            },
+            {
+              "name": "headers_script_library",
+              "value": "\"createdAt\",\"updatedAt\",\"scriptName\",\"osTypes\",\"shortFileName\",\"scriptDescription\",\"scriptType\",\"inputRequired\",\"inputExample\",\"scopePath\",\"createdByUser\"",
+              "is_secret": false
+            },
+            {
+              "name": "queue_tasks_responses",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "headers_queue_tasks_responses",
+              "value": "\"\"",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -9.25,
+            "y": 296.0315999999999
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 11,
+      "connected_to": [
+        {
+          "target": 14,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "run jq query",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "input_data",
+              "value": "{{Function.FLATTEN_ARRAY(Function.JQ(http-trigger, local_var.jq_extract_input))}}",
+              "is_secret": false
+            },
+            {
+              "name": "action",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_action), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "epoch_start_date",
+              "value": "{{Function.MUL(Function.DATETIME_TO_EPOCH(Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_start_date), 0)), 1000)}}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_script_library_fields",
+              "value": "def find_field($field):\n  if ($field | contains(\".\")) then\n    ($field | split(\".\")) as $path |\n    try (getpath($path)) catch null\n  elif has($field) then \n    .[$field]\n  else \n    [paths(scalars) as $p | \n     if ($p | last) == $field then getpath($p) else empty end] | \n    if length > 0 then .[0] else null end\n  end;\n\n .script_library | map(. as $item | \n   [{{local_var.headers_script_library}}] as $fields | \n  reduce $fields[] as $field ({}; \n    . + {($field): ($item | find_field($field) | if type == \"array\" then tostring else . end)}\n  )\n)",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_tasks_list_fields",
+              "value": "def find_field($field):\n  if ($field | contains(\".\")) then\n    ($field | split(\".\")) as $path |\n    try (getpath($path)) catch null\n  elif has($field) then \n    .[$field]\n  else \n    [paths(scalars) as $p | \n     if ($p | last) == $field then getpath($p) else empty end] | \n    if length > 0 then .[0] else null end\n  end;\n\n.tasks_list | map(. as $item | \n   [{{local_var.headers_tasks_list}}] as $fields | \n  reduce $fields[] as $field ({}; \n    . + {($field): ($item | find_field($field) | if type == \"array\" then tostring else . end)}\n  )\n)",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_queue_tasks_responses_fields",
+              "value": "def find_field($field):\n  if ($field | contains(\".\")) then\n    ($field | split(\".\")) as $path |\n    try (getpath($path)) catch null\n  elif has($field) then \n    .[$field]\n  else \n    [paths(scalars) as $p | \n     if ($p | last) == $field then getpath($p) else empty end] | \n    if length > 0 then .[0] else null end\n  end;\n\n.queue_tasks_responses | map(. as $item | \n   [{{local_var.headers_queue_tasks_responses}}] as $fields | \n  reduce $fields[] as $field ({}; \n    . + {($field): ($item | find_field($field) | if type == \"array\" then tostring else . end)}\n  )\n)",
+              "is_secret": false
+            },
+            {
+              "name": "get_parameters",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_filters), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "epoch_end_date",
+              "value": "{{Function.MUL(Function.DATETIME_TO_EPOCH(Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_end_date), 0)), 1000)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -9.25,
+            "y": 472.7087999999999
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 14,
+      "connected_to": [
+        {
+          "target": 9,
+          "custom_handle": null
+        },
+        {
+          "target": 12,
+          "custom_handle": null
+        },
+        {
+          "target": 13,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "create task",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "create_task",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 310.75,
+            "y": 649.386
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 9,
+      "connected_to": [],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "list scripts",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "list_scripts",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -684.25,
+            "y": 649.386
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 12,
+      "connected_to": [
+        {
+          "target": 4,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "list tasks",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "list_tasks",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -9.25,
+            "y": 649.386
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 13,
+      "connected_to": [
+        {
+          "target": 15,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "set get task loop counter",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "get_tasks_loop_counter",
+              "value": "0",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 69.5,
+            "y": 826.0632
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 15,
+      "connected_to": [
+        {
+          "target": 16,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "tasks Loop",
+          "action_type": "loop",
+          "loop_type": "while",
+          "number_of_iterations": 1,
+          "object_to_iterate": null
+        },
+        "description": "Iterate over a list of items to perform repetitive actions. This action allows you to repeat a set of actions for each item in a list.",
+        "client_data": {
+          "position": {
+            "x": -285.5,
+            "y": 1040.7404000000001
+          },
+          "dimensions": {
+            "width": 966.0,
+            "height": 818.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 16,
+      "connected_to": [
+        {
+          "target": 5,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 10,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "cacb7721-1ba7-4ab2-82bc-dc9bb4e63677",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "ef645af9-ed60-4efd-882e-bf534442ce86",
+        "data": {
+          "name": "Get Scripts",
+          "action_type": "http_request",
+          "public_action_id": "cd0ee9ad-98cb-4914-8fed-9628e17fdf7b",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}<@/web/api/v2.1/remote-scripts@>",
+          "url_path": "/web/api/v2.1/remote-scripts",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [
+            {
+              "parameter_name": "limit",
+              "parameter_value": "1000"
+            },
+            {
+              "parameter_name": "sortBy",
+              "parameter_value": "createdAt"
+            },
+            {
+              "parameter_name": "sortOrder",
+              "parameter_value": "desc"
+            }
+          ],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {},
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get data of the scripts in the SentinelOne Script Library.\nThe SentinelOne Script Library, used for the Remote Script Orchestration feature, gives you a wide range of scripts to collect various forensic artifacts, parse them, and show them in formats that are easy to analyze. Use the scripts to collect information such as hardware and software inventory and configuration, running applications and processes, files and directories, network connections, and more.",
+        "client_data": {
+          "position": {
+            "x": -605.5,
+            "y": 826.0632
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 4,
+      "connected_to": [
+        {
+          "target": 8,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "cacb7721-1ba7-4ab2-82bc-dc9bb4e63677",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "ef645af9-ed60-4efd-882e-bf534442ce86",
+        "data": {
+          "name": "Get Tasks",
+          "action_type": "http_request",
+          "public_action_id": "cd0ee9ad-98cb-4914-8fed-9628e17fdf7b",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}/web/api/v2.1/private/tasks?{{local_var.get_parameters}}",
+          "url_path": "/web/api/v2.1/remote-scripts",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [
+            {
+              "parameter_name": "createdAt__gt",
+              "parameter_value": "{{local_var.epoch_start_date}}"
+            },
+            {
+              "parameter_name": "createdAt__lt",
+              "parameter_value": "{{local_var.epoch_end_date}}"
+            },
+            {
+              "parameter_name": "sortBy",
+              "parameter_value": "createdAt"
+            },
+            {
+              "parameter_name": "sortOrder",
+              "parameter_value": "desc"
+            },
+            {
+              "parameter_name": "limit",
+              "parameter_value": "1000"
+            },
+            {
+              "parameter_name": "types",
+              "parameter_value": "script_execution"
+            }
+          ],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get data of the scripts in the SentinelOne Script Library.\nThe SentinelOne Script Library, used for the Remote Script Orchestration feature, gives you a wide range of scripts to collect various forensic artifacts, parse them, and show them in formats that are easy to analyze. Use the scripts to collect information such as hardware and software inventory and configuration, running applications and processes, files and directories, network connections, and more.",
+        "client_data": {
+          "position": {
+            "x": 355.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 5,
+      "connected_to": [
+        {
+          "target": 0,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 16
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "append scripts",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"script_library\": {{get-scripts.body.data}}, \"tasks_list\": {{local_var.json_output.tasks_list}}, \"queue_tasks_responses\": {{local_var.json_output.queue_tasks_responses}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -605.5,
+            "y": 1002.7404000000001
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 8,
+      "connected_to": [
+        {
+          "target": 10,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define json output",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"time_start\": {{local_var.time_start}}, \"time_stop\": {{Function.DATETIME_NOW()}} , \"req_id\": {{http-trigger.data.req_id}}, \"action\": {{local_var.action}}, \"data\":{\"script_library\": {{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.json_output, local_var.jq_extract_script_library_fields), 0)}}, \"tasks_list\": {{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.json_output, local_var.jq_extract_tasks_list_fields), 0)}},\"queue_tasks_responses\": {{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.json_output, local_var.jq_extract_queue_tasks_responses_fields), 0)}}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -228.625,
+            "y": 1959.4176000000002
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 10,
+      "connected_to": [
+        {
+          "target": 7,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Append tasks info",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"tasks_list\": {{Function.UNION(local_var.json_output.tasks_list, get-tasks.body.data)}}, \"script_library\": {{local_var.json_output.script_library}}, \"queue_tasks_responses\": {{local_var.json_output.queue_tasks_responses}}}",
+              "is_secret": false
+            },
+            {
+              "name": "get_tasks_loop_counter",
+              "value": "{{Function.ADD(local_var.get_tasks_loop_counter, Function.LENGTH(get-tasks.body.data))}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 195.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 0,
+      "connected_to": [
+        {
+          "target": 2,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 16
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Check Cursor",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.get_tasks_loop_counter}}",
+              "compared_value": "{{get-tasks.body.pagination.totalItems}}",
+              "comparison_operator": "greater_than_or_equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 195.0,
+            "y": 530.0316
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 2,
+      "connected_to": [
+        {
+          "target": 1,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": 16
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Write to DB",
+          "action_type": "http_request",
+          "public_action_id": null,
+          "method": "post",
+          "url": "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<DB_UUID>",
+          "url_path": null,
+          "url_prefix": null,
+          "payload": "{\n\t\"req_id\": {{http-trigger.data.req_id}},\n    \"action\": \"create_row\",\n    \"input\": [{{local_var.json_output}}]\n}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -228.625,
+            "y": 2136.0948000000003
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 7,
+      "connected_to": [],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "break_loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Break Endpoints Loop",
+          "action_type": "break_loop"
+        },
+        "description": "Exit a loop prematurely. This action allows you to stop the loop before it has iterated over all items.",
+        "client_data": {
+          "position": {
+            "x": 273.75,
+            "y": 706.7088
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 1,
+      "connected_to": [],
+      "parent_action": 16
+    }
+  ]
+}

@@ -1,0 +1,884 @@
+{
+  "name": "VT_Agent",
+  "description": "Check IPs and FQDN against VT Intel database and return metadata",
+  "actions": [
+    {
+      "action": {
+        "type": "http_trigger",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "HTTP Trigger",
+          "action_type": "http_trigger",
+          "url_identifier": "<UUID>",
+          "supported_methods": {
+            "get": true,
+            "post": true
+          },
+          "response_status_code": 200,
+          "response_body": "{\n  \"Status\": \"OK\"\n}",
+          "response_content_type": "application/json",
+          "response_headers": {},
+          "include_headers": true,
+          "allow_empty_request_body": true
+        },
+        "description": null,
+        "client_data": {
+          "position": {
+            "x": -342.0,
+            "y": -392.0
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 100.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 1,
+      "connected_to": [
+        {
+          "target": 17,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "validate input",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "correct_input",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, \"((.data | has(\\\"action\\\") and (.action | type == \\\"string\\\")) and (.data | has(\\\"input\\\") and (.input | type == \\\"array\\\")) and (.data | has(\\\"req_id\\\") and (.req_id | type == \\\"string\\\")))\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -342.0,
+            "y": -191.3228
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 17,
+      "connected_to": [
+        {
+          "target": 0,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Condition",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.correct_input}}",
+              "compared_value": "true",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -342.0,
+            "y": -14.645600000000059
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 0,
+      "connected_to": [
+        {
+          "target": 10,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define variables and jq queries",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "jq_extract_input",
+              "value": ".data.input",
+              "is_secret": false
+            },
+            {
+              "name": "jq_extract_action",
+              "value": ".data.action",
+              "is_secret": false
+            },
+            {
+              "name": "json_output",
+              "value": "{\"ti_lookups\": [], \"downloaded_samples\": []}",
+              "is_secret": false
+            },
+            {
+              "name": "downloaded_binary_payloads",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "ti_lookup_data",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "ti_ip_lookup_data",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "ti_domains_lookup_data",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "ti_hash_lookup_data",
+              "value": "[]",
+              "is_secret": false
+            },
+            {
+              "name": "time_start",
+              "value": "{{Function.DATETIME_NOW()}}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_ip_summary",
+              "value": ".body.data | {ip: .id,\ncountry: .attributes.country,\nas_owner: .attributes.as_owner,\nasn: .attributes.asn,\nnetwork: .attributes.network,\nreputation: .attributes.reputation,\nanalysis_stats: .attributes.last_analysis_stats,\nthreat_severity: .attributes.threat_severity.threat_severity_level,\ntags: .attributes.tags,\nlast_analysis_date: .attributes.last_analysis_date,\nconfidence_rating: {\nis_malicious: (.attributes.last_analysis_stats.malicious > 0 or .attributes.last_analysis_stats.suspicious > 0),\nconfidence: (if .attributes.last_analysis_stats.malicious > 0 or .attributes.last_analysis_stats.suspicious > 0 \n                 then ((.attributes.last_analysis_stats.malicious + .attributes.last_analysis_stats.suspicious) * 100 / \n                      (.attributes.last_analysis_stats.malicious + .attributes.last_analysis_stats.suspicious + \n                       .attributes.last_analysis_stats.undetected + .attributes.last_analysis_stats.harmless)) | tostring + \"% of engines detected issues\"\n                 else \"No engines detected issues - likely benign\" \n                 end),\ndetected_by: \"\\(.attributes.last_analysis_stats.malicious + .attributes.last_analysis_stats.suspicious)/\\(.attributes.last_analysis_stats.malicious + .attributes.last_analysis_stats.suspicious + .attributes.last_analysis_stats.undetected + .attributes.last_analysis_stats.harmless) engines\"\n}\n}",
+              "is_secret": false
+            },
+            {
+              "name": "jq_hash_summary",
+              "value": ".body.data | {\n  id: .id,\n  hashes: { sha256: .attributes.sha256, md5: .attributes.md5 },\n  meaningful_name: .attributes.meaningful_name?,\n  size: .attributes.size,\n  last_analysis_date: (.attributes.last_analysis_date? | if . then strftime(\"%Y-%m-%d %H:%M:%S UTC\") else null end),\n  last_analysis_stats: .attributes.last_analysis_stats,\n  reputation: .attributes.reputation,\n  threat_severity: .attributes.threat_severity?,\n sandbox_summary: (\n    \n    if (.attributes.sandbox_verdicts? | type) == \"object\" then\n      {\n        malicious_count: (.attributes.sandbox_verdicts | map_values(select(.category == \"malicious\")) | length),\n        suspicious_count: (.attributes.sandbox_verdicts | map_values(select(.category == \"suspicious\")) | length),\n        harmless_count: (.attributes.sandbox_verdicts | map_values(select(.category == \"harmless\" or .category == \"clean\")) | length)\n      }\n    else\n      null\n    end\n  )\n}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -263.25,
+            "y": 162.0315999999999
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 10,
+      "connected_to": [
+        {
+          "target": 16,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "run jq query",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "input_data",
+              "value": "{{Function.FLATTEN_ARRAY(Function.JQ(http-trigger, local_var.jq_extract_input))}}",
+              "is_secret": false
+            },
+            {
+              "name": "action",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, local_var.jq_extract_action), 0)}}",
+              "is_secret": false
+            },
+            {
+              "name": "hash_list",
+              "value": "{{Function.EXTRACT_ANY_HASH(Function.STRING(Function.FLATTEN_ARRAY(Function.JQ(http-trigger, local_var.jq_extract_input))))}}",
+              "is_secret": false
+            },
+            {
+              "name": "ip_list",
+              "value": "{{Function.EXTRACT_IPS(Function.STRING(Function.FLATTEN_ARRAY(Function.JQ(http-trigger, local_var.jq_extract_input))))}}",
+              "is_secret": false
+            },
+            {
+              "name": "domain_list",
+              "value": "{{Function.EXTRACT_DOMAINS(Function.STRING(Function.FLATTEN_ARRAY(Function.JQ(http-trigger, local_var.jq_extract_input))))}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -263.25,
+            "y": 338.7087999999999
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 16,
+      "connected_to": [
+        {
+          "target": 11,
+          "custom_handle": null
+        },
+        {
+          "target": 15,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "download sample",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "download_sample",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 647.5,
+            "y": 515.386
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 11,
+      "connected_to": [
+        {
+          "target": 12,
+          "custom_handle": "false"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "hash download loop",
+          "action_type": "loop",
+          "loop_type": "dynamic",
+          "number_of_iterations": 1,
+          "object_to_iterate": "{{local_var.hash_list}}"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 312.75,
+            "y": 730.0632
+          },
+          "dimensions": {
+            "width": 768.0,
+            "height": 320.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 12,
+      "connected_to": [
+        {
+          "target": 5,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 9,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "perform ti lookup",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "ti_lookup",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -758.0,
+            "y": 515.386
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 15,
+      "connected_to": [
+        {
+          "target": 13,
+          "custom_handle": "true"
+        },
+        {
+          "target": 14,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Variable",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "do_nothing",
+              "value": "[]",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 5,
+      "connected_to": [],
+      "parent_action": 12
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "hash loop",
+          "action_type": "loop",
+          "loop_type": "dynamic",
+          "number_of_iterations": 1,
+          "object_to_iterate": "{{local_var.hash_list}}"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -519.25,
+            "y": 730.0632
+          },
+          "dimensions": {
+            "width": 768.0,
+            "height": 464.3544
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 13,
+      "connected_to": [
+        {
+          "target": 2,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 9,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "ip loop",
+          "action_type": "loop",
+          "loop_type": "dynamic",
+          "number_of_iterations": 1,
+          "object_to_iterate": "{{local_var.ip_list}}"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -1351.25,
+            "y": 730.0632
+          },
+          "dimensions": {
+            "width": 768.0,
+            "height": 464.3544
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 14,
+      "connected_to": [
+        {
+          "target": 3,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 9,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "ef20ca63-3176-4342-be04-b3abcfa28905",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "9b735fa3-69db-4430-bca0-347b57a8604d",
+        "data": {
+          "name": "Search File Hash",
+          "action_type": "http_request",
+          "public_action_id": "bb65ec26-0d88-4f9e-9369-4ceba0e738bd",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}<@/api/v3/files/@>{{hash-loop.item}}",
+          "url_path": "/api/v3/files/<<file_hash>>",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Retrieve information about a file.\nfile-hash could be SHA-256, SHA-1 or MD5 identifying the file.",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 2,
+      "connected_to": [
+        {
+          "target": 7,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 13
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "ef20ca63-3176-4342-be04-b3abcfa28905",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "9b735fa3-69db-4430-bca0-347b57a8604d",
+        "data": {
+          "name": "Search IP address",
+          "action_type": "http_request",
+          "public_action_id": "25394f56-6862-4ba7-9843-5d6c5fa3ac04",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}<@/api/v3/ip_addresses/@>{{ip-loop.item}}",
+          "url_path": "/api/v3/ip_addresses/<<ip>>",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Given an IP address, retrieves the pertinent analysis report including threat reputation and context produced by 70+ antivirus products/blocklists and a myriad of other security tools and datasets.",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 3,
+      "connected_to": [
+        {
+          "target": 8,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 14
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "add Hash lookup results",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "ti_lookup_data",
+              "value": "{{Function.APPEND(local_var.ti_hash_lookup_data, search-file-hash.body)}}",
+              "is_secret": false
+            },
+            {
+              "name": "json_output",
+              "value": "{\"ti_lookups\": {{Function.APPEND(local_var.json_output.ti_lookups, Function.ACCESS_LIST_ITEM(Function.JQ(search-file-hash, local_var.jq_hash_summary), 0))}} , \"downloaded_samples\": {{local_var.json_output.downloaded_samples}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 7,
+      "connected_to": [],
+      "parent_action": 13
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "add IP lookup results",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "ti_ip_lookup_data",
+              "value": "{{Function.APPEND(local_var.ti_ip_lookup_data, search-ip-address.body.data)}}",
+              "is_secret": false
+            },
+            {
+              "name": "json_output",
+              "value": "{\"ti_lookups\": {{Function.APPEND(local_var.json_output.ti_lookups, Function.ACCESS_LIST_ITEM(Function.JQ(search-ip-address, local_var.jq_ip_summary), 0))}} , \"downloaded_samples\": {{local_var.json_output.downloaded_samples}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 256.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 8,
+      "connected_to": [],
+      "parent_action": 14
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define output json",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"time_start\": {{local_var.time_start}}, \"time_stop\": {{Function.DATETIME_NOW()}} , \"req_id\": {{http-trigger.data.req_id}}, \"action\": {{local_var.action}}, \"data\":{\"ti_lookups\": {{local_var.json_output.ti_lookups}} , \"downloaded_samples\": {{local_var.json_output.downloaded_samples}}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -263.25,
+            "y": 1295.0948
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 9,
+      "connected_to": [
+        {
+          "target": 4,
+          "custom_handle": null
+        },
+        {
+          "target": 6,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "send_email",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Send Email",
+          "action_type": "send_email",
+          "subject": "HA intel enrichment",
+          "to": [
+            "antonio.monaca+test@sentinelone.com"
+          ],
+          "cc": [],
+          "bcc": [],
+          "reply_to": [],
+          "mime_type": "text/plain",
+          "body": "{{Function.PRETTY_PRINT(local_var.json_output)}}",
+          "attachments": [],
+          "continue_on_fail": false
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -423.25,
+            "y": 1471.7720000000002
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 4,
+      "connected_to": [],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Write to DB",
+          "action_type": "http_request",
+          "public_action_id": null,
+          "method": "post",
+          "url": "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<DB_UUID>",
+          "url_path": null,
+          "url_prefix": null,
+          "payload": "{\n\t\"req_id\": {{http-trigger.data.req_id}},\n    \"action\": \"create_row\",\n    \"input\": [{{local_var.json_output}}]\n}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -103.25,
+            "y": 1471.7720000000002
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 6,
+      "connected_to": [],
+      "parent_action": null
+    }
+  ]
+}

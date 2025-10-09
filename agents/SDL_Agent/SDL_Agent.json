@@ -1,0 +1,1388 @@
+{
+  "name": "SDL_Manager v2",
+  "description": "",
+  "actions": [
+    {
+      "action": {
+        "type": "http_trigger",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "HTTP Trigger",
+          "action_type": "http_trigger",
+          "url_identifier": "<UUID>",
+          "supported_methods": {
+            "get": true,
+            "post": true
+          },
+          "response_status_code": 200,
+          "response_body": "{\"Status\": \"OK\"}",
+          "response_content_type": "application/json",
+          "response_headers": {},
+          "include_headers": true,
+          "allow_empty_request_body": true
+        },
+        "description": null,
+        "client_data": {
+          "position": {
+            "x": -91.2987433751664,
+            "y": -464.42320529563807
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 11,
+      "connected_to": [
+        {
+          "target": 29,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "validate input",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "correct_input",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(http-trigger, \"((.data | has(\\\"action\\\") and (.action | type == \\\"string\\\")) and (.data | has(\\\"input\\\") and (.input | type == \\\"array\\\")) and (.data | has(\\\"req_id\\\") and (.req_id | type == \\\"string\\\")))\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -91.2987433751664,
+            "y": -287.74600529563804
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 29,
+      "connected_to": [
+        {
+          "target": 5,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Condition",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.correct_input}}",
+              "compared_value": "true",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -91.2987433751664,
+            "y": -111.06880529563807
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 5,
+      "connected_to": [
+        {
+          "target": 21,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "define variables",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"pql_rows\": [], \"errors\": \"\"}",
+              "is_secret": false
+            },
+            {
+              "name": "time_start",
+              "value": "{{Function.DATETIME_NOW()}}",
+              "is_secret": false
+            },
+            {
+              "name": "query_list",
+              "value": "{{http-trigger.data.input}}",
+              "is_secret": false
+            },
+            {
+              "name": "action",
+              "value": "{{http-trigger.data.action}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -12.548743375166396,
+            "y": 65.60839470436196
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 21,
+      "connected_to": [
+        {
+          "target": 23,
+          "custom_handle": null
+        },
+        {
+          "target": 27,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "get query results",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "get_query_results",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 714.7950066248336,
+            "y": 242.28559470436204
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 23,
+      "connected_to": [
+        {
+          "target": 26,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "results loop",
+          "action_type": "loop",
+          "loop_type": "dynamic",
+          "number_of_iterations": 1,
+          "object_to_iterate": "{{local_var.query_list}}"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 63.857506624833604,
+            "y": 456.962794704362
+          },
+          "dimensions": {
+            "width": 1715.375,
+            "height": 2480.8036
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 26,
+      "connected_to": [
+        {
+          "target": 14,
+          "custom_handle": "inner"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "run query",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.action}}",
+              "compared_value": "execute_pql_query",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -739.8924933751664,
+            "y": 242.28559470436204
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 27,
+      "connected_to": [
+        {
+          "target": 25,
+          "custom_handle": "true"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Set lastStepSeen",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "lastStepSeen",
+              "value": "0",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 729.6875,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 14,
+      "connected_to": [
+        {
+          "target": 30,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 26
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "queries loop",
+          "action_type": "loop",
+          "loop_type": "dynamic",
+          "number_of_iterations": 1,
+          "object_to_iterate": "{{local_var.query_list}}"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": -1066.1424933751664,
+            "y": 456.962794704362
+          },
+          "dimensions": {
+            "width": 1066.0,
+            "height": 1008.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 25,
+      "connected_to": [
+        {
+          "target": 6,
+          "custom_handle": "inner"
+        }
+      ],
+      "parent_action": null
+    },
+    {
+      "action": {
+        "type": "loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "while loop",
+          "action_type": "loop",
+          "loop_type": "while",
+          "number_of_iterations": 1,
+          "object_to_iterate": null
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 35.0,
+            "y": 391.3544
+          },
+          "dimensions": {
+            "width": 1645.375,
+            "height": 1171.0632
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 30,
+      "connected_to": [
+        {
+          "target": 4,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 10,
+          "custom_handle": "inner"
+        },
+        {
+          "target": 22,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 26
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Build Ping Query",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "pingQuery_query",
+              "value": "{\n    \"operationName\": \"pingQuery\",\n    \"variables\": {\n        \"ids\": [\n            {{results-loop.item.queryId}}\n        ],\n        \"lastStepSeen\": {{local_var.lastStepSeen}},\n        \"token\": {{results-loop.item.token}}\n        \n    },\n    \"query\": \"query pingQuery($ids: [String], $lastStepSeen: Int!, $token: String!) {\\n  pingQuery(ids: $ids, lastStepSeen: $lastStepSeen, token: $token) {\\n    ...QueriesResult\\n    __typename\\n  }\\n}\\n\\nfragment QueriesResult on QueriesResult {\\n  ids\\n  status\\n  token\\n  stepsCompleted\\n  totalSteps\\n  results {\\n    id\\n    stepsCompleted\\n    totalSteps\\n    error\\n    data {\\n      matchCount\\n      ...PowerQueryResult\\n      __typename\\n    }\\n    __typename\\n  }\\n  __typename\\n}\\n\\nfragment PowerQueryResult on ResultData {\\n  ... on PqResultData {\\n    columns {\\n      name\\n      format\\n      decimalPlaces\\n      type\\n      __typename\\n    }\\n    cells {\\n      value\\n      url\\n      __typename\\n    }\\n    values\\n    matchCount\\n    omittedEvents\\n    outcome\\n    partialResultsDueToTimeLimit\\n    __typename\\n  }\\n  __typename\\n}\"\n}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 854.6875,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 4,
+      "connected_to": [
+        {
+          "target": 9,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Create Final graphQL query",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "final_graphQL_query",
+              "value": "{\n                    \"origin\": \"UNKNOWN\",\n                    \"endTime\": \"{{Function.MUL(Function.DATETIME_TO_EPOCH(queries-loop.item.stop), 1000000000)}}\",\n                    \"filter\": {{queries-loop.item.query}},\n                    \"powerQuery\": {},\n                    \"startTime\": \"{{Function.MUL(Function.DATETIME_TO_EPOCH(queries-loop.item.start), 1000000000)}}\",\n                    \"type\": \"PQ\",    \n                    \"id\": {{Function.MD5(Function.APPEND(queries-loop.item.start, Function.APPEND(\"#\", Function.APPEND(queries-loop.item.stop, Function.APPEND(\"#\", queries-loop.item.query)))))}}\n}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 565.0,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 6,
+      "connected_to": [
+        {
+          "target": 17,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 25
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "extract headers and values",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "parsed_headers",
+              "value": "{{Function.JQ(get-query-events.body.data.pingQuery.results[0].data.columns, \".[].name\")}}",
+              "is_secret": false
+            },
+            {
+              "name": "parsed_values",
+              "value": "{{Function.JQ(get-query-events.body.data.pingQuery.results[0].data.values, \".[]\")}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 729.6875,
+            "y": 1663.0948
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 22,
+      "connected_to": [
+        {
+          "target": 24,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 26
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "c6bd7ddc-9f53-455d-8b41-10a71f5d85e6",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "3e274c5a-f574-462f-8685-5eed98e90fbb",
+        "data": {
+          "name": "Get Query events",
+          "action_type": "http_request",
+          "public_action_id": "6f06eb91-9a16-45f3-ab9d-670c16e7355d",
+          "method": "post",
+          "url": "https://xdr.us1.sentinelone.net/v2/graphql?opname=pingQuery",
+          "url_path": "/web/api/v2.0/threats",
+          "url_prefix": null,
+          "payload": "{{local_var.pingQuery_query}}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json",
+            "Cookie": "{{results-loop.item.Cookie}}",
+            "Priority": "u=1, i",
+            "Scalyr-Team-Token": "{{results-loop.item.Scalyr-Team-Token}}",
+            "x-dataset-query-forward-tag": "{{results-loop.item.x-dataset-query-forward-tag}}"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get all Deep Visibility events from a queryId. You can use this command to send a sub-query, a new query to run on these events. Get the ID from \"init-query\". See \"Create Query and get QueryId\".\nFor complete documentation, see Query Syntax in the Knowledge Base (support.sentinelone.com) or the Console Help.",
+        "client_data": {
+          "position": {
+            "x": 854.6875,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 9,
+      "connected_to": [
+        {
+          "target": 18,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "cacb7721-1ba7-4ab2-82bc-dc9bb4e63677",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "ef645af9-ed60-4efd-882e-bf534442ce86",
+        "data": {
+          "name": "Get Query events old",
+          "action_type": "http_request",
+          "public_action_id": "014e1093-4466-4fa4-8cd7-317a8dac18c2",
+          "method": "get",
+          "url": "{{Connection.protocol}}{{Connection.url}}/web/api/v2.1/dv/events/pq-ping",
+          "url_path": "/web/api/v2.1/dv/events",
+          "url_prefix": null,
+          "payload": null,
+          "parameters": [
+            {
+              "parameter_name": "queryId",
+              "parameter_value": "{{results-loop.item.queryId}}"
+            }
+          ],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 300,
+          "headers": {
+            "Content-Type": "application/json",
+            "accept": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": true
+        },
+        "description": "Get all Deep Visibility events from a queryId. You can use this command to send a sub-query, a new query to run on these events. Get the ID from \"init-query\". See \"Create Query and get QueryId\".\nFor complete documentation, see Query Syntax in the Knowledge Base (support.sentinelone.com) or the Console Help.",
+        "client_data": {
+          "position": {
+            "x": 534.6875,
+            "y": 176.6772
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 10,
+      "connected_to": [],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "build POST body",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "launchQuery_query",
+              "value": "{\n    \"operationName\": \"launchQuery\",\n    \"variables\": {\n        \"queryGroupRequest\": {\n            \"queries\": [{{local_var.final_graphQL_query}}],\n            \"preFilter\": \"dataSource.category = 'security' dataSource.name in ('SentinelOne', 'Windows Event Logs')\"\n        }\n    },\n    \"query\": \"query launchQuery($queryGroupRequest: QueryGroupRequestInput!) {\\n  launchQuery(queryGroupRequest: $queryGroupRequest) {\\n    ...QueriesResult\\n    __typename\\n  }\\n}\\n\\nfragment QueriesResult on QueriesResult {\\n  ids\\n  status\\n  token\\n  stepsCompleted\\n  totalSteps\\n  results {\\n    id\\n    stepsCompleted\\n    totalSteps\\n    error\\n    data {\\n      matchCount\\n      ...PowerQueryResult\\n      __typename\\n    }\\n    __typename\\n  }\\n  __typename\\n}\\n\\nfragment PowerQueryResult on ResultData {\\n  ... on PqResultData {\\n    columns {\\n      name\\n      format\\n      decimalPlaces\\n      type\\n      __typename\\n    }\\n    cells {\\n      value\\n      url\\n      __typename\\n    }\\n    values\\n    matchCount\\n    omittedEvents\\n    outcome\\n    partialResultsDueToTimeLimit\\n    __typename\\n  }\\n  __typename\\n}\"\n}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 565.0,
+            "y": 353.3544
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 17,
+      "connected_to": [
+        {
+          "target": 8,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 25
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "check query status",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "query_execution_failed",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(get-query-events.body, \". | has(\\\"errors\\\")\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "todo: check if error field exists with pq",
+        "client_data": {
+          "position": {
+            "x": 854.6875,
+            "y": 530.0316
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 18,
+      "connected_to": [
+        {
+          "target": 19,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "check query syntax",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{local_var.query_execution_failed}}",
+              "compared_value": "true",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 854.6875,
+            "y": 706.7088
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 19,
+      "connected_to": [
+        {
+          "target": 0,
+          "custom_handle": "true"
+        },
+        {
+          "target": 12,
+          "custom_handle": "false"
+        }
+      ],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "map rows",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "mapped_rows",
+              "value": "{{Function.MAP_TABLE(local_var.parsed_headers, local_var.parsed_values)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 729.6875,
+            "y": 1839.7720000000002
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 24,
+      "connected_to": [
+        {
+          "target": 20,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 26
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Add error to json output",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "json_output",
+              "value": "{\"pql_rows\": [], \"errors\": {{get-query-events.body.errors[0].message}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 1135.3125,
+            "y": 883.3860000000001
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 0,
+      "connected_to": [
+        {
+          "target": 2,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "break_loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Break",
+          "action_type": "break_loop"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 1135.3125,
+            "y": 1060.0632
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 2,
+      "connected_to": [],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "integration",
+        "connection_id": "c6bd7ddc-9f53-455d-8b41-10a71f5d85e6",
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": "3e274c5a-f574-462f-8685-5eed98e90fbb",
+        "data": {
+          "name": "Get PQL QueryID",
+          "action_type": "http_request",
+          "public_action_id": "6f06eb91-9a16-45f3-ab9d-670c16e7355d",
+          "method": "post",
+          "url": "https://xdr.us1.sentinelone.net/v2/graphql?opname=launchQuery",
+          "url_path": "/web/api/v2.0/threats",
+          "url_prefix": null,
+          "payload": "{{local_var.launchQuery_query}}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [
+            500
+          ],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "Get All Unified Alerts",
+        "client_data": {
+          "position": {
+            "x": 565.0,
+            "y": 530.0316
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 8,
+      "connected_to": [
+        {
+          "target": 13,
+          "custom_handle": null
+        },
+        {
+          "target": 15,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 25
+    },
+    {
+      "action": {
+        "type": "condition",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Loop until PQ results are ready",
+          "action_type": "condition",
+          "condition_type": "multi",
+          "condition": null,
+          "conditions": [
+            {
+              "input_value": "{{get-query-events.status_code}}",
+              "compared_value": "200",
+              "comparison_operator": "equals"
+            },
+            {
+              "input_value": "{{get-query-events.body.data.pingQuery.status}}",
+              "compared_value": "DONE",
+              "comparison_operator": "equals"
+            }
+          ],
+          "conditions_relationship": "and"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 574.0625,
+            "y": 883.3860000000001
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 12,
+      "connected_to": [
+        {
+          "target": 3,
+          "custom_handle": "true"
+        },
+        {
+          "target": 7,
+          "custom_handle": "false"
+        },
+        {
+          "target": 28,
+          "custom_handle": "false"
+        }
+      ],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": "",
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Send HTTP Request",
+          "action_type": "http_request",
+          "public_action_id": null,
+          "method": "post",
+          "url": "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<UUID>",
+          "url_path": null,
+          "url_prefix": null,
+          "payload": "{\n\t\"req_id\": {{http-trigger.data.req_id}},\n    \"action\": \"get_query_results\",\n    \"input\": [{\n      \"queryId\" : {{get-pql-queryid.body.data.launchQuery.ids[0]}},\n      \"start\": {{queries-loop.item.start}},\n      \"stop\": {{queries-loop.item.stop}},\n      \"query\": {{queries-loop.item.query}},\n      \"token\" : {{get-pql-queryid.body.data.launchQuery.token}},\n      \"Scalyr-Team-Token\": {{get-pql-queryid.headers.scalyr-team-token}},\n      \"x-dataset-query-forward-tag\" : {{get-pql-queryid.headers.x-dataset-query-forward-tag}},\n      \"Cookie\" : {{get-pql-queryid.headers.Set-Cookie}} \n      \n    }\n    ]  \n}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 405.0,
+            "y": 706.7088000000001
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 13,
+      "connected_to": [],
+      "parent_action": 25
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Variable",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "debug",
+              "value": "{\n\t\"req_id\": {{http-trigger.data.req_id}},\n    \"action\": \"get_query_results\",\n    \"input\": [{\n      \"queryId\" : {{get-pql-queryid.body.data.launchQuery.ids[0]}},\n      \"start\": {{queries-loop.item.start}},\n      \"stop\": {{queries-loop.item.stop}},\n      \"query\": {{queries-loop.item.query}},\n      \"token\" : {{get-pql-queryid.body.data.launchQuery.token}},\n      \"Scalyr-Team-Token\": {{get-pql-queryid.headers.scalyr-team-token}},\n      \"x-dataset-query-forward-tag\" : {{get-pql-queryid.headers.x-dataset-query-forward-tag}},\n      \"Cookie\" : {{get-pql-queryid.headers.Set-Cookie}} \n      \n    }\n    ]  \n}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 725.0,
+            "y": 706.7088000000001
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 15,
+      "connected_to": [],
+      "parent_action": 25
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "convert timestamps",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "utc_rows",
+              "value": "{{Function.ACCESS_LIST_ITEM(Function.JQ(local_var.mapped_rows, \"map(if has(\\\"event.time\\\") then (.\\\"event.time\\\" |= try ((. / 1000 | floor) as $seconds | (. % 1000) as $milliseconds | ($milliseconds | tostring) as $ms_str | ($seconds | gmtime | strftime(\\\"%Y-%m-%d %H:%M:%S\\\")) + \\\".\\\" + (if ($ms_str | length) == 1 then \\\"00\\\" + $ms_str elif ($ms_str | length) == 2 then \\\"0\\\" + $ms_str else $ms_str end)) catch .) else . end)\"), 0)}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 729.6875,
+            "y": 2016.4492000000002
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 20,
+      "connected_to": [
+        {
+          "target": 1,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 26
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "update lastStepSeen",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "lastStepSeen",
+              "value": "{{get-query-events.body.data.pingQuery.stepsCompleted}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 495.3125,
+            "y": 1060.0632
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 28,
+      "connected_to": [],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "variable",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Add results to json output",
+          "action_type": "variable",
+          "variables": [
+            {
+              "name": "jjj",
+              "value": "{{results-loop.item}}",
+              "is_secret": false
+            },
+            {
+              "name": "json_output",
+              "value": "{\"time_start\": {{local_var.time_start}}, \"time_stop\": {{Function.DATETIME_NOW()}} , \"req_id\": {{http-trigger.data.req_id}}, \"action\": {{local_var.action}}, \"data\":{\"input_query\": {{results-loop.item}},\"pql_rows\": {{local_var.utc_rows}} , \"errors\": {{local_var.json_output.errors}}}}",
+              "is_secret": false
+            }
+          ],
+          "variables_scope": "local"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 729.6875,
+            "y": 2193.1264
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 1,
+      "connected_to": [
+        {
+          "target": 16,
+          "custom_handle": null
+        }
+      ],
+      "parent_action": 26
+    },
+    {
+      "action": {
+        "type": "break_loop",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Break when PQ results are ready",
+          "action_type": "break_loop"
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 815.3125,
+            "y": 1060.0632
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 3,
+      "connected_to": [],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "delay",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Delay 3s 2",
+          "action_type": "delay",
+          "time_unit": "seconds",
+          "value": 2
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 175.3125,
+            "y": 1060.0632
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 7,
+      "connected_to": [],
+      "parent_action": 30
+    },
+    {
+      "action": {
+        "type": "http_request",
+        "tag": "core_action",
+        "connection_id": null,
+        "connection_name": null,
+        "use_connection_name": false,
+        "integration_id": null,
+        "data": {
+          "name": "Write to DB",
+          "action_type": "http_request",
+          "public_action_id": null,
+          "method": "post",
+          "url": "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/<DB_UUID>",
+          "url_path": null,
+          "url_prefix": null,
+          "payload": "{\n\t\"req_id\": {{http-trigger.data.req_id}},\n    \"action\": \"create_row\",\n    \"input\": [{{local_var.json_output}}]\n}",
+          "parameters": [],
+          "retry_on_status_code": null,
+          "retry_on_status_codes": [],
+          "ssl_verification": true,
+          "timeout": 30,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "use_authentication_data": true,
+          "use_proxy": false,
+          "proxy_user": null,
+          "proxy_password": null,
+          "proxy_host": null,
+          "proxy_port": null,
+          "redirect_follow": true,
+          "continue_on_fail": false
+        },
+        "description": "",
+        "client_data": {
+          "position": {
+            "x": 729.6875,
+            "y": 2369.8036
+          },
+          "dimensions": {
+            "width": 256.0,
+            "height": 76.0
+          },
+          "collapsed": false
+        }
+      },
+      "export_id": 16,
+      "connected_to": [],
+      "parent_action": 26
+    }
+  ]
+}
