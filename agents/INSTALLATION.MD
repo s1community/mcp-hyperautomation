@@ -6,8 +6,15 @@ There are three steps necessary to configure this architecture in HyperAutomatio
 3. Updating the [API Endpoints in the MCP server](../server/server.py#L66-L71)
 
 ### Integrations
+
+Go to the **Integrations** tab under the Hyperautomation menu and [configure a connection](https://community.sentinelone.com/s/article/000010828) for each of the following
+
 1. Virus Total
-   - From the **Integrations** tab under the Hyperautomation menu, search for VirusTotal and Add a Connection. Use your VT/GTI API token and you will be fine.
+   - Search for VirusTotal and add a new Connection. Use your VT/GTI API token, and you will be fine.
+2. SentinelOne GraphQL
+   - Create a Service Token and add a new Connection as shown in the image below
+   <img width="803" height="675" alt="Image" src="https://github.com/user-attachments/assets/5e4a75f2-d0f2-472c-8290-c866b3417645" />
+
 
 
 ### Setting up the Agents in HA
