@@ -17,7 +17,7 @@ Go to the **Integrations** tab under the Hyperautomation menu and [configure a c
 3. **SentinelOne**
     - Use the same API Token generated at the previous step to create a new Connection (this is for the REST API) as shown in the image below. **Note** that the value for the field `Header Value Prefix` is different from the previous connection
 
-   <img width="798" height="674" alt="Image" src="https://github.com/user-attachments/assets/ae0767e8-a9d0-48d0-a80b-0519fee1d6f3" />
+      <img width="798" height="674" alt="Image" src="https://github.com/user-attachments/assets/ae0767e8-a9d0-48d0-a80b-0519fee1d6f3" />
 
 
 
