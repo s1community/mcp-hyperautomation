@@ -94,6 +94,7 @@ Connect the MCP server to your LLM client of preference.
 /PATH_TO_BINARY/uv --directory /mcp-hyperautomation/server/ run server.py --transport stdio
 ```
 Run a quick test by typing `list endpoints` in your client
+
 <img width="768" height="367" alt="Image" src="https://github.com/user-attachments/assets/9052e625-4351-454d-b238-d7da6e3bd306" />
 
 ## Dependencies
