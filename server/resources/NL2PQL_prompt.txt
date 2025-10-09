@@ -1,42 +1,6 @@
 Here are examples of how PowerQuery (PQL) queries are created for security-related data analysis
 ====BEGIN NATURAL_LANGUAGE TO PQL QUERY GUIDANCE=====
 [PQL Fields Reference]
-- Field: #cmdline
-- Description: All Processes CmdLine Arguments
-
-- Field: #dns
-- Description: All DNS requests and responses
-
-- Field: #filepath
-- Description: All Paths
-
-- Field: #hash
-- Description: any MD5, SHA1, or SHA256 field
-
-- Field: #ip
-- Description: All IPs
-
-- Field: #md5
-- Description: All Md5
-
-- Field: #name
-- Description: All Processes Names
-
-- Field: #sha1
-- Description: All Sha1
-
-- Field: #sha256
-- Description: All Sha256
-
-- Field: #storylineid
-- Description: All Storyline Ids
-
-- Field: #uid
-- Description: All UIDs
-
-- Field: #username
-- Description: All Processes Users
-
 - Field: account.id
 - Description: SentinelOne Account ID
 
@@ -2514,22 +2478,6 @@ Query: * matches 'regex'
 Description/Purpose: Use the in operator to search for numeric, boolean (true / false), and text values in a field:
 Query: fieldname in ("aaa", 111, false)
 
-Description/Purpose: Similar to * contains, shortcut queries search multiple fields for a value. The fields searched are predefined, and each shortcut name is preceded by a hash character #. Example
-Query: #storylineid = 'bba6fccd-a1e8-9561-b397-33bae4194c75'
-
-Description/Purpose: The following shortcuts/fields are supported for the # hash character 
-Query: #cmdline (all processes CmdLine Arguments)
-#dns (All DNS requests and responses)
-#filepath (All fields referencing a Path)
-#hash (any MD5, SHA1, or SHA256 field)
-#ip (all IPs)
-#md5 (all fields containing a sha md5s)
-#name (all process names)
-#sha1 (All fields containing a sha1)
-#sha256 (All sha256)
-#storyline (All storylines IDs)
-#uid (all UIDs)
-#username (All Processes users)
 
 Description/Purpose: 3CX Supply Chain attack
 Query: "// Known C2
