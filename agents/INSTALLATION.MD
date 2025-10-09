@@ -89,9 +89,9 @@ AGENT_ENDPOINTS = {
 ##### After
 ```python
 AGENT_ENDPOINTS = {
-    "VT_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/1bc6413b-5bbe-4a19-8ef5-6a49454..",
-    "SDL_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/8e015aa5-72b7-4cd4-946e-e1...",
-    "ASSETHANDLER_Agent" : "https://<CONSOLE_NAME>.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/b64252f0-8921-43d0-a9f7-372...",
+    "VT_Agent" : "https://euce1-103.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/1bc6413b-5bbe-4a19-8ef5-6a49454..",
+    "SDL_Agent" : "https://euce1-103.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/8e015aa5-72b7-4cd4-946e-e1...",
+    "ASSETHANDLER_Agent" : "https://euce1-103.sentinelone.net/web/api/v2.1/hyper-automate/webhook/v1/webhook/http/b64252f0-8921-43d0-a9f7-372...",
      ...
      ...
 }
