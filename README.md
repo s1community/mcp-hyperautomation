@@ -90,8 +90,7 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 3. [Configure the Agents](./agents/INSTALLATION.MD)
 4. **Install dependencies**: `uv install` (or `uv sync` if using uv.lock)
 5. **Configure environment variables** ([see instructions above](#environment-variables-configuration))
-6. **Update agent webhook URLs** in `server.py`
-7. **Test the server**: `uv run python server/server.py`
+6. **Test the server**: `uv run python server/server.py`
    - Make sure you see no errors
    - Kill process
 
