@@ -153,7 +153,7 @@ BIGQUERY_TABLE_ID="ha_service_responses"
 BIGQUERY_REQ_ID_COLUMN="req_id"
 
 # Path to your service account JSON credentials file
-GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/credentials.json"
+CREDENTIALS_FILE="/path/to/your/credentials.json"
 ```
 
 ### Example `.env` file:
@@ -163,6 +163,6 @@ GOOGLE_CLOUD_PROJECT=arcane-transit-457914-n8
 BIGQUERY_DATASET_ID=mcp_iso_results_dataset
 BIGQUERY_TABLE_ID=ha_service_responses
 BIGQUERY_REQ_ID_COLUMN=req_id
-GOOGLE_APPLICATION_CREDENTIALS=./credentials/bigquery-credentials.json
+CREDENTIALS_FILE=./credentials/bigquery-credentials.json
 ```
 
