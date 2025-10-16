@@ -86,7 +86,7 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 ## Setup Instructions
 
 1. **Clone the repository**
-2. [Configute BigQuery](./agents/DB_Manager/BigQuery.md)
+2. [Configure BigQuery](./agents/DB_Manager/BigQuery.md)
 3. [Configure the Agents](./agents/INSTALLATION.MD)
 4. **Install dependencies**: `uv install` (or `uv sync` if using uv.lock)
 5. **Configure environment variables** ([see instructions above](#environment-variables-configuration))
