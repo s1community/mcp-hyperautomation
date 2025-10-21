@@ -22,6 +22,8 @@ Unlike traditional SOAR platforms, where workflows are pre-built and static, thi
 
 This unlocks a new paradigm where analysts can seamlessly blend dynamic workflow orchestration with traditional static SOAR approaches, creating a hybrid system that combines the reliability and predictability of pre-built workflows with the flexibility and intelligence of user-directed automation.
 
+**Companion blog post**: [The Interactive Security Orchestration Paradigm (Part I)](https://medium.com/@thatsalamandrguy/the-interactive-security-orchestration-paradigm-part-1-63157bb3b0a1)
+
 ## Architecture Blueprint
 
 <img width="1145" height="628" alt="Image" src="https://github.com/user-attachments/assets/b4c4a5a7-64d2-42cb-ae68-304e4194606c" />
