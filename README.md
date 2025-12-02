@@ -8,8 +8,6 @@
   - [Agents](#agents)
   - [Cloud DB](#cloud-db)
 - [Environment Variables Configuration](#environment-variables-configuration)
-  - [Required Variables](#required-variables)
-  - [Optional Variables](#optional-variables)
 - [Setup Instructions](#setup-instructions)
 - [Usage](#usage)
 - [Dependencies](#dependencies)
@@ -18,11 +16,13 @@
 
 The Hyperautomation MCP Server provides a bridge between LLM clients and a middle layer of HA workflows, enabling dynamic security orchestration through natural language interactions.
 
-This MCP server is the core component of an architecture called **Interactive Security Orchestration** that reimagines how standard SOAR solutions can operate.
+This MCP server is the core component of an architecture called [**Interactive Security Orchestration**](https://medium.com/@thatsalamandrguy/the-interactive-security-orchestration-paradigm-part-1-63157bb3b0a1) that reimagines how standard SOAR solutions can operate.
 
 Unlike traditional SOAR platforms, where workflows are pre-built and static, this architecture enables analysts to "create workflows" in real-time as the LLM interprets high-level security goals and dynamically selects the optimal tools and actions from available [Agents](./agents/README.MD) in the HyperAutomation layer.
 
 This unlocks a new paradigm where analysts can seamlessly blend dynamic workflow orchestration with traditional static SOAR approaches, creating a hybrid system that combines the reliability and predictability of pre-built workflows with the flexibility and intelligence of user-directed automation.
+
+📖 **Companion blog post**: [The Interactive Security Orchestration Paradigm (Part I)](https://medium.com/@thatsalamandrguy/the-interactive-security-orchestration-paradigm-part-1-63157bb3b0a1)
 
 ## Architecture Blueprint
 
@@ -88,12 +88,11 @@ BIGQUERY_REQ_ID_COLUMN="req_id"       # Default: req_id
 ## Setup Instructions
 
 1. **Clone the repository**
-2. [Configute BigQuery](./agents/DB_Manager/BigQuery.md)
+2. [Configure BigQuery](./agents/DB_Manager/BigQuery.md)
 3. [Configure the Agents](./agents/INSTALLATION.MD)
 4. **Install dependencies**: `uv install` (or `uv sync` if using uv.lock)
 5. **Configure environment variables** ([see instructions above](#environment-variables-configuration))
-6. **Update agent webhook URLs** in `server.py`
-7. **Test the server**: `uv run python server/server.py`
+6. **Test the server**: `uv run python server/server.py`
    - Make sure you see no errors
    - Kill process
 
